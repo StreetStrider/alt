@@ -1,0 +1,88 @@
+{
+  "private": true,
+
+     "name": "alt",
+  "version": "0.0.0",
+
+  "description": "generalization over Option, Either, Result and others for the practical usage in JavaScript apps",
+
+  "author":  "Strider <strange.transistor@gmail.com>",
+  "license": "ISC",
+
+  "keywords": [],
+
+  "homepage":            "https://github.com/StreetStrider/alt",
+  "repository": { "url": "https://github.com/StreetStrider/alt.git", "type": "git" },
+  "bugs":       { "url": "https://github.com/StreetStrider/alt/issues" },
+
+  "main": "index.js",
+  "files":
+  [
+    "index.d.ts"
+  ],
+
+  "scripts":
+  {
+     "test": "npm run st && npm run ts && npm run unit && npm run cover",
+
+       "st": "eslint --ext ts .",
+
+       "ts": "npm run tsc && npm run dts",
+      "tsc": "tsc",
+      "dts": "dtslint --expectOnly --localTs ./node_modules/typescript/lib test",
+
+     "unit": "true",
+     "--unit": "mocha --check-leaks test/*.test.js",
+    "cover": "true",
+    "--cover": "c8 -r text -r html npm run unit"
+  },
+
+  "devDependencies":
+  {
+    "gulp":
+      "4",
+ 
+    "rollup":
+      "3",
+ 
+    "metalpipe":
+      "https://github.com/StrangeTransistor/metalpipe.git#8606a6b6cb1a82a78b1ba7430476fb1c1a18b446",
+
+    "metalpipe":
+      "~/Projects/metalpipe",
+
+
+    "eslint":
+      "8",
+
+    "js-outlander":
+      "StrangeTransistor/js-outlander#2.11.0",
+
+    "@typescript-eslint/parser":
+      "5",
+
+    "@typescript-eslint/eslint-plugin":
+      "5",
+
+
+    "typescript":
+      "4.8.4",
+
+    "dtslint":
+      "4",
+
+    "ts-node":
+      "10",
+
+
+    "mocha":
+      "10",
+
+    "chai":
+      "4",
+
+
+    "c8":
+      "7"
+  }
+}

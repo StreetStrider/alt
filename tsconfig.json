@@ -1,0 +1,19 @@
+{
+	"include":
+	[
+		"index.ts"
+	],
+	"exclude":
+	[
+		"release/"
+	],
+	"compilerOptions":
+	{
+		"noEmit": true,
+		"pretty": true,
+
+		"strict": true,
+		"lib":  [ "ES6" ],
+		"target": "ES6"
+	}
+}

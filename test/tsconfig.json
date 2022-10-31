@@ -1,0 +1,20 @@
+{
+	"extends": "../tsconfig.json",
+
+	"files":
+	[
+		"types.ts"
+	],
+
+	"compilerOptions":
+	{
+		"noEmit": true,
+		"pretty": true,
+
+		"strict": true,
+		"lib":  [ "ES6", "dom" ],
+		"target": "ES6",
+
+		"moduleResolution": "node"
+	}
+}
