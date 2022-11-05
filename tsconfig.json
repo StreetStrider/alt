@@ -3,10 +3,6 @@
 	[
 		"index.ts"
 	],
-	"exclude":
-	[
-		"release/"
-	],
 	"compilerOptions":
 	{
 		"noEmit": true,

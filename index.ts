@@ -2,14 +2,6 @@
 /* eslint max-statements: [ 1, 22 ] */
 
 export default Alt
-export { load }
-export { OK }
-export { FAIL }
-export { LOADING }
-export { join }
-export { attempt }
-export { capture }
-export { error_spread }
 
 export type Key_Base = (string | number | symbol)
 
@@ -251,7 +243,7 @@ function Alt <Key extends Key_Base, Value> (key: Key, value: Value)
 }
 
 
-function load <A extends Alt<any, any>, R extends Repr<A>> (repr: R): A
+export function load <A extends Alt<any, any>, R extends Repr<A>> (repr: R): A
 {
 	if (repr?.type !== 'Alt') throw new TypeError('alt/load/wrong')
 	if (! repr.key) throw new TypeError('alt/load/nokey')
@@ -260,23 +252,23 @@ function load <A extends Alt<any, any>, R extends Repr<A>> (repr: R): A
 }
 
 
-function OK <Value> (value: Value)
+export function OK <Value> (value: Value): Alt<'OK', Value>
 {
 	return Alt('OK', value)
 }
 
-function FAIL <Value> (value: Value)
+export function FAIL <Value> (value: Value): Alt<'FAIL', Value>
 {
 	return Alt('FAIL', value)
 }
 
-function LOADING ()
+export function LOADING (): Alt<'LOADING', void>
 {
 	return Alt('LOADING', void 0)
 }
 
 
-function join
+export function join
 <
 	Left  extends Alt<any, any>,
 	Right extends Alt<any, any>,
@@ -302,7 +294,7 @@ function join
 }
 
 
-function attempt <T, E = unknown> (fn: () => T): Result<T, E>
+export function attempt <T, E = unknown> (fn: () => T): Result<T, E>
 {
 	try
 	{
@@ -315,7 +307,7 @@ function attempt <T, E = unknown> (fn: () => T): Result<T, E>
 }
 
 
-async function capture <T, E = unknown> (fn: () => (Promise<T> | T)): Promise<Result<T, E>>
+export async function capture <T, E = unknown> (fn: () => (Promise<T> | T)): Promise<Result<T, E>>
 {
 	try
 	{
@@ -328,7 +320,7 @@ async function capture <T, E = unknown> (fn: () => (Promise<T> | T)): Promise<Re
 }
 
 
-function error_spread <T extends Alt<any, any>> (alt: T)
+export function error_spread <T extends Alt<any, any>> (alt: T)
 	:
 		(T extends Alt<'FAIL', infer E>
 		?
