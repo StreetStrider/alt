@@ -2,6 +2,7 @@
 /* eslint max-statements: [ 1, 22 ] */
 
 export default Alt
+export { load }
 export { OK }
 export { FAIL }
 export { LOADING }
@@ -9,11 +10,25 @@ export { join }
 export { attempt }
 export { capture }
 export { error_spread }
-export { load }
 
 export type Key_Base = (string | number | symbol)
 
 export type Repr <_ extends Alt<any, any>> = { type: 'Alt', key: string, value: unknown }
+
+export type Result <T, E = unknown> =
+(
+	Alt<'OK', T>
+|
+	Alt<'FAIL', E>
+)
+
+export type ResultLoading <T, E = unknown> =
+(
+	Result<T, E>
+|
+	Alt<'LOADING', void>
+)
+
 
 export type Alt <Key extends Key_Base, Value> =
 {
@@ -236,6 +251,15 @@ function Alt <Key extends Key_Base, Value> (key: Key, value: Value)
 }
 
 
+function load <A extends Alt<any, any>, R extends Repr<A>> (repr: R): A
+{
+	if (repr?.type !== 'Alt') throw new TypeError('alt/load/wrong')
+	if (! repr.key) throw new TypeError('alt/load/nokey')
+
+	return Alt(repr.key, repr.value) as any
+}
+
+
 function OK <Value> (value: Value)
 {
 	return Alt('OK', value)
@@ -276,21 +300,6 @@ function join
 	.chain('OK', (left_v: any) => (right as any)
 	.map((right_v: any) => [ left_v, right_v ]))
 }
-
-
-export type Result <T, E = unknown> =
-(
-	Alt<'OK', T>
-|
-	Alt<'FAIL', E>
-)
-
-export type ResultLoading <T, E = unknown> =
-(
-	Result<T, E>
-|
-	Alt<'LOADING', void>
-)
 
 
 function attempt <T, E = unknown> (fn: () => T): Result<T, E>
@@ -339,13 +348,4 @@ function error_spread <T extends Alt<any, any>> (alt: T)
 		T)
 {
 	return alt.chain('FAIL', (error) => Alt(`FAIL:${ error.message }`, error) as any)
-}
-
-
-function load <A extends Alt<any, any>, R extends Repr<A>> (repr: R): A
-{
-	if (repr?.type !== 'Alt') throw new TypeError('alt/load/wrong')
-	if (! repr.key) throw new TypeError('alt/load/nokey')
-
-	return Alt(repr.key, repr.value) as any
 }
