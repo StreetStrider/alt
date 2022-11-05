@@ -93,10 +93,61 @@ function thru ()
 
 function chain ()
 {
+	ALT('FOO', 'abc').chain('FOO', s => ALT('FOO', s + 'd')) // $ExpectType Alt<"FOO", string>
+	ALT('FOO', 'abc').chain('FOO', s => ALT('FOO', 17)) // $ExpectType Alt<"FOO", number>
+
+	ALT('FOO', 'abc').chain('FOO', s => ALT('BAR', s + 'd')) // $ExpectType Alt<"BAR", string>
+	ALT('FOO', 'abc').chain('FOO', s => ALT('BAR', 17)) // $ExpectType Alt<"BAR", number>
+
+	ALT('FOO', 'abc').chain('BAZ', s => ALT('BAR', null)) // $ExpectType Alt<"FOO", string>
+
+	ALT('FOO', 'abc').chain('FOO', s => null) // $ExpectError
+	ALT('FOO', 'abc').chain('BAZ', s => null) // $ExpectError
 }
 
-// map
-// tap
+function map_to ()
+{
+	ALT('FOO', 'abc').map_to('FOO', 'FOO', s => s + 'd') // $ExpectType Alt<"FOO", string>
+	ALT('FOO', 'abc').map_to('FOO', 'FOO', s => 17) // $ExpectType Alt<"FOO", number>
+
+	ALT('FOO', 'abc').map_to('FOO', 'BAR', s => s + 'd') // $ExpectType Alt<"BAR", string>
+	ALT('FOO', 'abc').map_to('FOO', 'BAR', s => 17) // $ExpectType Alt<"BAR", number>
+
+	ALT('FOO', 'abc').map_to('BAZ', 'BAR', s => null) // $ExpectType Alt<"FOO", string>
+}
+
+function map_on ()
+{
+	ALT('FOO', 'abc').map_on('FOO', s => s + 'd') // $ExpectType Alt<"FOO", string>
+	ALT('FOO', 'abc').map_on('FOO', s => 17) // $ExpectType Alt<"FOO", number>
+
+	ALT('FOO', 'abc').map_on('BAZ', s => null) // $ExpectType Alt<"FOO", string>
+}
+
+function map ()
+{
+	ALT('OK', 'abc').map(s => s + 'd') // $ExpectType Alt<"OK", string>
+	ALT('OK', 'abc').map(s => 17) // $ExpectType Alt<"OK", number>
+
+	ALT('FU', 'abc').map(s => null) // $ExpectType Alt<"FU", string>
+}
+
+function tap_on ()
+{
+	ALT('FOO', 'abc').tap_on('FOO', s => s + 'd') // $ExpectType Alt<"FOO", string>
+	ALT('FOO', 'abc').tap_on('FOO', s => 17) // $ExpectType Alt<"FOO", string>
+
+	ALT('FOO', 'abc').tap_on('BAZ', s => null) // $ExpectType Alt<"FOO", string>
+}
+
+function tap ()
+{
+	ALT('OK', 'abc').tap(s => s + 'd') // $ExpectType Alt<"OK", string>
+	ALT('OK', 'abc').tap(s => 17) // $ExpectType Alt<"OK", string>
+
+	ALT('FU', 'abc').tap(s => null) // $ExpectType Alt<"FU", string>
+}
+
 // settle
 // unless
 
