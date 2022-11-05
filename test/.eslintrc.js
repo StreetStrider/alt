@@ -8,7 +8,8 @@ module.exports =
 
 	rules:
 	{
-		// 'max-statements': 0,
-		// 'no-unused-expressions': 0,
+		'max-len': 0,
+		'max-statements-per-line': [ 1, { max: 3 } ],
+		'max-nested-callbacks': [ 1, { max: 4 } ],
 	},
 }

@@ -124,4 +124,113 @@ describe('Alt', () =>
 			expect(Alt('NONE', { x: 1 }).is('NONE')).eq(true)
 		})
 	})
+
+	describe('extract', () =>
+	{
+		it('extract_on', () =>
+		{
+			expect(Alt('FOO', 17).extract_on('FOO')).eq(17)
+			expect(() => Alt('FOO', 17).extract_on('BAR')).throw(TypeError)
+		})
+
+		it('extract', () =>
+		{
+			expect(Alt('OK', 17).extract()).eq(17)
+			expect(() => Alt('FOO', 17).extract()).throw(TypeError)
+		})
+	})
+
+	describe('ripout', () =>
+	{
+		it('ripout', () =>
+		{
+			expect(Alt('OK', 17).ripout()).eq(17)
+			expect(Alt('FOO', 17).ripout()).eq(void 0)
+		})
+	})
+
+	describe('thru', () =>
+	{
+		it('thru', () =>
+		{
+			expect(Alt('OK', 17).thru(a => a.debug())).deep.eq({ key: 'OK', value: 17 })
+		})
+	})
+
+	describe('chain', () =>
+	{
+		it('chain', () =>
+		{
+			expect(Alt('FOO', 17).chain('FOO', v => [ v ])).deep.eq([ 17 ])
+
+			const f = Alt('BAR', 17)
+			expect(f.chain('FOO', v => [ v ])).eq(f)
+			expect(f.debug()).deep.eq({ key: 'BAR', value: 17 })
+		})
+	})
+
+	describe('map', () =>
+	{
+		it('map_to', () =>
+		{
+			expect(Alt('FOO', 17).map_to('FOO', 'BAR', x => x + 1).debug()).deep.eq({ key: 'BAR', value: 18 })
+
+			const f = Alt('FOO', 17)
+			expect(f.map_to('BAR', 'BAZ', x => x + 1)).eq(f)
+			expect(f.debug()).deep.eq({ key: 'FOO', value: 17 })
+		})
+
+		it('map_on', () =>
+		{
+			expect(Alt('FOO', 17).map_on('FOO', x => x + 1).debug()).deep.eq({ key: 'FOO', value: 18 })
+
+			const f = Alt('FOO', 17)
+			expect(f.map_on('BAR', x => x + 1)).eq(f)
+			expect(f.debug()).deep.eq({ key: 'FOO', value: 17 })
+		})
+
+		it('map', () =>
+		{
+			expect(Alt('OK', 17).map(x => x + 1).debug()).deep.eq({ key: 'OK', value: 18 })
+
+			const f = Alt('FOO', 17)
+			expect(f.map(x => x + 1)).eq(f)
+			expect(f.debug()).deep.eq({ key: 'FOO', value: 17 })
+		})
+	})
+
+	describe('tap', () =>
+	{
+		it('tap_on', () =>
+		{
+			let x1 = 0
+			let x2 = 0
+
+			const f1 = Alt('FOO', 17)
+			expect(f1.tap_on('FOO', x => { x1++; return x + 1 })).eq(f1)
+			expect(f1.debug()).deep.eq({ key: 'FOO', value: 17 })
+
+			const f2 = Alt('FOO', 17)
+			expect(f2.tap_on('BAR', x => { x2++; return x + 1 })).eq(f2)
+			expect(f2.debug()).deep.eq({ key: 'FOO', value: 17 })
+
+			expect(x1).eq(1)
+			expect(x2).eq(0)
+		})
+
+		it('tap', () =>
+		{
+
+		})
+	})
+
+
+	describe('EEE', () =>
+	{
+		it('EEE', () =>
+		{
+
+		})
+	})
+
 })
