@@ -9,6 +9,8 @@ import { LOADING } from '../'
 
 import { load } from '../'
 import { join } from '../'
+import { attempt } from '../'
+import { capture } from '../'
 
 
 describe('Alt', () =>
@@ -333,12 +335,29 @@ describe('Alt', () =>
 		})
 	})
 
-	xdescribe('attempt', () =>
+	describe('attempt', () =>
 	{
 		it('attempt', () =>
 		{
-
+			expect(attempt(() => 17).debug()).deep.eq({ key: 'OK', value: 17 })
+			// eslint-disable-next-line no-throw-literal
+			expect(attempt(() => { throw { x: 0 } }).debug()).deep.eq({ key: 'FAIL', value: { x: 0 }})
 		})
+	})
+
+	describe('capture', () =>
+	{
+		/* eslint-disable require-await */
+		/* eslint-disable no-throw-literal */
+		it('capture', async () =>
+		{
+			expect((await capture(() => 17)).debug()).deep.eq({ key: 'OK', value: 17 })
+			expect((await capture(async () => 17)).debug()).deep.eq({ key: 'OK', value: 17 })
+			expect((await capture(() => { throw { x: 0 } })).debug()).deep.eq({ key: 'FAIL', value: { x: 0 }})
+			expect((await capture(async () => { throw { x: 0 } })).debug()).deep.eq({ key: 'FAIL', value: { x: 0 }})
+		})
+		/* eslint-enable no-throw-literal */
+		/* eslint-enable require-await */
 	})
 
 	xdescribe('error_spread', () =>

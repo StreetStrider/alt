@@ -7,6 +7,7 @@ export { FAIL }
 export { LOADING }
 export { join }
 export { attempt }
+export { capture }
 export { error_spread }
 export { load }
 
@@ -297,6 +298,19 @@ function attempt <T, E = unknown> (fn: () => T): Result<T, E>
 	try
 	{
 		return OK(fn())
+	}
+	catch (e)
+	{
+		return FAIL(e as any)
+	}
+}
+
+
+async function capture <T, E = unknown> (fn: () => (Promise<T> | T)): Promise<Result<T, E>>
+{
+	try
+	{
+		return OK(await fn())
 	}
 	catch (e)
 	{
