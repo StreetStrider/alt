@@ -125,6 +125,24 @@ describe('Alt', () =>
 		})
 	})
 
+	describe('debug', () =>
+	{
+		it('debug', () =>
+		{
+			expect(Alt('FOO', 17).debug()).deep.eq({ key: 'FOO', value: 17 })
+			expect(OK(17).debug()).deep.eq({ key: 'OK', value: 17 })
+		})
+	})
+
+	describe('repr', () =>
+	{
+		it('repr', () =>
+		{
+			expect(Alt('FOO', 17).repr()).deep.eq({ type: 'Alt', key: 'FOO', value: 17 })
+			expect(OK(17).repr()).deep.eq({ type: 'Alt', key: 'OK', value: 17 })
+		})
+	})
+
 	describe('extract', () =>
 	{
 		it('extract_on', () =>
@@ -220,10 +238,42 @@ describe('Alt', () =>
 
 		it('tap', () =>
 		{
+			let x1 = 0
+			let x2 = 0
 
+			const f1 = Alt('OK', 17)
+			expect(f1.tap(x => { x1++; return x + 1 })).eq(f1)
+			expect(f1.debug()).deep.eq({ key: 'OK', value: 17 })
+
+			const f2 = Alt('FOO', 17)
+			expect(f2.tap(x => { x2++; return x + 1 })).eq(f2)
+			expect(f2.debug()).deep.eq({ key: 'FOO', value: 17 })
+
+			expect(x1).eq(1)
+			expect(x2).eq(0)
 		})
 	})
 
+	describe('settle', () =>
+	{
+		it('settle_on', () =>
+		{
+			expect(Alt('FOO', 17).settle_on('FOO', x => x + 1).debug()).deep.eq({ key: 'OK', value: 18 })
+
+			const f = Alt('OK', 17)
+			expect(f.settle_on('FOO', x => x + 1)).eq(f)
+			expect(f.debug()).deep.eq({ key: 'OK', value: 17 })
+		})
+
+		it('settle', () =>
+		{
+			expect(Alt('FAIL', 17).settle(x => x + 1).debug()).deep.eq({ key: 'OK', value: 18 })
+
+			const f = Alt('OK', 17)
+			expect(f.settle(x => x + 1)).eq(f)
+			expect(f.debug()).deep.eq({ key: 'OK', value: 17 })
+		})
+	})
 
 	describe('EEE', () =>
 	{
