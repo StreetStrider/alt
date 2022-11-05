@@ -19,12 +19,13 @@ describe('Alt', () =>
 			expect(a.debug()).deep.eq({ key: 'OK', value: { x: 1 }})
 		})
 
+		/*
 		it('Alt(OK)', () =>
 		{
 			const a = Alt('OK')
 
 			expect(a.debug()).deep.eq({ key: 'OK', value: void 0 })
-		})
+		})*/
 
 		it('OK(v)', () =>
 		{
@@ -33,12 +34,13 @@ describe('Alt', () =>
 			expect(a.debug()).deep.eq({ key: 'OK', value: { x: 1 }})
 		})
 
+		/*
 		it('OK()', () =>
 		{
 			const a = OK()
 
 			expect(a.debug()).deep.eq({ key: 'OK', value: void 0 })
-		})
+		})*/
 
 		it('Alt(FAIL, v)', () =>
 		{
@@ -47,12 +49,13 @@ describe('Alt', () =>
 			expect(a.debug()).deep.eq({ key: 'FAIL', value: { x: 1 }})
 		})
 
+		/*
 		it('Alt(FAIL)', () =>
 		{
 			const a = Alt('FAIL')
 
 			expect(a.debug()).deep.eq({ key: 'FAIL', value: void 0 })
-		})
+		})*/
 
 		it('FAIL(v)', () =>
 		{
@@ -61,12 +64,13 @@ describe('Alt', () =>
 			expect(a.debug()).deep.eq({ key: 'FAIL', value: { x: 1 }})
 		})
 
+		/*
 		it('FAIL()', () =>
 		{
 			const a = FAIL()
 
 			expect(a.debug()).deep.eq({ key: 'FAIL', value: void 0 })
-		})
+		})*/
 
 		it('Alt(LOADING)', () =>
 		{
@@ -110,10 +114,10 @@ describe('Alt', () =>
 
 		it('LOADING', () =>
 		{
-			expect(LOADING({ x: 1 }).is('OK')).eq(false)
-			expect(LOADING({ x: 1 }).is('FAIL')).eq(false)
-			expect(LOADING({ x: 1 }).is('LOADING')).eq(true)
-			expect(LOADING({ x: 1 }).is('NONE')).eq(false)
+			expect(LOADING().is('OK')).eq(false)
+			expect(LOADING().is('FAIL')).eq(false)
+			expect(LOADING().is('LOADING')).eq(true)
+			expect(LOADING().is('NONE')).eq(false)
 		})
 
 		it('NONE', () =>
@@ -179,10 +183,12 @@ describe('Alt', () =>
 	{
 		it('chain', () =>
 		{
-			expect(Alt('FOO', 17).chain('FOO', v => [ v ])).deep.eq([ 17 ])
+			expect(Alt('FOO', 17)
+			.chain('FOO', v => Alt('BAR', [ v ]))
+			.debug()).deep.eq({ key: 'BAR', value: [ 17 ] })
 
 			const f = Alt('BAR', 17)
-			expect(f.chain('FOO', v => [ v ])).eq(f)
+			expect(f.chain('FOO', v => Alt('BAZ', [ v ]))).eq(f)
 			expect(f.debug()).deep.eq({ key: 'BAR', value: 17 })
 		})
 	})

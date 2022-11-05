@@ -1,9 +1,9 @@
 {
 	"extends": "../tsconfig.json",
 
-	"files":
+	"include":
 	[
-		"types.ts"
+		"*.ts"
 	],
 
 	"compilerOptions":
