@@ -2,10 +2,13 @@
 import { expect } from 'chai'
 
 import Alt from '../'
+
 import { OK } from '../'
 import { FAIL } from '../'
 import { LOADING } from '../'
+
 import { load } from '../'
+import { join } from '../'
 
 
 describe('Alt', () =>
@@ -85,13 +88,6 @@ describe('Alt', () =>
 
 			expect(a.debug()).deep.eq({ key: 'LOADING', value: void 0 })
 		})
-
-		it('load', () =>
-		{
-			const a = load({ type: 'Alt', key: 'OK', value: { y: 2 }})
-
-			expect(a.debug()).deep.eq({ key: 'OK', value: { y: 2 }})
-		})
 	})
 
 	describe('is', () =>
@@ -135,15 +131,6 @@ describe('Alt', () =>
 		{
 			expect(Alt('FOO', 17).debug()).deep.eq({ key: 'FOO', value: 17 })
 			expect(OK(17).debug()).deep.eq({ key: 'OK', value: 17 })
-		})
-	})
-
-	describe('repr', () =>
-	{
-		it('repr', () =>
-		{
-			expect(Alt('FOO', 17).repr()).deep.eq({ type: 'Alt', key: 'FOO', value: 17 })
-			expect(OK(17).repr()).deep.eq({ type: 'Alt', key: 'OK', value: 17 })
 		})
 	})
 
@@ -302,24 +289,47 @@ describe('Alt', () =>
 		})
 	})
 
-	xdescribe('join', () =>
+	describe('join', () =>
 	{
-		it('join', () =>
+		it('(_, _)', () =>
 		{
+			const L = Alt('FOO', { x: 1 })
+			const R = Alt('BAR', { y: true })
 
-		})
-	})
+			const j = join(L, R)
 
-	xdescribe('Result', () =>
-	{
-		it('Result', () =>
-		{
-
+			expect(j).eq(L)
 		})
 
-		it('ResultLoading', () =>
+		it('(OK, _)', () =>
 		{
+			const L = Alt('OK', { x: 1 })
+			const R = Alt('FU', { y: true })
 
+			const j = join(L, R)
+
+			expect(j).eq(R)
+		})
+
+		it('(_, OK)', () =>
+		{
+			const L = Alt('FU', { x: 1 })
+			const R = Alt('OK', { y: true })
+
+			const j = join(L, R)
+
+			expect(j).eq(L)
+		})
+
+		it('(OK, OK)', () =>
+		{
+			const L = Alt('OK', { x: 1 })
+			const R = Alt('OK', { y: true })
+
+			const j = join(L, R)
+
+			expect(j.is('OK')).eq(true)
+			expect(j.extract()).deep.eq([ { x: 1 }, { y: true } ])
 		})
 	})
 
@@ -339,11 +349,38 @@ describe('Alt', () =>
 		})
 	})
 
-	xdescribe('load / repr', () =>
+	describe('load / repr', () =>
 	{
 		it('load', () =>
 		{
+			const a = load({ type: 'Alt', key: 'OK', value: { y: 2 }})
 
+			expect(a.debug()).deep.eq({ key: 'OK', value: { y: 2 }})
+		})
+
+		it('load wrong', () =>
+		{
+			expect(() => load(void 0)).throw(TypeError, 'alt/load/wrong') // $ExpectError
+			expect(() => load(null)).throw(TypeError, 'alt/load/wrong') // $ExpectError
+			expect(() => load(16)).throw(TypeError, 'alt/load/wrong') // $ExpectError
+			expect(() => load({})).throw(TypeError, 'alt/load/wrong') // $ExpectError
+			expect(() => load({ key: 'OK' })).throw(TypeError, 'alt/load/wrong') // $ExpectError
+			expect(() => load({ key: 'OK', value: 1 })).throw(TypeError, 'alt/load/wrong') // $ExpectError
+
+			expect(() => load({ type: 'Alt' })).throw(TypeError, 'alt/load/nokey') // $ExpectError
+		})
+
+		it('repr', () =>
+		{
+			expect(Alt('FOO', 17).repr()).deep.eq({ type: 'Alt', key: 'FOO', value: 17 })
+			expect(OK(17).repr()).deep.eq({ type: 'Alt', key: 'OK', value: 17 })
+
+			const f1 = Alt('FOO', 17)
+			const re = f1.repr()
+			const f2 = load(re)
+
+			expect(f1.debug()).deep.eq(f2.debug())
+			expect(f1.repr()).deep.eq(f2.repr())
 		})
 	})
 })

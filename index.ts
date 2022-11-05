@@ -331,8 +331,7 @@ function error_spread <T extends Alt<any, any>> (alt: T)
 function load <A extends Alt<any, any>, R extends Repr<A>> (repr: R): A
 {
 	if (repr?.type !== 'Alt') throw new TypeError('alt/load/wrong')
-	if (! repr.key) throw new TypeError('alt/load/no/key')
-	/* if (! repr.value) throw new TypeError('alt/load/no/value') */
+	if (! repr.key) throw new TypeError('alt/load/nokey')
 
 	return Alt(repr.key, repr.value) as any
 }
