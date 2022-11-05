@@ -22,7 +22,7 @@
 
   "scripts":
   {
-     "test": "npm run st && npm run ts && npm run unit",
+     "test": "npm run st && npm run ts && npm run unit && npm run cover",
 
        "st": "eslint --ext ts .",
 
@@ -30,7 +30,8 @@
       "tsc": "tsc",
       "dts": "dtslint --expectOnly --localTs ./node_modules/typescript/lib test",
 
-     "unit": "ts-mocha test/*.unit.ts"
+     "unit": "ts-mocha test/*.unit.ts",
+    "cover": "nyc npm run unit"
   },
 
   "devDependencies":
@@ -78,6 +79,10 @@
       "10.0.0",
 
     "chai":
-      "4"
+      "4",
+
+
+    "nyc":
+      "15"
   }
 }
