@@ -7,6 +7,7 @@ export { LOADING }
 export { join }
 export { attempt }
 export { error_spread }
+export { load }
 
 export type Key_Base = (string | number | symbol)
 
@@ -319,7 +320,7 @@ function error_spread <T extends Alt<any, any>> (alt: T)
 }
 
 
-export function load <A extends Alt<any, any>, R extends Repr<A>> (repr: R): A
+function load <A extends Alt<any, any>, R extends Repr<A>> (repr: R): A
 {
 	if (repr?.type !== 'Alt') throw new TypeError('alt/load/wrong')
 	if (! repr.key) throw new TypeError('alt/load/no/key')

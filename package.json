@@ -15,7 +15,6 @@
   "repository": { "url": "https://github.com/StreetStrider/alt.git", "type": "git" },
   "bugs":       { "url": "https://github.com/StreetStrider/alt/issues" },
 
-  "main": "index.js",
   "files":
   [
     "index.d.ts"
@@ -23,7 +22,7 @@
 
   "scripts":
   {
-     "test": "npm run st && npm run ts && npm run unit && npm run cover",
+     "test": "npm run st && npm run ts && npm run unit",
 
        "st": "eslint --ext ts .",
 
@@ -31,10 +30,7 @@
       "tsc": "tsc",
       "dts": "dtslint --expectOnly --localTs ./node_modules/typescript/lib test",
 
-     "unit": "true",
-     "--unit": "mocha --check-leaks test/*.test.js",
-    "cover": "true",
-    "--cover": "c8 -r text -r html npm run unit"
+     "unit": "ts-mocha test/*.unit.ts"
   },
 
   "devDependencies":
@@ -69,20 +65,19 @@
       "4.8.4",
 
     "dtslint":
-      "4",
+      "4.2",
 
-    "ts-node":
-      "10",
 
+    "ts-mocha":
+      "10.0",
 
     "mocha":
-      "10",
+      "10.1.0",
+
+    "@types/mocha":
+      "10.0.0",
 
     "chai":
-      "4",
-
-
-    "c8":
-      "7"
+      "4"
   }
 }
