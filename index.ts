@@ -1,4 +1,5 @@
 /* eslint-disable max-len */
+/* eslint max-statements: [ 1, 22 ] */
 
 export default Alt
 export { OK }
@@ -59,7 +60,9 @@ export type Alt <Key extends Key_Base, Value> =
 	settle <Out> (fn: (value: ('FAIL' extends Key ? Value : never)) => Out)
 		: ('FAIL' extends Key ? Alt<'OK', Out> : Alt<Key, Value>),
 
-	// TODO: unless_on
+	unless_on <Key_Possible extends Key_Base, Out>
+		(key: Key_Possible, fn: (value: (Key_Possible extends Key ? never : Value)) => Out)
+			: Alt<Key_Possible, Key extends Key_Possible ? Value : Out>,
 
 	unless <Out> (fn: (value: ('OK' extends Key ? never : Value)) => Out)
 		: Alt<'OK', Key extends 'OK' ? Value : Out>,
@@ -93,7 +96,7 @@ function Alt <Key extends Key_Base, Value> (key: Key, value: Value)
 		tap,
 		settle_on,
 		settle,
-		// unless_on
+		unless_on,
 		unless,
 		debug,
 		repr,
@@ -200,17 +203,22 @@ function Alt <Key extends Key_Base, Value> (key: Key, value: Value)
 		return settle_on('FAIL', fn)
 	}
 
-	// unless_on
-
-	function unless <Out> (fn: (value: ('OK' extends Key ? never : Value)) => Out)
-		: Alt<'OK', Key extends 'OK' ? Value : Out>
+	function unless_on <Key_Possible extends Key_Base, Out>
+		(key: Key_Possible, fn: (value: (Key_Possible extends Key ? never : Value)) => Out)
+			: Alt<Key_Possible, Key extends Key_Possible ? Value : Out>
 	{
-		if (is('OK'))
+		if (is(key))
 		{
 			return ($alt as any)
 		}
 
-		return Alt('OK', fn($value as any) as any)
+		return Alt(key, fn($value as any) as any)
+	}
+
+	function unless <Out> (fn: (value: ('OK' extends Key ? never : Value)) => Out)
+		: Alt<'OK', Key extends 'OK' ? Value : Out>
+	{
+		return unless_on('OK', fn)
 	}
 
 	function debug ()
