@@ -1,6 +1,4 @@
 {
 	"cache": false,
-	"extension": [ ".ts" ],
-	"include": [ "index.ts" ],
 	"reporter": [ "text", "lcov" ]
 }
