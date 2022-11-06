@@ -150,22 +150,34 @@ function tap ()
 
 function settle_on ()
 {
+	ALT('FOO', 'abc').settle_on('FOO', s => s + 'd') // $ExpectType Alt<"OK", string>
+	ALT('FOO', 'abc').settle_on('FOO', s => 17) // $ExpectType Alt<"OK", number>
 
+	ALT('FOO', 'abc').settle_on('BAZ', s => 17) // $ExpectType Alt<"FOO", string>
 }
 
 function settle ()
 {
+	ALT('FAIL', 'abc').settle(s => s + 'd') // $ExpectType Alt<"OK", string>
+	ALT('FAIL', 'abc').settle(s => 17) // $ExpectType Alt<"OK", number>
 
+	ALT('FOO', 'abc').settle(s => 17) // $ExpectType Alt<"FOO", string>
 }
 
 function unless_on ()
 {
+	ALT('BAR', 'abc').unless_on('FOO', s => s + 'd') // $ExpectType Alt<"FOO", string>
+	ALT('BAR', 'abc').unless_on('FOO', s => 17) // $ExpectType Alt<"FOO", number>
 
+	ALT('FOO', 'abc').unless_on('FOO', s => null) // $ExpectType Alt<"FOO", string>
 }
 
 function unless ()
 {
+	ALT('FOO', 'abc').unless(s => s + 'd') // $ExpectType Alt<"OK", string>
+	ALT('FOO', 'abc').unless(s => 17) // $ExpectType Alt<"OK", number>
 
+	ALT('OK', 'abc').unless(s => null) // $ExpectType Alt<"OK", string>
 }
 
 function join_generic ()
