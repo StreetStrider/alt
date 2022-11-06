@@ -7,11 +7,11 @@ import { Repr } from '../'
 
 import { OK } from '../'
 import { FAIL } from '../'
-// import { LOADING } from '../'
+import { LOADING } from '../'
 
 import { join } from '../'
-// import { attempt } from '../'
-// import { capture } from '../'
+import { attempt } from '../'
+import { capture } from '../'
 import { error_spread } from '../'
 import { load } from '../'
 
@@ -29,6 +29,9 @@ function construct ()
 
 	const a4 = OK('foo')
 	a4 // $ExpectType Alt<"OK", string>
+
+	const a5 = LOADING()
+	a5 // $ExpectType Alt<"LOADING", void>
 }
 
 function is ()
@@ -221,9 +224,36 @@ function join_ok ()
 	join(a, b) // $ExpectType Alt<"OK", ["LK", "RK"]>
 }
 
-// attempt
-// capture
-// error_spread
+function attempt1 ()
+{
+	attempt(() => 17) // $ExpectType Result<number, unknown>
+	// eslint-disable-next-line no-throw-literal
+	attempt(() => { throw { x: 0 } }) // $ExpectType Result<never, unknown>
+}
+
+async function capture1 ()
+{
+	/* eslint-disable require-await */
+	/* eslint-disable no-throw-literal */
+	await capture(() => 17) // $ExpectType Result<number, unknown>
+	await capture(async () => 17) // $ExpectType Result<number, unknown>
+	await capture(() => { throw { x: 0 } }) // $ExpectType Result<never, unknown>
+	await capture(async () => { throw { x: 0 } }) // $ExpectType Result<never, unknown>
+	/* eslint-enable no-throw-literal */
+	/* eslint-enable require-await */
+}
+
+function error_spread1 ()
+{
+	const ok = ALT('OK', { x: 1 })
+	error_spread(ok) // $ExpectType Alt<"OK", { x: number; }>
+
+	const foo = new Error('FOO')
+	error_spread(ALT('FAIL', foo)) // $ExpectType Alt<`FAIL:${string}`, Error>
+
+	const bar = ALT('OK', new Error('BAR'))
+	error_spread(bar) // $ExpectType Alt<"OK", Error>
+}
 
 function load_repr ()
 {
