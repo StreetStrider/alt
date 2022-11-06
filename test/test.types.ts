@@ -47,7 +47,7 @@ function debug ()
 	ALT('FOO', true).debug() // $ExpectType { key: "FOO"; value: boolean; }
 }
 
-type Either <T = void> = (Alt<'OK', T> | Alt<'FAIL', void>)
+type Either <T = void, E = void> = (Alt<'OK', T> | Alt<'FAIL', E>)
 
 function extract ()
 {
@@ -148,85 +148,70 @@ function tap ()
 	ALT('FU', 'abc').tap(s => null) // $ExpectType Alt<"FU", string>
 }
 
-// settle
-// unless
+function settle_on ()
+{
 
-// join
+}
+
+function settle ()
+{
+
+}
+
+function unless_on ()
+{
+
+}
+
+function unless ()
+{
+
+}
+
+function join_generic ()
+{
+	const a = OK('LK') as Either<'LK', 'LE'>
+	const b = OK('RK') as Either<'RK', 'RE'>
+
+	join(a, b) // $ExpectType Alt<"FAIL", "LE"> | Alt<"FAIL", "RE"> | Alt<"OK", ["LK", "RK"]>
+}
+
+function join_L ()
+{
+	const a = FAIL('LE' as const)
+	const b = FAIL('RE' as const)
+
+	join(a, b) // $ExpectType Alt<"FAIL", "LE">
+}
+
+function join_R ()
+{
+	const a = OK(true)
+	const b = FAIL('RE' as const)
+
+	join(a, b) // $ExpectType Alt<"FAIL", "RE">
+}
+
+function join_generic_ok ()
+{
+	const a = OK(true)
+	const b = OK('abc')
+
+	join(a, b) // $ExpectType Alt<"OK", [boolean, string]>
+}
+
+function join_ok ()
+{
+	const a = OK('LK' as const)
+	const b = OK('RK' as const)
+
+	join(a, b) // $ExpectType Alt<"OK", ["LK", "RK"]>
+}
+
+
 // attempt
 // capture
 // capture
 // error_spread
 
 // load / repr
-
-/*
-const r1 = a.extract()
-const r2 = a.extract_on('OK')
-try { const r3 = a.extract_on('FAIL') }
- catch (e) { console.log(e) }
-
-console.log(r1, r2)
-
-const ch1 = a.chain('OK', (v) => OK(17 as const))
-const ch2 = a.chain('FAIL', (v) => OK(true))
-
-const r4 = ch1.extract()
-const r5 = ch1.extract_on('OK')
-try { const r6 = ch2.extract_on('FAIL') }
- catch (e) { console.log(e) }
-
-console.log(r4, r5)
-
-function foo (v: number)
-{
-	if (v < 0)
-	{
-		return FAIL(v)
-	}
-	else
-	{
-		return OK(String(v))
-	}
-}
-
-const b = foo(0)
-
-const r7 = b.extract()
-const r8 = b.extract_on('OK')
-try { const r9 = b.extract_on('FAIL') }
- catch (e) { console.log(e) }
-
-console.log(r7, r8)
-
-const b1 = b.map_on('OK', () => 18 as const)
-const b2 = b.map(() => 19 as const)
-const b3 = b.map_to('FAIL', 'FAIL2', () => 'F2' as const)
-const b4 = b.map_on('FAIL', () => 'F' as const)
-const b5 = b.settle_on('FAIL', () => 'FOK' as const)
-const b6 = b.settle(() => 'FOKK' as const)
-const b7 = b.settle_on('BAR', () => 'FOKK' as const)
-
-const j1 = join(a, b)
-const j2 = join(a, FAIL(false))
-const j3 = join(a, OK(false))
-const j4 = join(FAIL(false), b)
-const j5 = join(OK(false), b)
-const j6 = join(OK('foo'), FAIL(1))
-
-const ae1 = FAIL(new TypeError('foo')) // Alt('FAIL', new TypeError('foo'))
-const ae1a: (Alt<'OK', 1> | typeof ae1) = ae1 as any
-const ae1s = error_spread(ae1a)
-
-const ae1s_v = ae1s.extract()
-
-const E: (RangeError & { message: 'foo' }) = new RangeError('R1' as const) as any
-// const E: ({ message: 'foo' }) = new RangeError('R1' as const) as any
-const ae2 = FAIL(E) // Alt('FAIL', E)
-const ae2a: (Alt<'OK', 2> | typeof ae2) = ae2 as any
-const ae2s = error_spread(ae2a)
-
-const ae2s_2 = ae2s.extract()
-
-;(new RangeError).message
-E.message
-*/
