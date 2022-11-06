@@ -3,16 +3,17 @@
 
 import ALT from '../'
 import { Alt } from '../'
+import { Repr } from '../'
 
 import { OK } from '../'
 import { FAIL } from '../'
 // import { LOADING } from '../'
 
-// import { load } from '../'
 import { join } from '../'
 // import { attempt } from '../'
 // import { capture } from '../'
 import { error_spread } from '../'
+import { load } from '../'
 
 
 function construct ()
@@ -220,10 +221,20 @@ function join_ok ()
 	join(a, b) // $ExpectType Alt<"OK", ["LK", "RK"]>
 }
 
-
 // attempt
-// capture
 // capture
 // error_spread
 
-// load / repr
+function load_repr ()
+{
+	type T = { s: string }
+	const a = OK({ s: 'abc' }) as Either<T>
+
+	a // $ExpectType Either<T, void>
+
+	const r = a.repr()
+	r // $ExpectType Repr<Alt<"FAIL", void>> | Repr<Alt<"OK", T>>
+
+	const b = load(r)
+	b // $ExpectType Alt<"FAIL", void> | Alt<"OK", T>
+}

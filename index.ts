@@ -5,7 +5,15 @@ export default Alt
 
 export type Key_Base = (string | number | symbol)
 
-export type Repr <_ extends Alt<any, any>> = { type: 'Alt', key: string, value: unknown }
+const repr$symbol: unique symbol = Symbol('repr')
+export type Repr <T extends Alt<any, any>> =
+{
+	[ repr$symbol ]: T,
+
+	type: 'Alt',
+	key: string,
+	value: unknown,
+}
 
 export type Result <T, E = unknown> =
 (
@@ -243,7 +251,8 @@ function Alt <Key extends Key_Base, Value> (key: Key, value: Value)
 }
 
 
-export function load <A extends Alt<any, any>, R extends Repr<A>> (repr: R): A
+export function load <R extends Repr<any>> (repr: R)
+	: R extends Repr<infer A> ? A : never
 {
 	if (repr?.type !== 'Alt') throw new TypeError('alt/load/wrong')
 	if (! repr.key) throw new TypeError('alt/load/nokey')

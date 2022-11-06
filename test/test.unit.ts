@@ -2,6 +2,7 @@
 import { expect } from 'chai'
 
 import Alt from '../'
+import { Repr } from '../'
 
 import { OK } from '../'
 import { FAIL } from '../'
@@ -380,7 +381,7 @@ describe('Alt', () =>
 	{
 		it('load', () =>
 		{
-			const a = load({ type: 'Alt', key: 'OK', value: { y: 2 }})
+			const a = load({ type: 'Alt', key: 'OK', value: { y: 2 }} as Repr<any>)
 
 			expect(a.debug()).deep.eq({ key: 'OK', value: { y: 2 }})
 		})
