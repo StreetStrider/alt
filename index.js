@@ -53,7 +53,7 @@ function Alt (key, value)
 	{
 		if (is('OK'))
 		{
-			return value
+			return $value
 		}
 	}
 
@@ -170,9 +170,9 @@ function FAIL (value)
 	return Alt('FAIL', value)
 }
 
-exports.LOADING = function LOADING ()
+exports.LOADING = function LOADING (value)
 {
-	return Alt('LOADING')
+	return Alt('LOADING', value)
 }
 
 

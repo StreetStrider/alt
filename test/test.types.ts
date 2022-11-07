@@ -21,17 +21,38 @@ function construct ()
 	const a1 = ALT('OK', 'foo' as const)
 	a1 // $ExpectType Alt<"OK", "foo">
 
-	const a2 = ALT('OK', 'foo')
-	a2 // $ExpectType Alt<"OK", string>
+	const a11 = ALT('OK', 'foo')
+	a11 // $ExpectType Alt<"OK", string>
 
-	const a3 = OK('foo' as const)
-	a3 // $ExpectType Alt<"OK", "foo">
+	const a111 = ALT('OK')
+	a111 // $ExpectType Alt<"OK", void>
 
-	const a4 = OK('foo')
-	a4 // $ExpectType Alt<"OK", string>
+	const a2 = OK('foo' as const)
+	a2 // $ExpectType Alt<"OK", "foo">
 
-	const a5 = LOADING()
-	a5 // $ExpectType Alt<"LOADING", void>
+	const a22 = OK('foo')
+	a22 // $ExpectType Alt<"OK", string>
+
+	const a222 = OK()
+	a222 // $ExpectType Alt<"OK", void>
+
+	const a3 = FAIL('foo' as const)
+	a3 // $ExpectType Alt<"FAIL", "foo">
+
+	const a33 = FAIL('foo')
+	a33 // $ExpectType Alt<"FAIL", string>
+
+	const a333 = FAIL()
+	a333 // $ExpectType Alt<"FAIL", void>
+
+	const a4 = LOADING('foo' as const)
+	a4 // $ExpectType Alt<"LOADING", "foo">
+
+	const a44 = LOADING('foo')
+	a44 // $ExpectType Alt<"LOADING", string>
+
+	const a444 = LOADING()
+	a444 // $ExpectType Alt<"LOADING", void>
 }
 
 function is ()

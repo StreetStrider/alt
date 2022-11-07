@@ -27,13 +27,12 @@ describe('Alt', () =>
 			expect(a.debug()).deep.eq({ key: 'OK', value: { x: 1 }})
 		})
 
-		/*
 		it('Alt(OK)', () =>
 		{
 			const a = Alt('OK')
 
 			expect(a.debug()).deep.eq({ key: 'OK', value: void 0 })
-		})*/
+		})
 
 		it('OK(v)', () =>
 		{
@@ -42,13 +41,12 @@ describe('Alt', () =>
 			expect(a.debug()).deep.eq({ key: 'OK', value: { x: 1 }})
 		})
 
-		/*
 		it('OK()', () =>
 		{
 			const a = OK()
 
 			expect(a.debug()).deep.eq({ key: 'OK', value: void 0 })
-		})*/
+		})
 
 		it('Alt(FAIL, v)', () =>
 		{
@@ -57,13 +55,12 @@ describe('Alt', () =>
 			expect(a.debug()).deep.eq({ key: 'FAIL', value: { x: 1 }})
 		})
 
-		/*
 		it('Alt(FAIL)', () =>
 		{
 			const a = Alt('FAIL')
 
 			expect(a.debug()).deep.eq({ key: 'FAIL', value: void 0 })
-		})*/
+		})
 
 		it('FAIL(v)', () =>
 		{
@@ -72,17 +69,30 @@ describe('Alt', () =>
 			expect(a.debug()).deep.eq({ key: 'FAIL', value: { x: 1 }})
 		})
 
-		/*
 		it('FAIL()', () =>
 		{
 			const a = FAIL()
 
 			expect(a.debug()).deep.eq({ key: 'FAIL', value: void 0 })
-		})*/
+		})
+
+		it('Alt(LOADING, v)', () =>
+		{
+			const a = Alt('LOADING', { x: 1 })
+
+			expect(a.debug()).deep.eq({ key: 'LOADING', value: { x: 1 }})
+		})
 
 		it('Alt(LOADING)', () =>
 		{
-			const a = Alt('LOADING', { x: 1 })
+			const a = Alt('LOADING')
+
+			expect(a.debug()).deep.eq({ key: 'LOADING', value: void 0 })
+		})
+
+		it('LOADING(v)', () =>
+		{
+			const a = LOADING({ x: 1 })
 
 			expect(a.debug()).deep.eq({ key: 'LOADING', value: { x: 1 }})
 		})
@@ -97,6 +107,14 @@ describe('Alt', () =>
 
 	describe('is', () =>
 	{
+		it('Alt', () =>
+		{
+			expect(Alt('OK').is('OK')).eq(true)
+			expect(Alt('OK', 1).is('OK')).eq(true)
+			expect(Alt('FAIL').is('OK')).eq(false)
+			expect(Alt('FAIL', 1).is('OK')).eq(false)
+		})
+
 		it('OK', () =>
 		{
 			expect(OK({ x: 1 }).is('OK')).eq(true)

@@ -6,6 +6,7 @@ import { Alt } from './types'
 import { Result } from './types'
 
 
+export function Alt <Key extends Key_Base> (key: Key): Alt<Key, void>
 export function Alt <Key extends Key_Base, Value> (key: Key, value: Value): Alt<Key, Value>
 
 export function load <R extends Repr<any>> (repr: R): R extends Repr<infer A> ? A : never
@@ -29,11 +30,14 @@ export function join
 		)
 
 
+export function OK (): Alt<'OK', void>
 export function OK <Value> (value: Value): Alt<'OK', Value>
 
+export function FAIL (): Alt<'FAIL', void>
 export function FAIL <Value> (value: Value): Alt<'FAIL', Value>
 
 export function LOADING (): Alt<'LOADING', void>
+export function LOADING <Value> (value: Value): Alt<'LOADING', Value>
 
 
 export function attempt <T, E = unknown> (fn: () => T): Result<T, E>
