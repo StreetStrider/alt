@@ -5,8 +5,7 @@ exports.Alt = Alt
 
 function Alt (key, value)
 {
-	const $key   = key
-	const $value = value
+	const $key = key
 
 	const $alt =
 	{
@@ -41,7 +40,7 @@ function Alt (key, value)
 			throw new TypeError(`alt/extract/wrong (key = ${ String($key) }, attempt = ${ String(key) })`)
 		}
 
-		return $value
+		return value
 	}
 
 	function extract ()
@@ -53,7 +52,7 @@ function Alt (key, value)
 	{
 		if (is('OK'))
 		{
-			return $value
+			return value
 		}
 	}
 
@@ -66,7 +65,7 @@ function Alt (key, value)
 	{
 		if (is(key))
 		{
-			return fn($value)
+			return fn(value)
 		}
 
 		return $alt
@@ -91,7 +90,7 @@ function Alt (key, value)
 	{
 		if (is(key))
 		{
-			fn($value)
+			fn(value)
 		}
 
 		return $alt
@@ -119,7 +118,7 @@ function Alt (key, value)
 			return $alt
 		}
 
-		return Alt(key, fn($value))
+		return Alt(key, fn(value))
 	}
 
 	function unless (fn)
@@ -129,12 +128,12 @@ function Alt (key, value)
 
 	function debug ()
 	{
-		return { key: $key, value: $value }
+		return { key, value }
 	}
 
 	function repr ()
 	{
-		return { type: 'Alt', key: $key, value: $value }
+		return { type: 'Alt', key, value }
 	}
 
 	return $alt
