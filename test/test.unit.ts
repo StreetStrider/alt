@@ -1,8 +1,9 @@
 
 import { expect } from 'chai'
 
-import Alt from '../'
-import { Repr } from '../'
+// import Alt from '../'
+import { Alt } from '../'
+import { Repr } from '../types'
 
 import { OK } from '../'
 import { FAIL } from '../'

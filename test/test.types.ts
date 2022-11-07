@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
-import ALT from '../'
-import { Alt } from '../'
-import { Repr } from '../'
+import { Alt as ALT } from '../'
+import { Alt } from '../types'
+import { Repr } from '../types'
 
 import { OK } from '../'
 import { FAIL } from '../'

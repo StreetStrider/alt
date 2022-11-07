@@ -17,7 +17,8 @@
 
   "files":
   [
-    "index.d.ts"
+    "index.ts",
+    "types.d.ts"
   ],
 
   "scripts":
