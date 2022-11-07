@@ -8,15 +8,7 @@ import { Result } from './types'
 
 export function Alt <Key extends Key_Base, Value> (key: Key, value: Value): Alt<Key, Value>
 
-export function load <R extends Repr<any>> (repr: R)
-	: R extends Repr<infer A> ? A : never
-
-
-export function OK <Value> (value: Value): Alt<'OK', Value>
-
-export function FAIL <Value> (value: Value): Alt<'FAIL', Value>
-
-export function LOADING (): Alt<'LOADING', void>
+export function load <R extends Repr<any>> (repr: R): R extends Repr<infer A> ? A : never
 
 
 export function join
@@ -29,19 +21,22 @@ export function join
 	right: Right,
 )
 	:
-		(Left extends Alt<'OK', infer L_V>
+		(Left extends Alt<'OK', infer L>
 		?
-			(Right extends Alt<'OK', infer R_V>
-			? Alt<'OK', [ L_V, R_V ]>
-			: Right
-			)
+			(Right extends Alt<'OK', infer R> ? Alt<'OK', [ L, R ]> : Right)
 		:
-		Left
+			Left
 		)
 
 
-export function attempt <T, E = unknown> (fn: () => T): Result<T, E>
+export function OK <Value> (value: Value): Alt<'OK', Value>
 
+export function FAIL <Value> (value: Value): Alt<'FAIL', Value>
+
+export function LOADING (): Alt<'LOADING', void>
+
+
+export function attempt <T, E = unknown> (fn: () => T): Result<T, E>
 
 export function capture <T, E = unknown> (fn: () => (Promise<T> | T)): Promise<Result<T, E>>
 

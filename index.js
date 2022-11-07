@@ -150,6 +150,12 @@ exports.load = function load (repr)
 }
 
 
+exports.join = function join (left, right)
+{
+	return left.chain('OK', L => right.map(R => [ L, R ]))
+}
+
+
 exports.OK = OK
 
 function OK (value)
@@ -167,12 +173,6 @@ function FAIL (value)
 exports.LOADING = function LOADING ()
 {
 	return Alt('LOADING')
-}
-
-
-exports.join = function join (left, right)
-{
-	return left.chain('OK', L => right.map(R => [ L, R ]))
 }
 
 
