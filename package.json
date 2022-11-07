@@ -17,7 +17,9 @@
 
   "files":
   [
-    "index.ts",
+    "index.d.ts",
+    "index.js",
+
     "types.d.ts"
   ],
 
@@ -25,7 +27,7 @@
   {
      "test": "npm run st && npm run ts && npm run unit && npm run cover",
 
-       "st": "eslint --ext ts .",
+       "st": "eslint --ext js --ext d.ts .",
 
        "ts": "npm run tsc && npm run dts",
       "tsc": "tsc",
@@ -37,19 +39,6 @@
 
   "devDependencies":
   {
-    "gulp":
-      "4",
- 
-    "rollup":
-      "3",
- 
-    "metalpipe":
-      "https://github.com/StrangeTransistor/metalpipe.git#8606a6b6cb1a82a78b1ba7430476fb1c1a18b446",
-
-    "metalpipe":
-      "~/Projects/metalpipe",
-
-
     "eslint":
       "8",
 
