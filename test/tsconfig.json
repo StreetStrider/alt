@@ -3,13 +3,14 @@
 	[
 		"*.ts"
 	],
+	"exclude": [ "_*" ],
 	"compilerOptions":
 	{
 		"noEmit": true,
 		"pretty": true,
 
 		"strict": true,
-		"lib":  [ "ES6" ],
+		"lib":  [ "ES6", "dom" ],
 		"target": "ES6",
 
 		"moduleResolution": "node"
