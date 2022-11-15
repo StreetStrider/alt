@@ -393,3 +393,37 @@ function join_ok ()
 
 	join(a, b) // $ExpectType Alt<{ OK: ["LK", "RK"]; }>
 }
+
+
+//
+function attempt1 ()
+{
+	attempt(() => 17) // $ExpectType Result<number, unknown>
+	// eslint-disable-next-line no-throw-literal
+	attempt(() => { throw { x: 0 } }) // $ExpectType Result<never, unknown>
+}
+
+async function capture1 ()
+{
+	/* eslint-disable require-await */
+	/* eslint-disable no-throw-literal */
+	await capture(() => 17) // $ExpectType Result<number, unknown>
+	await capture(async () => 17) // $ExpectType Result<number, unknown>
+	await capture(() => { throw { x: 0 } }) // $ExpectType Result<never, unknown>
+	await capture(async () => { throw { x: 0 } }) // $ExpectType Result<never, unknown>
+	/* eslint-enable no-throw-literal */
+	/* eslint-enable require-await */
+}
+
+function load_repr ()
+{
+	const a: Alt<{ OK: { s: string }, FAIL: void }> = OK({ s: 'abc' })
+
+	a // $ExpectType Alt<{ OK: { s: string; }; FAIL: void; }>
+
+	const r = a.repr()
+	r // $ExpectType Repr<Alt<{ OK: { s: string; }; FAIL: void; }>>
+
+	const b = load(r)
+	b // $ExpectType Alt<{ OK: { s: string; }; FAIL: void; }>
+}
