@@ -15,8 +15,6 @@ import { capture } from '../'
 import { error_spread } from '../'
 import { load } from '../'
 
-// type Either <T = void, E = void> = Alt<{ OK: T, FAIL: E }>
-
 
 function construct ()
 {

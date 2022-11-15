@@ -1,6 +1,5 @@
 
 import { Key_Base } from './types'
-import { Map_Base } from './types'
 import { Repr } from './types'
 import { Alt } from './types'
 
@@ -13,8 +12,9 @@ import { Spread } from './types'
 export function Alt <Key extends Key_Base, Map extends { [K in Key]: void }> (key: Key)
 	: Alt<Map>
 
-export function Alt <Key extends Key_Base, Value, Map extends { [K in Key]: Value }> (key: Key, value: Value)
-	: Alt<Map>
+export function Alt <Key extends Key_Base, Value, Map extends { [K in Key]: Value }>
+	(key: Key, value: Value)
+		: Alt<Map>
 
 export function load <R extends Repr<any>> (repr: R): R extends Repr<infer A> ? A : never
 

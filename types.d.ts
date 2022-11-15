@@ -67,7 +67,8 @@ export interface Alt <Map extends Map_Base>
 		: (keyof Map extends 'OK' ? Map['OK'] : never),
 
 	ripout ()
-		: (keyof Map extends 'OK' ? Map['OK'] : 'OK' extends keyof Map ? (Map['OK'] | undefined) : never),
+		: (keyof Map extends 'OK' ? Map['OK'] :
+			'OK' extends keyof Map ? (Map['OK'] | undefined) : never),
 
 	thru <Out> (fn: (alt: this) => Out)
 		: Out,
@@ -168,7 +169,8 @@ export type Spread <A extends Alt<any>> =
 				Alt<Expand<
 					Omit<M, 'FAIL'>
 					&
-					Record<`FAIL:${ M['FAIL']['message'] }`, Extract<M['FAIL'], { message: M['FAIL']['message'] }>>>>
+					Record<`FAIL:${ M['FAIL']['message'] }`,
+						Extract<M['FAIL'], { message: M['FAIL']['message'] }>>>>
 			:
 			A
 		)
