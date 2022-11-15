@@ -1,9 +1,12 @@
 
 import { Key_Base } from './types'
+import { Map_Base } from './types'
 import { Repr } from './types'
 import { Alt } from './types'
 
 import { Result } from './types'
+
+import { Join } from './types'
 
 
 export function Alt <Key extends Key_Base, Map extends { [K in Key]: void }> (key: Key)
@@ -15,6 +18,11 @@ export function Alt <Key extends Key_Base, Value, Map extends { [K in Key]: Valu
 export function load <R extends Repr<any>> (repr: R): R extends Repr<infer A> ? A : never
 
 
+// type Join <M1 extends Map_Base, M2 extends Map_Base> =
+	// 'OK' extends keyof M1 ?
+	// 'OK' extends keyof M2 ?
+		// { OK: [ M1['OK'], M2['OK'] ] } : {} : {}
+
 export function join
 <
 	Left  extends Alt<any>,
@@ -24,18 +32,20 @@ export function join
 	left:  Left,
 	right: Right,
 )
-	:
+	: Join<Left, Right>
+	/*
 		(Left extends Alt<infer ML>
 		?
 			(Right extends Alt<infer MR>
 			?
-				Alt<Omit<ML, 'OK'> & Omit<MR, 'OK'> & { OK: [ ML['OK'], MR['OK'] ] }>
+				Alt<Expand<Merge<Omit<ML, 'OK'>, Omit<MR, 'OK'>> & Join<ML, MR>>>
+				// Alt<Expand<Merge<Omit<ML, 'OK'>, Omit<MR, 'OK'>> & { OK: [ ML['OK'], MR['OK'] ] }>>
 			:
 				never
 			)
 		:
 			never
-		)
+		)*/
 
 
 export function OK <Map extends { OK: void }> (): Alt<Map>

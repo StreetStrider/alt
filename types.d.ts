@@ -14,9 +14,43 @@ type Merge <M1 extends Map_Base, M2 extends Map_Base> =
 		(
 			(K extends keyof M1 ? M1[K] : never)
 		|
-			(K extends keyof M2 ? M2[K] : never )
+			(K extends keyof M2 ? M2[K] : never)
 		)
 }
+
+export type Join <
+	Left  extends Alt<any>,
+	Right extends Alt<any>,
+>
+=
+	Left  extends Alt<infer L> ?
+	Right extends Alt<infer R> ?
+		Alt<Expand<Join2<L, R>>>
+	: never
+	: never
+
+type Join2 <M1 extends Map_Base, M2 extends Map_Base> =
+	 'OK' extends keyof M1 ?
+	('OK' extends keyof M2 ?
+		Join3<M1, M2>
+		// (Merge<Omit<M1, 'OK'>, Omit<M2, 'OK'>>
+		// &
+		// { OK: [ M1['OK'], M2['OK'] ] })
+	: Merge<Omit<M1, 'OK'>, Omit<M2, 'OK'>>)
+	: M1
+
+type Join3 <M1 extends Map_Base, M2 extends Map_Base> =
+	Merge<Omit<M1, 'OK'>, Omit<M2, 'OK'>>
+	&
+	{ OK: [ M1['OK'], M2['OK'] ] }
+
+		// (Merge<>
+		// &
+		// { OK: [ M1['OK'], M2['OK'] ] })
+	// Merge<Omit<ML, 'OK'>, Omit<MR, 'OK'>>
+		// Alt<Expand<Merge<Omit<ML, 'OK'>, Omit<MR, 'OK'>> & Join<ML, MR>>>
+		// Alt<Expand<Merge<Omit<ML, 'OK'>, Omit<MR, 'OK'>> & { OK: [ ML['OK'], MR['OK'] ] }>>
+
 
 
 export interface Alt <Map extends Map_Base>

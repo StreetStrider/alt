@@ -343,3 +343,53 @@ function unless ()
 
 	ALT('FU', 'abc').unless(s => null) // $ExpectType Alt<{ OK: null; }>
 }
+
+
+//
+function join_generic ()
+{
+	const a: Alt<{ OK: 'LK', FAIL: 'LE' }> = OK('LK')
+	const b: Alt<{ OK: 'RK', FAIL: 'RE' }> = FAIL('REE')
+
+	join(a, b) // $ExpectType Alt<{ FAIL: "LE" | "RE"; OK: ["LK", "RK"]; }>
+}
+
+function join_generic_custom ()
+{
+	const a: Alt<{ F1: 'a1', F2: 'a2', OK: 'ak' }> = ALT('F1', 'a1')
+	const b: Alt<{ F1: 'b1', F3: 'b3' }> = ALT('F3', 'b3')
+
+	join(a, b) // $ExpectType Alt<{ F1: "a1" | "b1"; F2: "a2"; F3: "b3"; }>
+}
+
+function join_L ()
+{
+	const a = FAIL('LE' as const)
+	const b = FAIL('RE' as const)
+
+	join(a, b) // $ExpectType Alt<{ FAIL: "LE"; }>
+}
+
+function join_R ()
+{
+	const a = OK(true)
+	const b = FAIL('RE' as const)
+
+	join(a, b) // $ExpectType Alt<{ FAIL: "RE"; }>
+}
+
+function join_generic_ok ()
+{
+	const a = OK(true)
+	const b = OK('abc')
+
+	join(a, b) // $ExpectType Alt<{ OK: [boolean, string]; }>
+}
+
+function join_ok ()
+{
+	const a = OK('LK' as const)
+	const b = OK('RK' as const)
+
+	join(a, b) // $ExpectType Alt<{ OK: ["LK", "RK"]; }>
+}
