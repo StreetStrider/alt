@@ -285,3 +285,61 @@ function tap ()
 		s // $ExpectType never
 	})
 }
+
+function settle_on ()
+{
+	ALT('FOO', 'abc').settle_on('FOO', s => s + 'd') // $ExpectType Alt<{ OK: string; }>
+	ALT('FOO', 'abc').settle_on('FOO', s => 17) // $ExpectType Alt<{ OK: number; }>
+
+	ALT('FOO', 'abc').settle_on('FOO', s =>
+	{
+		s // $ExpectType string
+	})
+
+	ALT('FOO', 'abc').settle_on('BAZ', // $ExpectError
+		s => 17)
+}
+
+function settle ()
+{
+	ALT('FAIL', 'abc').settle(s => s + 'd') // $ExpectType Alt<{ OK: string; }>
+	ALT('FAIL', 'abc').settle(s => 17) // $ExpectType Alt<{ OK: number; }>
+
+	ALT('FAIL', 'abc').settle(s =>
+	{
+		s // $ExpectType string
+	})
+
+	ALT('FOO', 'abc').settle_on('BAZ', // $ExpectError
+		s => 17)
+}
+
+function unless_on ()
+{
+	const a: Alt<{ FOO: number, BAR: string }> = ALT('BAR', 'abc')
+	a.unless_on('FOO', s => s + 'd') // $ExpectType Alt<{ FOO: string | number; }>
+	a.unless_on('FOO', s => 17) // $ExpectType Alt<{ FOO: number; }>
+
+	ALT('FOO', 'abc').unless_on('FOO', s =>
+	{
+		s // $ExpectType never
+	})
+	ALT('FOO', 'abc').unless_on('FOO', s => null) // $ExpectType Alt<{ FOO: string; }>
+
+	ALT('FOO', 'abc').unless_on('BAZ', s => null) // $ExpectType Alt<{ BAZ: null; }>
+}
+
+function unless ()
+{
+	const a: Alt<{ OK: null, FAIL: string }> = ALT('FAIL', 'abc')
+	a.unless(s => s + 'd') // $ExpectType Alt<{ OK: string | null; }>
+	a.unless(s => 17) // $ExpectType Alt<{ OK: number | null; }>
+
+	ALT('OK', 'abc').unless(s =>
+	{
+		s // $ExpectType never
+	})
+	ALT('OK', 'abc').unless(s => null) // $ExpectType Alt<{ OK: string; }>
+
+	ALT('FU', 'abc').unless(s => null) // $ExpectType Alt<{ OK: null; }>
+}

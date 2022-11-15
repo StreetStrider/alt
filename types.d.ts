@@ -66,18 +66,23 @@ export interface Alt <Map extends Map_Base>
 
 	settle_on <K extends keyof Map, Out>
 		(key: K, fn: (value: Map[K]) => Out)
-			: Alt<Omit<Map, K> & Record<'OK', Out>>,
+			: Alt<Expand<Merge<Omit<Map, K>, Record<'OK', Out>>>>,
+			// : Alt<Omit<Map, K> & Record<'OK', Out>>,
 
-	settle <Out> (fn: (value: Map['FAIL']) => Out)
-		: Alt<Omit<Map, 'FAIL'> & Record<'OK', Out>>,
+	settle <Out> (fn: (value: 'FAIL' extends keyof Map ? Map['FAIL'] : never) => Out)
+		: 'FAIL' extends keyof Map ? Alt<Expand<Merge<Omit<Map, 'FAIL'>, Record<'OK', Out>>>> : never,
+		// : Alt<Omit<Map, 'FAIL'> & Record<'OK', Out>>,
 
-	unless_on <K extends keyof Map, Out>
+	unless_on <K extends Key_Base, Out>
 		(key: K, fn: (value: Map[Exclude<keyof Map, K>]) => Out)
-			: Alt<Omit<Map, Exclude<keyof Map, K>> & Record<K, Out>>,
+			: Exclude<keyof Map, K> extends never ? this
+				: Alt<Expand<Merge<Omit<Map, Exclude<keyof Map, K>>, Record<K, Out>>>>,
 
 	unless <Out>
 		(fn: (value: Map[Exclude<keyof Map, 'OK'>]) => Out)
-			: Alt<Omit<Map, Exclude<keyof Map, 'OK'>> & Record<'OK', Out>>,
+			: Exclude<keyof Map, 'OK'> extends never ? this
+				: Alt<Expand<Merge<Omit<Map, Exclude<keyof Map, 'OK'>>, Record<'OK', Out>>>>,
+				// : Alt<Omit<Map, Exclude<keyof Map, 'OK'>> & Record<'OK', Out>>,
 
 	debug ()
 		: Debug<keyof Map, Map>
