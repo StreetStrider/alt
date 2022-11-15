@@ -1,6 +1,6 @@
 
-export type Key_Base = (string | number | symbol)
-export type Base = Record<Key_Base, unknown>
+export type Keys = (string | number | symbol)
+export type Base = Record<Keys, unknown>
 
 
 type Expand <M extends Base> = M extends infer MM ? { [ K in keyof MM ]: MM[K] } : never
@@ -18,7 +18,7 @@ type Merge <L extends Base, R extends Base> =
 
 export interface Alt <Map extends Base>
 {
-	is <K extends Key_Base> (key: K)
+	is <K extends Keys> (key: K)
 		: (keyof Map extends K ? true : K extends keyof Map ? boolean : false)
 
 	extract_on <K extends keyof Map> (key: K)
@@ -39,7 +39,7 @@ export interface Alt <Map extends Base>
 			: (Out extends Alt<infer MOut>
 				? Alt<Expand<Merge<Omit<Map, K>, MOut>>> : never),
 
-	map_to <From extends keyof Map, To extends Key_Base, Out>
+	map_to <From extends keyof Map, To extends Keys, Out>
 		(from: From, to: To, fn: (value: Map[From]) => Out)
 			: Alt<Expand<Merge<
 				Omit<Map, From>,
@@ -84,7 +84,7 @@ export interface Alt <Map extends Base>
 			:
 				never),
 
-	unless_on <K extends Key_Base, Out> (key: K, fn: (value: Map[Exclude<keyof Map, K>]) => Out)
+	unless_on <K extends Keys, Out> (key: K, fn: (value: Map[Exclude<keyof Map, K>]) => Out)
 		: (Exclude<keyof Map, K> extends never
 			?
 				this

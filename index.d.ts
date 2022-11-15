@@ -1,6 +1,6 @@
 
 import { Alt } from './types'
-import { Key_Base } from './types'
+import { Keys } from './types'
 
 import { Repr } from './types'
 import { Join } from './types'
@@ -8,11 +8,11 @@ import { Result } from './types'
 import { Spread } from './types'
 
 
-export function Alt <Key extends Key_Base, Map extends { [K in Key]: void }>
+export function Alt <Key extends Keys, Map extends { [K in Key]: void }>
 	(key: Key)
 		: Alt<Map>
 
-export function Alt <Key extends Key_Base, Value, Map extends { [K in Key]: Value }>
+export function Alt <Key extends Keys, Value, Map extends { [K in Key]: Value }>
 	(key: Key, value: Value)
 		: Alt<Map>
 
