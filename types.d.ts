@@ -2,19 +2,15 @@
 export type Key_Base = (string | number | symbol)
 export type Map_Base = Record<Key_Base, unknown>
 
-type toMap <A extends Alt<any>> = (A extends Alt<infer M> ? M : never)
-// type toValue <A extends Alt<any>, K extends Key_Base> = (A extends Alt<infer M> ? (K extends keyof M ? M[K] : never) : never)
-// type toValue <A extends Alt<any>, K extends keyof toMap<A>> = toMap<A>[K]
-
-// type Without <T, K extends keyof T> = { [ K2 in keyof T as (K2 extends K ? never : K2) ]: T[K] }
 type Expand <T extends Map_Base> = T extends infer O ? { [ K in keyof O ]: O[K] } : never
-type Merge <M1 extends Map_Base, M2 extends Map_Base> =
+
+type Merge <L extends Map_Base, R extends Map_Base> =
 {
-	[ K in ((keyof M1) | (keyof M2)) ]:
+	[ K in ((keyof L) | (keyof R)) ]:
 		(
-			(K extends keyof M1 ? M1[K] : never)
+			(K extends keyof L ? L[K] : never)
 		|
-			(K extends keyof M2 ? M2[K] : never)
+			(K extends keyof R ? R[K] : never)
 		)
 }
 
@@ -29,28 +25,41 @@ export type Join <
 	: never
 	: never
 
-type Join2 <M1 extends Map_Base, M2 extends Map_Base> =
-	 'OK' extends keyof M1 ?
-	('OK' extends keyof M2 ?
-		Join3<M1, M2>
-		// (Merge<Omit<M1, 'OK'>, Omit<M2, 'OK'>>
+type Join2 <L extends Map_Base, R extends Map_Base> =
+	 'OK' extends keyof L ?
+	('OK' extends keyof R ?
+		Join3<L, R>
+		// (Merge<Omit<L, 'OK'>, Omit<R, 'OK'>>
 		// &
-		// { OK: [ M1['OK'], M2['OK'] ] })
-	: Merge<Omit<M1, 'OK'>, Omit<M2, 'OK'>>)
-	: M1
+		// { OK: [ L['OK'], R['OK'] ] })
+	: Merge<Omit<L, 'OK'>, Omit<R, 'OK'>>)
+	: L
 
-type Join3 <M1 extends Map_Base, M2 extends Map_Base> =
-	Merge<Omit<M1, 'OK'>, Omit<M2, 'OK'>>
+type Join3 <L extends Map_Base, R extends Map_Base> =
+	Merge<Omit<L, 'OK'>, Omit<R, 'OK'>>
 	&
-	{ OK: [ M1['OK'], M2['OK'] ] }
+	{ OK: [ L['OK'], R['OK'] ] }
 
 		// (Merge<>
 		// &
-		// { OK: [ M1['OK'], M2['OK'] ] })
+		// { OK: [ L['OK'], R['OK'] ] })
 	// Merge<Omit<ML, 'OK'>, Omit<MR, 'OK'>>
 		// Alt<Expand<Merge<Omit<ML, 'OK'>, Omit<MR, 'OK'>> & Join<ML, MR>>>
 		// Alt<Expand<Merge<Omit<ML, 'OK'>, Omit<MR, 'OK'>> & { OK: [ ML['OK'], MR['OK'] ] }>>
 
+	/*
+		(Left extends Alt<infer ML>
+		?
+			(Right extends Alt<infer MR>
+			?
+				Alt<Expand<Merge<Omit<ML, 'OK'>, Omit<MR, 'OK'>> & Join<ML, MR>>>
+				// Alt<Expand<Merge<Omit<ML, 'OK'>, Omit<MR, 'OK'>> & { OK: [ ML['OK'], MR['OK'] ] }>>
+			:
+				never
+			)
+		:
+			never
+		)*/
 
 
 export interface Alt <Map extends Map_Base>
@@ -75,7 +84,8 @@ export interface Alt <Map extends Map_Base>
 
 	chain <K extends keyof Map, Out extends Alt<any>>
 		(key: K, fn: (value: Map[K]) => Out)
-			: Alt<Expand<Merge<Omit<Map, K>, toMap<Out>>>>,
+			: Out extends Alt<infer MOut>
+				? Alt<Expand<Merge<Omit<Map, K>, MOut>>> : never
 			// : Alt<Expand<Omit<Map, K> & toMap<Out>>>,
 			// Alt<Omit<Map, K> & toMap<Out>>
 			// : Alt<{ [ K2 in keyof Map ]: K2 extends K ? toValue<Out, K2> : Map[K2] }>,
