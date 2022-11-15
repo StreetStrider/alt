@@ -156,3 +156,21 @@ export type ResultLoading <T, E = unknown> = Alt<
 	FAIL: E,
 	LOADING: void,
 }>
+
+
+//
+export type Spread <A extends Alt<any>> =
+	(A extends Alt<infer M>
+	?
+		(
+			M['FAIL'] extends { message: string }
+			?
+				Alt<Expand<
+					Omit<M, 'FAIL'>
+					&
+					Record<`FAIL:${ M['FAIL']['message'] }`, Extract<M['FAIL'], { message: M['FAIL']['message'] }>>>>
+			:
+			A
+		)
+	:
+	never)

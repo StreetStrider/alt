@@ -7,6 +7,7 @@ import { Alt } from './types'
 import { Result } from './types'
 
 import { Join } from './types'
+import { Spread } from './types'
 
 
 export function Alt <Key extends Key_Base, Map extends { [K in Key]: void }> (key: Key)
@@ -62,20 +63,4 @@ export function attempt <T, E = unknown> (fn: () => T): Result<T, E>
 
 export function capture <T, E = unknown> (fn: () => (Promise<T> | T)): Promise<Result<T, E>>
 
-/*
-export function error_spread <A extends Alt<any>> (alt: A)
-	:
-		(A extends Alt<infer M>
-		?
-			(
-				M['FAIL'] extends { message: string }
-				?
-					Alt<Omit<M, 'FAIL'> & Record<`FAIL:${ M['FAIL']['message'] }`, Extract<M['FAIL'], { message: M['FAIL']['message'] }>>>
-				:
-				A
-			)
-		:
-		never)
-*/
-
-export const error_spread: any
+export function error_spread <A extends Alt<any>> (alt: A): Spread<A>

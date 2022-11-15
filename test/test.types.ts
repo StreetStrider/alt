@@ -427,3 +427,17 @@ function load_repr ()
 	const b = load(r)
 	b // $ExpectType Alt<{ OK: { s: string; }; FAIL: void; }>
 }
+
+
+//
+function error_spread1 ()
+{
+	const ok = ALT('OK', { x: 1 })
+	error_spread(ok) // $ExpectType Alt<{ OK: { x: number; }; }>
+
+	const foo = new Error('FOO')
+	error_spread(ALT('FAIL', foo)) // $ExpectType Alt<{ [x: `FAIL:${string}`]: Error; }>
+
+	const bar = ALT('OK', new Error('BAR'))
+	error_spread(bar) // $ExpectType Alt<{ OK: Error; }>
+}
