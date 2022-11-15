@@ -8,15 +8,17 @@ import { Result } from './types'
 import { Spread } from './types'
 
 
-export function Alt <Key extends Key_Base, Map extends { [K in Key]: void }> (key: Key)
-	: Alt<Map>
+export function Alt <Key extends Key_Base, Map extends { [K in Key]: void }>
+	(key: Key)
+		: Alt<Map>
 
 export function Alt <Key extends Key_Base, Value, Map extends { [K in Key]: Value }>
 	(key: Key, value: Value)
 		: Alt<Map>
 
 
-export function load <R extends Repr<any>> (repr: R): R extends Repr<infer A> ? A : never
+export function load <R extends Repr<any>> (repr: R)
+	: (R extends Repr<infer A> ? A : never)
 
 
 export function join
@@ -24,11 +26,8 @@ export function join
 	Left  extends Alt<any>,
 	Right extends Alt<any>,
 >
-(
-	left:  Left,
-	right: Right,
-)
-	: Join<Left, Right>
+	(left: Left, right: Right)
+		: Join<Left, Right>
 
 
 export function OK <Map extends { OK: void }> (): Alt<Map>

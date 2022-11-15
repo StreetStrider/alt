@@ -2,6 +2,7 @@
 export type Key_Base = (string | number | symbol)
 export type Map_Base = Record<Key_Base, unknown>
 
+
 type Expand <T extends Map_Base> = T extends infer O ? { [ K in keyof O ]: O[K] } : never
 
 type Merge <L extends Map_Base, R extends Map_Base> =
@@ -14,6 +15,116 @@ type Merge <L extends Map_Base, R extends Map_Base> =
 		)
 }
 
+
+export interface Alt <Map extends Map_Base>
+{
+	is <K extends Key_Base> (key: K)
+		: (keyof Map extends K ? true : K extends keyof Map ? boolean : false)
+
+	extract_on <K extends keyof Map> (key: K)
+		: (keyof Map extends K ? Map[K] : never),
+
+	extract ()
+		: (keyof Map extends 'OK' ? Map['OK'] : never),
+
+	ripout ()
+		: (keyof Map extends 'OK' ? Map['OK'] :
+			'OK' extends keyof Map ? (Map['OK'] | undefined) : never),
+
+	thru <Out> (fn: (alt: this) => Out)
+		: Out,
+
+	chain <K extends keyof Map, Out extends Alt<any>>
+		(key: K, fn: (value: Map[K]) => Out)
+			: (Out extends Alt<infer MOut>
+				? Alt<Expand<Merge<Omit<Map, K>, MOut>>> : never),
+
+	map_to <From extends keyof Map, To extends Key_Base, Out>
+		(from: From, to: To, fn: (value: Map[From]) => Out)
+			: Alt<Expand<Merge<
+				Omit<Map, From>,
+				Record<To, Out>
+			>>>,
+
+	map_on <K extends keyof Map, Out> (key: K, fn: (value: Map[K]) => Out)
+		: Alt<Expand<Merge<
+			Omit<Map, K>,
+			Record<K, Out>
+		>>>,
+
+	map <Out> (fn: (value: 'OK' extends keyof Map ? Map['OK'] : never) => Out)
+		: ('OK' extends keyof Map
+			?
+				Alt<Expand<Merge<
+					Omit<Map, 'OK'>,
+					Record<'OK', Out>
+				>>>
+			:
+				never),
+
+	tap_on <K extends keyof Map> (key: K, fn: (value: Map[K]) => void)
+		: this,
+
+	tap (fn: (value: 'OK' extends keyof Map ? Map['OK'] : never) => void)
+		: ('OK' extends keyof Map ? this : never),
+
+	settle_on <K extends keyof Map, Out> (key: K, fn: (value: Map[K]) => Out)
+		: Alt<Expand<Merge<
+			Omit<Map, K>,
+			Record<'OK', Out>
+		>>>,
+
+	settle <Out> (fn: (value: 'FAIL' extends keyof Map ? Map['FAIL'] : never) => Out)
+		: ('FAIL' extends keyof Map
+			?
+				Alt<Expand<Merge<
+					Omit<Map, 'FAIL'>,
+					Record<'OK', Out>
+				>>>
+			:
+				never),
+
+	unless_on <K extends Key_Base, Out> (key: K, fn: (value: Map[Exclude<keyof Map, K>]) => Out)
+		: (Exclude<keyof Map, K> extends never
+			?
+				this
+			:
+				Alt<Expand<Merge<
+					Omit<Map, Exclude<keyof Map, K>>,
+					Record<K, Out>
+				>>>
+			),
+
+	unless <Out> (fn: (value: Map[Exclude<keyof Map, 'OK'>]) => Out)
+		: (Exclude<keyof Map, 'OK'> extends never ? this
+			: Alt<Expand<Merge<Omit<Map, Exclude<keyof Map, 'OK'>>, Record<'OK', Out>>>>),
+
+	debug ()
+		: Debug<keyof Map, Map>
+
+	repr ()
+		: Repr<this>,
+}
+
+
+//
+type Debug <K extends keyof Map, Map> = K extends any ? { key: K, value: Map[K] } : never
+
+
+//
+declare const repr$symbol: unique symbol // = Symbol('repr')
+
+export type Repr <A extends Alt<any>> =
+{
+	[ repr$symbol ]: A,
+
+	type: 'Alt',
+	key: string,
+	value: unknown,
+}
+
+
+//
 export type Join <
 	Left  extends Alt<any>,
 	Right extends Alt<any>,
@@ -59,99 +170,7 @@ type Join3 <L extends Map_Base, R extends Map_Base> =
 			)
 		:
 			never
-		)*/
-
-
-export interface Alt <Map extends Map_Base>
-{
-	is <K extends Key_Base> (key: K)
-		: (keyof Map extends K ? true : K extends keyof Map ? boolean : false)
-		// : this is Alt<{ [ K2 in K ]: Map[K2] }>,
-		// : this is Alt<Pick<Map, K>>,
-
-	extract_on <K extends keyof Map> (key: K)
-		: (keyof Map extends K ? Map[K] : never),
-
-	extract ()
-		: (keyof Map extends 'OK' ? Map['OK'] : never),
-
-	ripout ()
-		: (keyof Map extends 'OK' ? Map['OK'] :
-			'OK' extends keyof Map ? (Map['OK'] | undefined) : never),
-
-	thru <Out> (fn: (alt: this) => Out)
-		: Out,
-
-	chain <K extends keyof Map, Out extends Alt<any>>
-		(key: K, fn: (value: Map[K]) => Out)
-			: Out extends Alt<infer MOut>
-				? Alt<Expand<Merge<Omit<Map, K>, MOut>>> : never
-			// : Alt<Expand<Omit<Map, K> & toMap<Out>>>,
-			// Alt<Omit<Map, K> & toMap<Out>>
-			// : Alt<{ [ K2 in keyof Map ]: K2 extends K ? toValue<Out, K2> : Map[K2] }>,
-
-	map_to <From extends keyof Map, To extends Key_Base, Out>
-		(from: From, to: To, fn: (value: Map[From]) => Out)
-			: Alt<Expand<Merge<Omit<Map, From>, Record<To, Out>>>>,
-
-	map_on <K extends keyof Map, Out>
-		(key: K, fn: (value: Map[K]) => Out)
-			: Alt<Expand<Merge<Omit<Map, K>, Record<K, Out>>>>,
-
-	map <Out> (fn: (value: 'OK' extends keyof Map ? Map['OK'] : never) => Out)
-		: 'OK' extends keyof Map ? Alt<Expand<Merge<Omit<Map, 'OK'>, Record<'OK', Out>>>> : never,
-		// : Alt<Expand<Merge<Omit<Map, 'OK'>, Record<'OK', Out>>>>,
-
-	tap_on <K extends keyof Map>
-		(key: K, fn: (value: Map[K]) => void)
-			: this,
-
-	tap (fn: (value: 'OK' extends keyof Map ? Map['OK'] : never) => void)
-		: 'OK' extends keyof Map ? this : never,
-
-	settle_on <K extends keyof Map, Out>
-		(key: K, fn: (value: Map[K]) => Out)
-			: Alt<Expand<Merge<Omit<Map, K>, Record<'OK', Out>>>>,
-			// : Alt<Omit<Map, K> & Record<'OK', Out>>,
-
-	settle <Out> (fn: (value: 'FAIL' extends keyof Map ? Map['FAIL'] : never) => Out)
-		: 'FAIL' extends keyof Map ? Alt<Expand<Merge<Omit<Map, 'FAIL'>, Record<'OK', Out>>>> : never,
-		// : Alt<Omit<Map, 'FAIL'> & Record<'OK', Out>>,
-
-	unless_on <K extends Key_Base, Out>
-		(key: K, fn: (value: Map[Exclude<keyof Map, K>]) => Out)
-			: Exclude<keyof Map, K> extends never ? this
-				: Alt<Expand<Merge<Omit<Map, Exclude<keyof Map, K>>, Record<K, Out>>>>,
-
-	unless <Out>
-		(fn: (value: Map[Exclude<keyof Map, 'OK'>]) => Out)
-			: Exclude<keyof Map, 'OK'> extends never ? this
-				: Alt<Expand<Merge<Omit<Map, Exclude<keyof Map, 'OK'>>, Record<'OK', Out>>>>,
-				// : Alt<Omit<Map, Exclude<keyof Map, 'OK'>> & Record<'OK', Out>>,
-
-	debug ()
-		: Debug<keyof Map, Map>
-
-	repr ()
-		: Repr<this>,
-}
-
-
-//
-type Debug <K extends keyof Map, Map> = K extends any ? { key: K, value: Map[K] } : never
-
-
-//
-declare const repr$symbol: unique symbol // = Symbol('repr')
-
-export type Repr <A extends Alt<any>> =
-{
-	[ repr$symbol ]: A,
-
-	type: 'Alt',
-	key: string,
-	value: unknown,
-}
+)*/
 
 
 //
@@ -171,18 +190,18 @@ export type ResultLoading <T, E = unknown> = Alt<
 
 //
 export type Spread <A extends Alt<any>> =
-	(A extends Alt<infer M>
-	?
-		(
-			M['FAIL'] extends { message: string }
-			?
-				Alt<Expand<
-					Omit<M, 'FAIL'>
-					&
-					Record<`FAIL:${ M['FAIL']['message'] }`,
-						Extract<M['FAIL'], { message: M['FAIL']['message'] }>>>>
-			:
-			A
-		)
-	:
-	never)
+(A extends Alt<infer M>
+?
+	(
+		M['FAIL'] extends { message: string }
+		?
+			Alt<Expand<
+				Omit<M, 'FAIL'>
+				&
+				Record<`FAIL:${ M['FAIL']['message'] }`,
+					Extract<M['FAIL'], { message: M['FAIL']['message'] }>>>>
+		:
+		A
+	)
+:
+never)
