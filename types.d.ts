@@ -1,11 +1,11 @@
 
 export type Key_Base = (string | number | symbol)
-export type Map_Base = Record<Key_Base, unknown>
+export type Base = Record<Key_Base, unknown>
 
 
-type Expand <T extends Map_Base> = T extends infer O ? { [ K in keyof O ]: O[K] } : never
+type Expand <M extends Base> = M extends infer MM ? { [ K in keyof MM ]: MM[K] } : never
 
-type Merge <L extends Map_Base, R extends Map_Base> =
+type Merge <L extends Base, R extends Base> =
 {
 	[ K in ((keyof L) | (keyof R)) ]:
 		(
@@ -16,7 +16,7 @@ type Merge <L extends Map_Base, R extends Map_Base> =
 }
 
 
-export interface Alt <Map extends Map_Base>
+export interface Alt <Map extends Base>
 {
 	is <K extends Key_Base> (key: K)
 		: (keyof Map extends K ? true : K extends keyof Map ? boolean : false)
@@ -136,7 +136,7 @@ export type Join <
 	: never
 	: never
 
-type Join2 <L extends Map_Base, R extends Map_Base> =
+type Join2 <L extends Base, R extends Base> =
 	 'OK' extends keyof L ?
 	('OK' extends keyof R ?
 		Join3<L, R>
@@ -146,7 +146,7 @@ type Join2 <L extends Map_Base, R extends Map_Base> =
 	: Merge<Omit<L, 'OK'>, Omit<R, 'OK'>>)
 	: L
 
-type Join3 <L extends Map_Base, R extends Map_Base> =
+type Join3 <L extends Base, R extends Base> =
 	Merge<Omit<L, 'OK'>, Omit<R, 'OK'>>
 	&
 	{ OK: [ L['OK'], R['OK'] ] }
