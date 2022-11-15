@@ -24,6 +24,12 @@ type MapTo
 >
 = Merge<Omit<Map, From>, Record<To, Out>>
 
+type ValuesFor <Map extends Base, Key extends Keys>
+= Map[Extract<keyof Map, Key>]
+
+type KeysOther <Map extends Base, Key extends Keys>
+= Exclude <keyof Map, Key>
+
 
 export interface Alt <Map extends Base>
 {
@@ -56,30 +62,30 @@ export interface Alt <Map extends Base>
 		(key: K, fn: (value: Map[K]) => Out)
 			: Alt<Expand<MapTo<Map, K, K, Out>>>,
 
-	map <Out> (fn: (value: Map[Extract<keyof Map, 'OK'>]) => Out)
+	map <Out> (fn: (value: ValuesFor<Map, 'OK'>) => Out)
 		: ('OK' extends keyof Map
 			? Alt<Expand<MapTo<Map, 'OK', 'OK', Out>>> : never),
 
 	tap_on <K extends keyof Map> (key: K, fn: (value: Map[K]) => void)
 		: this,
 
-	tap (fn: (value: Map[Extract<keyof Map, 'OK'>]) => void)
+	tap (fn: (value: ValuesFor<Map, 'OK'>) => void)
 		: ('OK' extends keyof Map ? this : never),
 
 	settle_on <K extends keyof Map, Out> (key: K, fn: (value: Map[K]) => Out)
 		: Alt<Expand<MapTo<Map, K, 'OK', Out>>>,
 
-	settle <Out> (fn: (value: Map[Extract<keyof Map, 'FAIL'>]) => Out)
+	settle <Out> (fn: (value: ValuesFor<Map, 'FAIL'>) => Out)
 		: ('FAIL' extends keyof Map
 			? Alt<Expand<MapTo<Map, 'FAIL', 'OK', Out>>> : never),
 
-	unless_on <K extends Keys, Out> (key: K, fn: (value: Map[Exclude<keyof Map, K>]) => Out)
-		: (Exclude<keyof Map, K> extends never
-			? this : Alt<Expand<MapTo<Map, Exclude<keyof Map, K>, K, Out>>>),
+	unless_on <K extends Keys, Out> (key: K, fn: (value: Map[KeysOther<Map, K>]) => Out)
+		: (KeysOther<Map, K> extends never
+			? this : Alt<Expand<MapTo<Map, KeysOther<Map, K>, K, Out>>>),
 
-	unless <Out> (fn: (value: Map[Exclude<keyof Map, 'OK'>]) => Out)
-		: (Exclude<keyof Map, 'OK'> extends never
-			? this : Alt<Expand<MapTo<Map, Exclude<keyof Map, 'OK'>, 'OK', Out>>>),
+	unless <Out> (fn: (value: Map[KeysOther<Map, 'OK'>]) => Out)
+		: (KeysOther<Map, 'OK'> extends never
+			? this : Alt<Expand<MapTo<Map, KeysOther<Map, 'OK'>, 'OK', Out>>>),
 
 	debug ()
 		: Debug<keyof Map, Map>
