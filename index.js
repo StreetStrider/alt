@@ -203,5 +203,15 @@ exports.capture = async function capture (fn)
 
 exports.error_spread = function error_spread (alt)
 {
-	return alt.chain('FAIL', (error) => Alt(`FAIL:${ error.message }`, error))
+	return alt.chain('FAIL', (error) =>
+	{
+		if ('message' in Object(error))
+		{
+			return Alt(`FAIL:${ error.message }`, error)
+		}
+		else
+		{
+			return alt
+		}
+	})
 }

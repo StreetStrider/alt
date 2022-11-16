@@ -438,4 +438,7 @@ function error_spread1 ()
 
 	const bar = ALT('OK', new Error('BAR'))
 	error_spread(bar) // $ExpectType Alt<{ OK: Error; }>
+
+	const baz = ALT('FAIL', { error: true })
+	error_spread(baz) // $ExpectType Alt<{ FAIL: { error: boolean; }; }>
 }

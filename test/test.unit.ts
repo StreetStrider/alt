@@ -381,21 +381,6 @@ describe('Alt', () =>
 		/* eslint-enable require-await */
 	})
 
-	describe('error_spread', () =>
-	{
-		it('error_spread', () =>
-		{
-			const ok = Alt('OK', { x: 1 })
-			expect(error_spread(ok)).eq(ok)
-
-			const foo = new Error('FOO')
-			expect(error_spread(Alt('FAIL', foo)).debug()).deep.eq({ key: 'FAIL:FOO', value: foo })
-
-			const bar = Alt('OK', new Error('BAR'))
-			expect(error_spread(bar)).eq(bar)
-		})
-	})
-
 	describe('load / repr', () =>
 	{
 		it('load', () =>
@@ -428,6 +413,27 @@ describe('Alt', () =>
 
 			expect(f1.debug()).deep.eq(f2.debug())
 			expect(f1.repr()).deep.eq(f2.repr())
+		})
+	})
+
+	describe('error_spread', () =>
+	{
+		it('error_spread', () =>
+		{
+			const ok = Alt('OK', { x: 1 })
+			expect(error_spread(ok)).eq(ok)
+
+			const foo = new Error('FOO')
+			expect(error_spread(Alt('FAIL', foo)).debug()).deep.eq({ key: 'FAIL:FOO', value: foo })
+
+			const bar = Alt('OK', new Error('BAR'))
+			expect(error_spread(bar)).eq(bar)
+		})
+
+		it('error_spread no message', () =>
+		{
+			const foo = { error: true }
+			expect(error_spread(Alt('FAIL', foo)).debug()).deep.eq({ key: 'FAIL', value: foo })
 		})
 	})
 })
