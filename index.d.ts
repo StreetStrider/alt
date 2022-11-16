@@ -21,11 +21,7 @@ export function load <R extends Repr<any>> (repr: R)
 	: (R extends Repr<infer A> ? A : never)
 
 
-export function join
-<
-	Left  extends Alt<any>,
-	Right extends Alt<any>,
->
+export function join <Left extends Alt<any>, Right extends Alt<any>>
 	(left: Left, right: Right)
 		: Join<Left, Right>
 
