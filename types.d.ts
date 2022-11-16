@@ -120,45 +120,20 @@ export type Join <
 =
 	Left  extends Alt<infer L> ?
 	Right extends Alt<infer R> ?
-		Alt<Expand<Join2<L, R>>>
+		Alt<Expand<
+			 'OK' extends keyof L ?
+			('OK' extends keyof R ?
+				(
+					JoinMixed<L, R> & { OK: [ L['OK'], R['OK'] ] }
+				)
+			: JoinMixed<L, R>)
+			: L
+		>>
 	: never
 	: never
 
-type Join2 <L extends Base, R extends Base> =
-	 'OK' extends keyof L ?
-	('OK' extends keyof R ?
-		Join3<L, R>
-		// (Merge<Omit<L, 'OK'>, Omit<R, 'OK'>>
-		// &
-		// { OK: [ L['OK'], R['OK'] ] })
-	: Merge<Omit<L, 'OK'>, Omit<R, 'OK'>>)
-	: L
-
-type Join3 <L extends Base, R extends Base> =
-	Merge<Omit<L, 'OK'>, Omit<R, 'OK'>>
-	&
-	{ OK: [ L['OK'], R['OK'] ] }
-
-		// (Merge<>
-		// &
-		// { OK: [ L['OK'], R['OK'] ] })
-	// Merge<Omit<ML, 'OK'>, Omit<MR, 'OK'>>
-		// Alt<Expand<Merge<Omit<ML, 'OK'>, Omit<MR, 'OK'>> & Join<ML, MR>>>
-		// Alt<Expand<Merge<Omit<ML, 'OK'>, Omit<MR, 'OK'>> & { OK: [ ML['OK'], MR['OK'] ] }>>
-
-	/*
-		(Left extends Alt<infer ML>
-		?
-			(Right extends Alt<infer MR>
-			?
-				Alt<Expand<Merge<Omit<ML, 'OK'>, Omit<MR, 'OK'>> & Join<ML, MR>>>
-				// Alt<Expand<Merge<Omit<ML, 'OK'>, Omit<MR, 'OK'>> & { OK: [ ML['OK'], MR['OK'] ] }>>
-			:
-				never
-			)
-		:
-			never
-)*/
+type JoinMixed <L extends Base, R extends Base>
+= Merge<Omit<L, 'OK'>, Omit<R, 'OK'>>
 
 
 //
