@@ -1,4 +1,6 @@
 
+import { expect } from 'chai'
+
 import { OK } from '../'
 import { Alt } from '../types'
 
@@ -20,11 +22,13 @@ describe('Integration', () =>
 		.map(ok => V(ok.data))
 		.map_on('FAIL', e => V(e.message))
 		.map_on('LOADING', () => V('~'))
-		.unless(_ => _)
+		.unless()
 		b // $ExpectType Alt<{ OK: V; }>
 
 		const c = b.extract()
 		c // $ExpectType V
+
+		expect(c).deep.eq({ text: 'foo' })
 	})
 
 	it('waterfall #2', () =>
@@ -35,11 +39,13 @@ describe('Integration', () =>
 		.map_on('FAIL', e => V(e.message))
 		.map_on('LOADING', () => V('~'))
 		.map(ok => V(ok.data))
-		.unless(_ => _)
+		.unless()
 		b // $ExpectType Alt<{ OK: V; }>
 
 		const c = b.extract()
 		c // $ExpectType V
+
+		expect(c).deep.eq({ text: 'foo' })
 	})
 
 	it('waterfall #3', () =>
@@ -56,6 +62,8 @@ describe('Integration', () =>
 
 		const c = b.extract()
 		c // $ExpectType V
+
+		expect(c).deep.eq({ text: 'foo' })
 	})
 
 	it('waterfall #4', () =>
@@ -66,12 +74,14 @@ describe('Integration', () =>
 		.map_on('FAIL', e => e.message)
 		.map_on('LOADING', () => '~')
 		.map(ok => ok.data)
-		.unless(_ => _)
+		.unless()
 		.map(V)
 		b // $ExpectType Alt<{ OK: V; }>
 
 		const c = b.extract()
 		c // $ExpectType V
+
+		expect(c).deep.eq({ text: 'foo' })
 	})
 
 	it('waterfall #5 settle', () =>
@@ -86,6 +96,8 @@ describe('Integration', () =>
 
 		const c = b.extract()
 		c // $ExpectType V
+
+		expect(c).deep.eq({ text: 'foo' })
 	})
 
 	it('waterfall #6 settle', () =>
@@ -100,6 +112,8 @@ describe('Integration', () =>
 
 		const c = b.extract()
 		c // $ExpectType V
+
+		expect(c).deep.eq({ text: 'foo' })
 	})
 
 	it('waterfall #7 map_to', () =>
@@ -114,6 +128,8 @@ describe('Integration', () =>
 
 		const c = b.extract()
 		c // $ExpectType V
+
+		expect(c).deep.eq({ text: 'foo' })
 	})
 
 	it('waterfall #8 map_to', () =>
@@ -128,5 +144,7 @@ describe('Integration', () =>
 
 		const c = b.extract()
 		c // $ExpectType V
+
+		expect(c).deep.eq({ text: 'foo' })
 	})
 })
