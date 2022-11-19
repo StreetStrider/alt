@@ -75,9 +75,16 @@ export interface Alt <Map extends Base>
 	settle_on <K extends keyof Map, Out> (key: K, fn: (value: Map[K]) => Out)
 		: Alt<Expand<MapTo<Map, K, 'OK', Out>>>,
 
+	settle_on <K extends keyof Map> (key: K)
+		: Alt<Expand<MapTo<Map, K, 'OK', Map[K]>>>,
+
 	settle <Out> (fn: (value: ValuesFor<Map, 'FAIL'>) => Out)
 		: ('FAIL' extends keyof Map
 			? Alt<Expand<MapTo<Map, 'FAIL', 'OK', Out>>> : never),
+
+	settle ()
+		: ('FAIL' extends keyof Map
+			? Alt<Expand<MapTo<Map, 'FAIL', 'OK', Map['FAIL']>>> : never),
 
 	unless_on <K extends Keys, Out> (key: K, fn: (value: Map[KeysOther<Map, K>]) => Out)
 		: (KeysOther<Map, K> extends never

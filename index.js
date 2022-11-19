@@ -76,6 +76,8 @@ function Alt (key, value)
 
 	function map_to (from, to, fn)
 	{
+		fn || (fn = idem)
+
 		return chain(from, value => Alt(to, fn(value)))
 	}
 

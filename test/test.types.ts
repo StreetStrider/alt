@@ -287,6 +287,7 @@ function settle_on ()
 {
 	ALT('FOO', 'abc').settle_on('FOO', s => s + 'd') // $ExpectType Alt<{ OK: string; }>
 	ALT('FOO', 'abc').settle_on('FOO', s => 17) // $ExpectType Alt<{ OK: number; }>
+	ALT('FOO', 'abc').settle_on('FOO') // $ExpectType Alt<{ OK: string; }>
 
 	ALT('FOO', 'abc').settle_on('FOO', s =>
 	{
@@ -295,12 +296,14 @@ function settle_on ()
 
 	ALT('FOO', 'abc').settle_on('BAZ', // $ExpectError
 		s => 17)
+	ALT('FOO', 'abc').settle_on('BAZ') // $ExpectError
 }
 
 function settle ()
 {
 	ALT('FAIL', 'abc').settle(s => s + 'd') // $ExpectType Alt<{ OK: string; }>
 	ALT('FAIL', 'abc').settle(s => 17) // $ExpectType Alt<{ OK: number; }>
+	ALT('FAIL', 'abc').settle() // $ExpectType Alt<{ OK: string; }>
 
 	ALT('FAIL', 'abc').settle(s =>
 	{
@@ -309,6 +312,7 @@ function settle ()
 
 	ALT('FOO', 'abc').settle_on('BAZ', // $ExpectError
 		s => 17)
+	ALT('FOO', 'abc').settle_on('BAZ') // $ExpectError
 }
 
 function unless_on ()
