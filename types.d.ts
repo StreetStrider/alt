@@ -83,9 +83,19 @@ export interface Alt <Map extends Base>
 		: (KeysOther<Map, K> extends never
 			? this : Alt<Expand<MapTo<Map, KeysOther<Map, K>, K, Out>>>),
 
+	unless_on <K extends Keys> (key: K)
+		: (KeysOther<Map, K> extends never
+			? this : Alt<Expand<Record<K, Map[keyof Map]>>>),
+			// ? this : Alt<Expand<MapTo<Map, KeysOther<Map, K>, K, Map[KeysOther<Map, K>]>>>),
+
 	unless <Out> (fn: (value: Map[KeysOther<Map, 'OK'>]) => Out)
 		: (KeysOther<Map, 'OK'> extends never
 			? this : Alt<Expand<MapTo<Map, KeysOther<Map, 'OK'>, 'OK', Out>>>),
+
+	unless ()
+		: (KeysOther<Map, 'OK'> extends never
+			? this : Alt<Expand<Record<'OK', Map[keyof Map]>>>),
+			// ? this : Alt<Expand<MapTo<Map, KeysOther<Map, 'OK'>, 'OK', Map[KeysOther<Map, 'OK'>]>>>),
 
 	debug ()
 		: Debug<keyof Map, Map>

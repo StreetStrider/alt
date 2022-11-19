@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import { Alt as ALT } from '../'
 import { Alt } from '../types'
@@ -317,14 +316,17 @@ function unless_on ()
 	const a: Alt<{ FOO: number, BAR: string }> = ALT('BAR', 'abc')
 	a.unless_on('FOO', s => s + 'd') // $ExpectType Alt<{ FOO: string | number; }>
 	a.unless_on('FOO', s => 17) // $ExpectType Alt<{ FOO: number; }>
+	a.unless_on('FOO') // $ExpectType Alt<{ FOO: string | number; }>
 
 	ALT('FOO', 'abc').unless_on('FOO', s =>
 	{
 		s // $ExpectType never
 	})
 	ALT('FOO', 'abc').unless_on('FOO', s => null) // $ExpectType Alt<{ FOO: string; }>
+	ALT('FOO', 'abc').unless_on('FOO') // $ExpectType Alt<{ FOO: string; }>
 
 	ALT('FOO', 'abc').unless_on('BAZ', s => null) // $ExpectType Alt<{ BAZ: null; }>
+	ALT('FOO', 'abc').unless_on('BAZ') // $ExpectType Alt<{ BAZ: string; }>
 }
 
 function unless ()
@@ -332,14 +334,17 @@ function unless ()
 	const a: Alt<{ OK: null, FAIL: string }> = ALT('FAIL', 'abc')
 	a.unless(s => s + 'd') // $ExpectType Alt<{ OK: string | null; }>
 	a.unless(s => 17) // $ExpectType Alt<{ OK: number | null; }>
+	a.unless() // $ExpectType Alt<{ OK: string | null; }>
 
 	ALT('OK', 'abc').unless(s =>
 	{
 		s // $ExpectType never
 	})
 	ALT('OK', 'abc').unless(s => null) // $ExpectType Alt<{ OK: string; }>
+	ALT('OK', 'abc').unless() // $ExpectType Alt<{ OK: string; }>
 
 	ALT('FU', 'abc').unless(s => null) // $ExpectType Alt<{ OK: null; }>
+	ALT('FU', 'abc').unless() // $ExpectType Alt<{ OK: string; }>
 }
 
 

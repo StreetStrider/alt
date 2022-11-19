@@ -302,12 +302,30 @@ describe('Alt', () =>
 			expect(f.debug()).deep.eq({ key: 'FOO', value: 17 })
 		})
 
+		it('unless_on()', () =>
+		{
+			expect(Alt('BAR', 17).unless_on('FOO').debug()).deep.eq({ key: 'FOO', value: 17 })
+
+			const f = Alt('FOO', 17)
+			expect(f.unless_on('FOO')).eq(f)
+			expect(f.debug()).deep.eq({ key: 'FOO', value: 17 })
+		})
+
 		it('unless', () =>
 		{
 			expect(Alt('BAR', 17).unless(x => x + 1).debug()).deep.eq({ key: 'OK', value: 18 })
 
 			const f = Alt('OK', 17)
 			expect(f.unless(x => x + 1)).eq(f)
+			expect(f.debug()).deep.eq({ key: 'OK', value: 17 })
+		})
+
+		it('unless()', () =>
+		{
+			expect(Alt('BAR', 17).unless().debug()).deep.eq({ key: 'OK', value: 17 })
+
+			const f = Alt('OK', 17)
+			expect(f.unless()).eq(f)
 			expect(f.debug()).deep.eq({ key: 'OK', value: 17 })
 		})
 	})

@@ -1,7 +1,10 @@
 /* eslint-disable max-len */
 /* eslint max-statements: [ 1, 21 ] */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 
 exports.Alt = Alt
+
+var idem = (_ => _)
 
 function Alt (key, value)
 {
@@ -113,6 +116,8 @@ function Alt (key, value)
 
 	function unless_on (key, fn)
 	{
+		fn || (fn = idem)
+
 		if (is(key))
 		{
 			return $alt
