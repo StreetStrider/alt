@@ -212,6 +212,9 @@ describe('Alt', () =>
 			const f = Alt('FOO', 17)
 			expect(f.map_to('BAR', 'BAZ', x => x + 1)).eq(f) // $ExpectError
 			expect(f.debug()).deep.eq({ key: 'FOO', value: 17 })
+
+			expect(Alt('FOO', 17).map_to('FOO', 'BAR').debug()).deep.eq({ key: 'BAR', value: 17 })
+			expect(f.map_to('BAR', 'BAZ')).eq(f) // $ExpectError
 		})
 
 		it('map_on', () =>
