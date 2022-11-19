@@ -254,15 +254,15 @@ function map ()
 
 function tap_on ()
 {
-	ALT('FOO', 'abc').tap_on('FOO', s => console.log(s + 'd')) // $ExpectType Alt<{ FOO: string; }>
-	ALT('FOO', 'abc').tap_on('FOO', s => 17) // $ExpectType Alt<{ FOO: string; }>
+	ALT('FOO', 'abc').tap('FOO', s => console.log(s + 'd')) // $ExpectType Alt<{ FOO: string; }>
+	ALT('FOO', 'abc').tap('FOO', s => 17) // $ExpectType Alt<{ FOO: string; }>
 
-	ALT('FOO', 'abc').tap_on('FOO', s =>
+	ALT('FOO', 'abc').tap('FOO', s =>
 	{
 		s // $ExpectType string
 	})
 
-	ALT('FOO', 'abc').tap_on('BAZ', // $ExpectError
+	ALT('FOO', 'abc').tap('BAZ', // $ExpectError
 		s => null)
 }
 

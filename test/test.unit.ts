@@ -238,17 +238,17 @@ describe('Alt', () =>
 
 	describe('tap', () =>
 	{
-		it('tap_on', () =>
+		it('tap on key', () =>
 		{
 			let x1 = 0
 			let x2 = 0
 
 			const f1 = Alt('FOO', 17)
-			expect(f1.tap_on('FOO', x => { x1++; return x + 1 })).eq(f1)
+			expect(f1.tap('FOO', x => { x1++; return x + 1 })).eq(f1)
 			expect(f1.debug()).deep.eq({ key: 'FOO', value: 17 })
 
 			const f2 = Alt('FOO', 17)
-			expect(f2.tap_on('BAR', x => { x2++; return x + 1 })).eq(f2) // $ExpectError
+			expect(f2.tap('BAR', x => { x2++; return x + 1 })).eq(f2) // $ExpectError
 			expect(f2.debug()).deep.eq({ key: 'FOO', value: 17 })
 
 			expect(x1).eq(1)

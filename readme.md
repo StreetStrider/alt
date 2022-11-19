@@ -7,7 +7,7 @@ function View () {
   const [ state, _ ] = useSomeState()
 
   useEffect(() => {
-    state.tap_on('ERROR', error => console.error(error))
+    state.tap('ERROR', error => console.error(error))
   }, [ state ])
 
   return <div>

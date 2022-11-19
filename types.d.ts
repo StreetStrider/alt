@@ -70,7 +70,7 @@ export interface Alt <Map extends Base>
 		: ('OK' extends keyof Map
 			? Alt<Expand<MapTo<Map, 'OK', 'OK', Out>>> : never),
 
-	tap_on <K extends keyof Map> (key: K, fn: (value: Map[K]) => void)
+	tap <K extends keyof Map> (key: K, fn: (value: Map[K]) => void)
 		: this,
 
 	tap (fn: (value: ValuesFor<Map, 'OK'>) => void)

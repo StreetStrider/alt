@@ -21,7 +21,6 @@ function Alt (key, value)
 		map_to,
 		map_on,
 		map,
-		tap_on,
 		tap,
 		settle_on,
 		settle,
@@ -91,19 +90,20 @@ function Alt (key, value)
 		return map_on('OK', fn)
 	}
 
-	function tap_on (key, fn)
+	function tap (key, fn)
 	{
+		if (typeof key === 'function')
+		{
+			fn  = key
+			key = 'OK'
+		}
+
 		if (is(key))
 		{
 			fn(value)
 		}
 
 		return $alt
-	}
-
-	function tap (fn)
-	{
-		return tap_on('OK', fn)
 	}
 
 	function settle_on (key, fn)
