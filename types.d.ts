@@ -36,7 +36,7 @@ export interface Alt <Map extends Base>
 	is <K extends Keys> (key: K)
 		: (keyof Map extends K ? true : K extends keyof Map ? boolean : false)
 
-	extract_on <K extends keyof Map> (key: K)
+	extract <K extends keyof Map> (key: K)
 		: (keyof Map extends K ? Map[K] : never),
 
 	extract ()

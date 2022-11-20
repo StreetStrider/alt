@@ -105,26 +105,26 @@ function extract ()
 	OK(true).extract() // $ExpectType boolean
 	ALT('FOO', true).extract() // $ExpectType never
 
-	OK(true).extract_on('BAR') // $ExpectError
-	ALT('FOO', true).extract_on('BAR') // $ExpectError
+	OK(true).extract('BAR') // $ExpectError
+	ALT('FOO', true).extract('BAR') // $ExpectError
 
-	ALT('FOO', true).extract_on('FOO') // $ExpectType boolean
+	ALT('FOO', true).extract('FOO') // $ExpectType boolean
 
 	const a: Alt<{ OK: number, FAIL: void }> = OK(17)
 	a.extract() // $ExpectType never
-	a.extract_on('OK') // $ExpectType never
-	a.extract_on('FOO') // $ExpectError
+	a.extract('OK') // $ExpectType never
+	a.extract('FOO') // $ExpectError
 
 	const b: Alt<{ OK: number, FAIL: void }> = FAIL()
 	b.extract() // $ExpectType never
-	b.extract_on('OK') // $ExpectType never
-	b.extract_on('FOO') // $ExpectError
+	b.extract('OK') // $ExpectType never
+	b.extract('FOO') // $ExpectError
 
 	const b_ok = b.settle(() => 0)
 	b_ok.extract() // $ExpectType number
-	b_ok.extract_on('OK') // $ExpectType number
-	b_ok.extract_on('FAIL') // $ExpectError
-	b_ok.extract_on('FOO') // $ExpectError
+	b_ok.extract('OK') // $ExpectType number
+	b_ok.extract('FAIL') // $ExpectError
+	b_ok.extract('FOO') // $ExpectError
 }
 
 function ripout ()

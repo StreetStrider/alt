@@ -159,10 +159,10 @@ describe('Alt', () =>
 
 	describe('extract', () =>
 	{
-		it('extract_on', () =>
+		it('extract on key', () =>
 		{
-			expect(Alt('FOO', 17).extract_on('FOO')).eq(17)
-			expect(() => Alt('FOO', 17).extract_on('BAR')).throw(TypeError) // $ExpectError
+			expect(Alt('FOO', 17).extract('FOO')).eq(17)
+			expect(() => Alt('FOO', 17).extract('BAR')).throw(TypeError) // $ExpectError
 		})
 
 		it('extract', () =>

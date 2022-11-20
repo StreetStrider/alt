@@ -13,7 +13,6 @@ function Alt (key, value)
 	const $alt =
 	{
 		is,
-		extract_on,
 		extract,
 		ripout,
 		thru,
@@ -32,19 +31,16 @@ function Alt (key, value)
 		return (key === $key)
 	}
 
-	function extract_on (key)
+	function extract (key)
 	{
+		key || (key = 'OK')
+
 		if (! is(key))
 		{
 			throw new TypeError(`alt/extract/wrong (key = ${ String($key) }, attempt = ${ String(key) })`)
 		}
 
 		return value
-	}
-
-	function extract ()
-	{
-		return extract_on('OK')
 	}
 
 	function ripout ()
