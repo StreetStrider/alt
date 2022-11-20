@@ -22,7 +22,6 @@ function Alt (key, value)
 		map,
 		tap,
 		settle,
-		unless_on,
 		unless,
 		debug,
 		repr,
@@ -117,21 +116,23 @@ function Alt (key, value)
 		return map_to(key, 'OK', fn)
 	}
 
-	function unless_on (key, fn)
+	function unless (key, fn)
 	{
-		fn || (fn = idem)
+		var k = typeof key
+		if (k !== 'string')
+		{
+			if (k === 'function') { fn = key }
+			key = 'OK'
+		}
 
 		if (is(key))
 		{
 			return $alt
 		}
 
-		return Alt(key, fn(value))
-	}
+		fn || (fn = idem)
 
-	function unless (fn)
-	{
-		return unless_on('OK', fn)
+		return Alt(key, fn(value))
 	}
 
 	function debug ()

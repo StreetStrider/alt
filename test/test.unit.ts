@@ -314,21 +314,21 @@ describe('Alt', () =>
 
 	describe('unless', () =>
 	{
-		it('unless_on', () =>
+		it('unless on key', () =>
 		{
-			expect(Alt('BAR', 17).unless_on('FOO', x => x + 1).debug()).deep.eq({ key: 'FOO', value: 18 })
+			expect(Alt('BAR', 17).unless('FOO', x => x + 1).debug()).deep.eq({ key: 'FOO', value: 18 })
 
 			const f = Alt('FOO', 17)
-			expect(f.unless_on('FOO', x => x + 1)).eq(f)
+			expect(f.unless('FOO', x => x + 1)).eq(f)
 			expect(f.debug()).deep.eq({ key: 'FOO', value: 17 })
 		})
 
-		it('unless_on()', () =>
+		it('unless on key()', () =>
 		{
-			expect(Alt('BAR', 17).unless_on('FOO').debug()).deep.eq({ key: 'FOO', value: 17 })
+			expect(Alt('BAR', 17).unless('FOO').debug()).deep.eq({ key: 'FOO', value: 17 })
 
 			const f = Alt('FOO', 17)
-			expect(f.unless_on('FOO')).eq(f)
+			expect(f.unless('FOO')).eq(f)
 			expect(f.debug()).deep.eq({ key: 'FOO', value: 17 })
 		})
 

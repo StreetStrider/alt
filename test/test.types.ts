@@ -321,19 +321,19 @@ function settle ()
 function unless_on ()
 {
 	const a: Alt<{ FOO: number, BAR: string }> = ALT('BAR', 'abc')
-	a.unless_on('FOO', s => s + 'd') // $ExpectType Alt<{ FOO: string | number; }>
-	a.unless_on('FOO', s => 17) // $ExpectType Alt<{ FOO: number; }>
-	a.unless_on('FOO') // $ExpectType Alt<{ FOO: string | number; }>
+	a.unless('FOO', s => s + 'd') // $ExpectType Alt<{ FOO: string | number; }>
+	a.unless('FOO', s => 17) // $ExpectType Alt<{ FOO: number; }>
+	a.unless('FOO') // $ExpectType Alt<{ FOO: string | number; }>
 
-	ALT('FOO', 'abc').unless_on('FOO', s =>
+	ALT('FOO', 'abc').unless('FOO', s =>
 	{
 		s // $ExpectType never
 	})
-	ALT('FOO', 'abc').unless_on('FOO', s => null) // $ExpectType Alt<{ FOO: string; }>
-	ALT('FOO', 'abc').unless_on('FOO') // $ExpectType Alt<{ FOO: string; }>
+	ALT('FOO', 'abc').unless('FOO', s => null) // $ExpectType Alt<{ FOO: string; }>
+	ALT('FOO', 'abc').unless('FOO') // $ExpectType Alt<{ FOO: string; }>
 
-	ALT('FOO', 'abc').unless_on('BAZ', s => null) // $ExpectType Alt<{ BAZ: null; }>
-	ALT('FOO', 'abc').unless_on('BAZ') // $ExpectType Alt<{ BAZ: string; }>
+	ALT('FOO', 'abc').unless('BAZ', s => null) // $ExpectType Alt<{ BAZ: null; }>
+	ALT('FOO', 'abc').unless('BAZ') // $ExpectType Alt<{ BAZ: string; }>
 }
 
 function unless ()
