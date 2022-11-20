@@ -91,7 +91,7 @@ describe('Integration', () =>
 		const b = a
 		.map(ok => V(ok.data))
 		.settle(e => V(e.message))
-		.settle_on('LOADING', () => V('~'))
+		.settle('LOADING', () => V('~'))
 		b // $ExpectType Alt<{ OK: V; }>
 
 		const c = b.extract()
@@ -106,7 +106,7 @@ describe('Integration', () =>
 
 		const b = a
 		.settle(e => e.message)
-		.settle_on('LOADING', () => '~')
+		.settle('LOADING', () => '~')
 		.map(V)
 		b // $ExpectType Alt<{ OK: V; }>
 

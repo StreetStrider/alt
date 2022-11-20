@@ -285,18 +285,18 @@ function tap ()
 
 function settle_on ()
 {
-	ALT('FOO', 'abc').settle_on('FOO', s => s + 'd') // $ExpectType Alt<{ OK: string; }>
-	ALT('FOO', 'abc').settle_on('FOO', s => 17) // $ExpectType Alt<{ OK: number; }>
-	ALT('FOO', 'abc').settle_on('FOO') // $ExpectType Alt<{ OK: string; }>
+	ALT('FOO', 'abc').settle('FOO', s => s + 'd') // $ExpectType Alt<{ OK: string; }>
+	ALT('FOO', 'abc').settle('FOO', s => 17) // $ExpectType Alt<{ OK: number; }>
+	ALT('FOO', 'abc').settle('FOO') // $ExpectType Alt<{ OK: string; }>
 
-	ALT('FOO', 'abc').settle_on('FOO', s =>
+	ALT('FOO', 'abc').settle('FOO', s =>
 	{
 		s // $ExpectType string
 	})
 
-	ALT('FOO', 'abc').settle_on('BAZ', // $ExpectError
+	ALT('FOO', 'abc').settle('BAZ', // $ExpectError
 		s => 17)
-	ALT('FOO', 'abc').settle_on('BAZ') // $ExpectError
+	ALT('FOO', 'abc').settle('BAZ') // $ExpectError
 }
 
 function settle ()

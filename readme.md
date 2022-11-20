@@ -14,8 +14,8 @@ function View () {
   {
     state
     .map(data => <Component data={ data } />)
-    .settle_on('LOADING', () => <Loading />)
-    .settle_on('ERROR', error => <div className='error'>Error: { error.message }</div>)
+    .settle('LOADING', () => <Loading />)
+    .settle('ERROR', error => <div className='error'>Error: { error.message }</div>)
     .extract()
   }
   </div>

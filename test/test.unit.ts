@@ -275,21 +275,21 @@ describe('Alt', () =>
 
 	describe('settle', () =>
 	{
-		it('settle_on', () =>
+		it('settle on key', () =>
 		{
-			expect(Alt('FOO', 17).settle_on('FOO', x => x + 1).debug()).deep.eq({ key: 'OK', value: 18 })
+			expect(Alt('FOO', 17).settle('FOO', x => x + 1).debug()).deep.eq({ key: 'OK', value: 18 })
 
 			const f = Alt('OK', 17)
-			expect(f.settle_on('FOO', x => x + 1)).eq(f) // $ExpectError
+			expect(f.settle('FOO', x => x + 1)).eq(f) // $ExpectError
 			expect(f.debug()).deep.eq({ key: 'OK', value: 17 })
 		})
 
-		it('settle_on()', () =>
+		it('settle on key()', () =>
 		{
-			expect(Alt('FOO', 17).settle_on('FOO').debug()).deep.eq({ key: 'OK', value: 17 })
+			expect(Alt('FOO', 17).settle('FOO').debug()).deep.eq({ key: 'OK', value: 17 })
 
 			const f = Alt('OK', 17)
-			expect(f.settle_on('FOO')).eq(f) // $ExpectError
+			expect(f.settle('FOO')).eq(f) // $ExpectError
 			expect(f.debug()).deep.eq({ key: 'OK', value: 17 })
 		})
 

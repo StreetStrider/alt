@@ -21,7 +21,6 @@ function Alt (key, value)
 		map_to,
 		map,
 		tap,
-		settle_on,
 		settle,
 		unless_on,
 		unless,
@@ -106,14 +105,16 @@ function Alt (key, value)
 		return $alt
 	}
 
-	function settle_on (key, fn)
+	function settle (key, fn)
 	{
-		return map_to(key, 'OK', fn)
-	}
+		var k = typeof key
+		if (k !== 'string')
+		{
+			if (k === 'function') { fn = key }
+			key = 'FAIL'
+		}
 
-	function settle (fn)
-	{
-		return settle_on('FAIL', fn)
+		return map_to(key, 'OK', fn)
 	}
 
 	function unless_on (key, fn)
