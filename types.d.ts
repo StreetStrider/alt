@@ -62,7 +62,7 @@ export interface Alt <Map extends Base>
 		(from: From, to: To)
 			: Alt<Expand<MapTo<Map, From, To, Map[From]>>>,
 
-	map_on <K extends keyof Map, Out>
+	map <K extends keyof Map, Out>
 		(key: K, fn: (value: Map[K]) => Out)
 			: Alt<Expand<MapTo<Map, K, K, Out>>>,
 

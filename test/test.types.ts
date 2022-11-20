@@ -214,21 +214,21 @@ function map_to ()
 
 function map_on ()
 {
-	ALT('FOO', 'abc').map_on('FOO', s => s + 'd') // $ExpectType Alt<{ FOO: string; }>
-	ALT('FOO', 'abc').map_on('FOO', s => 17) // $ExpectType Alt<{ FOO: number; }>
-	ALT('FOO', 'abc').map_on('FOO', s =>
+	ALT('FOO', 'abc').map('FOO', s => s + 'd') // $ExpectType Alt<{ FOO: string; }>
+	ALT('FOO', 'abc').map('FOO', s => 17) // $ExpectType Alt<{ FOO: number; }>
+	ALT('FOO', 'abc').map('FOO', s =>
 	{
 		s // $ExpectType string
 	})
 
-	ALT('FOO', 'abc').map_on('BAZ', // $ExpectError
+	ALT('FOO', 'abc').map('BAZ', // $ExpectError
 		s => null)
 
 	const a: Alt<{ FOO: string, BAR: boolean }> = ALT('FOO', 'abc')
-	a.map_on('FOO', s => s + 'd') // $ExpectType Alt<{ FOO: string; BAR: boolean; }>
-	a.map_on('FOO', s => 17)      // $ExpectType Alt<{ FOO: number; BAR: boolean; }>
+	a.map('FOO', s => s + 'd') // $ExpectType Alt<{ FOO: string; BAR: boolean; }>
+	a.map('FOO', s => 17)      // $ExpectType Alt<{ FOO: number; BAR: boolean; }>
 
-	a.map_on('BAZ', // $ExpectError
+	a.map('BAZ', // $ExpectError
 		s => null)
 }
 

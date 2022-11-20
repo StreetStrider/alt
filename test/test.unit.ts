@@ -217,12 +217,12 @@ describe('Alt', () =>
 			expect(f.map_to('BAR', 'BAZ')).eq(f) // $ExpectError
 		})
 
-		it('map_on', () =>
+		it('map on key', () =>
 		{
-			expect(Alt('FOO', 17).map_on('FOO', x => x + 1).debug()).deep.eq({ key: 'FOO', value: 18 })
+			expect(Alt('FOO', 17).map('FOO', x => x + 1).debug()).deep.eq({ key: 'FOO', value: 18 })
 
 			const f = Alt('FOO', 17)
-			expect(f.map_on('BAR', x => x + 1)).eq(f) // $ExpectError
+			expect(f.map('BAR', x => x + 1)).eq(f) // $ExpectError
 			expect(f.debug()).deep.eq({ key: 'FOO', value: 17 })
 		})
 

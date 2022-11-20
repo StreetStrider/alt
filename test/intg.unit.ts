@@ -20,8 +20,8 @@ describe('Integration', () =>
 
 		const b = a
 		.map(ok => V(ok.data))
-		.map_on('FAIL', e => V(e.message))
-		.map_on('LOADING', () => V('~'))
+		.map('FAIL', e => V(e.message))
+		.map('LOADING', () => V('~'))
 		.unless()
 		b // $ExpectType Alt<{ OK: V; }>
 
@@ -36,8 +36,8 @@ describe('Integration', () =>
 		const a: Alt<{ OK: { data: string }, FAIL: Error, LOADING: void }> = OK({ data: 'foo' })
 
 		const b = a
-		.map_on('FAIL', e => V(e.message))
-		.map_on('LOADING', () => V('~'))
+		.map('FAIL', e => V(e.message))
+		.map('LOADING', () => V('~'))
 		.map(ok => V(ok.data))
 		.unless()
 		b // $ExpectType Alt<{ OK: V; }>
@@ -54,8 +54,8 @@ describe('Integration', () =>
 
 		const b = a
 		.map(ok => ok.data)
-		.map_on('FAIL', e => e.message)
-		.map_on('LOADING', () => '~')
+		.map('FAIL', e => e.message)
+		.map('LOADING', () => '~')
 		.map(V)
 		.unless(V)
 		b // $ExpectType Alt<{ OK: V; }>
@@ -71,8 +71,8 @@ describe('Integration', () =>
 		const a: Alt<{ OK: { data: string }, FAIL: Error, LOADING: void }> = OK({ data: 'foo' })
 
 		const b = a
-		.map_on('FAIL', e => e.message)
-		.map_on('LOADING', () => '~')
+		.map('FAIL', e => e.message)
+		.map('LOADING', () => '~')
 		.map(ok => ok.data)
 		.unless()
 		.map(V)
