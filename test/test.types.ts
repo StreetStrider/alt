@@ -310,9 +310,12 @@ function settle ()
 		s // $ExpectType string
 	})
 
-	ALT('FOO', 'abc').settle_on('BAZ', // $ExpectError
-		s => 17)
-	ALT('FOO', 'abc').settle_on('BAZ') // $ExpectError
+	ALT('FOO', 'abc').settle(s =>
+	{
+		s // $ExpectType never
+	})
+	ALT('FOO', 'abc').settle(s => null) // $ExpectType never
+	ALT('FOO', 'abc').settle() // $ExpectType never
 }
 
 function unless_on ()
