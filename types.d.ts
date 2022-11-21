@@ -33,18 +33,24 @@ type KeysOther <Map extends Base, Key extends Keys>
 
 export interface Alt <Map extends Base>
 {
+	debug ()
+		: Debug<keyof Map, Map>
+
+	repr ()
+		: Repr<this>,
+
 	is <K extends Keys> (key: K)
 		: (keyof Map extends K ? true : K extends keyof Map ? boolean : false)
+
+	ripout ()
+		: (keyof Map extends 'OK' ? Map['OK'] :
+			'OK' extends keyof Map ? (Map['OK'] | undefined) : never),
 
 	extract <K extends keyof Map> (key: K)
 		: (keyof Map extends K ? Map[K] : never),
 
 	extract ()
 		: (keyof Map extends 'OK' ? Map['OK'] : never),
-
-	ripout ()
-		: (keyof Map extends 'OK' ? Map['OK'] :
-			'OK' extends keyof Map ? (Map['OK'] | undefined) : never),
 
 	thru <Out> (fn: (alt: this) => Out)
 		: Out,
@@ -107,12 +113,6 @@ export interface Alt <Map extends Base>
 		: (KeysOther<Map, 'OK'> extends never
 			? this : Alt<Expand<Record<'OK', Map[keyof Map]>>>),
 			// ? this : Alt<Expand<MapTo<Map, KeysOther<Map, 'OK'>, 'OK', Map[KeysOther<Map, 'OK'>]>>>),
-
-	debug ()
-		: Debug<keyof Map, Map>
-
-	repr ()
-		: Repr<this>,
 }
 
 

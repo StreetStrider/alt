@@ -12,9 +12,11 @@ function Alt (key, value)
 
 	const $alt =
 	{
+		debug,
+		repr,
 		is,
-		extract,
 		ripout,
+		extract,
 		thru,
 		chain,
 		map_to,
@@ -22,13 +24,29 @@ function Alt (key, value)
 		tap,
 		settle,
 		unless,
-		debug,
-		repr,
+	}
+
+	function debug ()
+	{
+		return { key, value }
+	}
+
+	function repr ()
+	{
+		return { type: 'Alt', key, value }
 	}
 
 	function is (key)
 	{
 		return (key === $key)
+	}
+
+	function ripout ()
+	{
+		if (is('OK'))
+		{
+			return value
+		}
 	}
 
 	function extract (key)
@@ -41,14 +59,6 @@ function Alt (key, value)
 		}
 
 		return value
-	}
-
-	function ripout ()
-	{
-		if (is('OK'))
-		{
-			return value
-		}
 	}
 
 	function thru (fn)
@@ -129,16 +139,6 @@ function Alt (key, value)
 		fn || (fn = idem)
 
 		return Alt(key, fn(value))
-	}
-
-	function debug ()
-	{
-		return { key, value }
-	}
-
-	function repr ()
-	{
-		return { type: 'Alt', key, value }
 	}
 
 	return $alt
