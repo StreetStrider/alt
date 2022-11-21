@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { Alt as ALT } from '../'
 import { Alt } from '../types'

@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-/* eslint max-statements: [ 1, 21 ] */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 exports.Alt = Alt
