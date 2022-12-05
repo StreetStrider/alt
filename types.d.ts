@@ -74,13 +74,13 @@ export interface Alt <Map extends Base>
 
 	map <Out> (fn: (value: ValuesFor<Map, 'OK'>) => Out)
 		: ('OK' extends keyof Map
-			? Alt<Expand<MapTo<Map, 'OK', 'OK', Out>>> : never),
+			? Alt<Expand<MapTo<Map, 'OK', 'OK', Out>>> : unknown),
 
 	tap <K extends keyof Map> (key: K, fn: (value: Map[K]) => void)
 		: this,
 
 	tap (fn: (value: ValuesFor<Map, 'OK'>) => void)
-		: ('OK' extends keyof Map ? this : never),
+		: ('OK' extends keyof Map ? this : unknown),
 
 	settle <K extends keyof Map, Out> (key: K, fn: (value: Map[K]) => Out)
 		: Alt<Expand<MapTo<Map, K, 'OK', Out>>>,
@@ -90,11 +90,11 @@ export interface Alt <Map extends Base>
 
 	settle <Out> (fn: (value: ValuesFor<Map, 'FAIL'>) => Out)
 		: ('FAIL' extends keyof Map
-			? Alt<Expand<MapTo<Map, 'FAIL', 'OK', Out>>> : never),
+			? Alt<Expand<MapTo<Map, 'FAIL', 'OK', Out>>> : unknown),
 
 	settle ()
 		: ('FAIL' extends keyof Map
-			? Alt<Expand<MapTo<Map, 'FAIL', 'OK', Map['FAIL']>>> : never),
+			? Alt<Expand<MapTo<Map, 'FAIL', 'OK', Map['FAIL']>>> : unknown),
 
 	unless <K extends Keys, Out> (key: K, fn: (value: Map[KeysOther<Map, K>]) => Out)
 		: (KeysOther<Map, K> extends never

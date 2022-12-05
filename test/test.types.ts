@@ -240,7 +240,7 @@ function map ()
 		s // $ExpectType string
 	})
 
-	ALT('FU', 'abc').map(s => null) // $ExpectType never
+	ALT('FU', 'abc').map(s => null) // $ExpectType unknown
 	ALT('FU', 'abc').map(s =>
 	{
 		s // $ExpectType never
@@ -275,7 +275,7 @@ function tap ()
 		s // $ExpectType string
 	})
 
-	ALT('FU', 'abc').tap(s => null) // $ExpectType never
+	ALT('FU', 'abc').tap(s => null) // $ExpectType unknown
 	ALT('FU', 'abc').tap(s =>
 	{
 		s // $ExpectType never
@@ -313,8 +313,8 @@ function settle ()
 	{
 		s // $ExpectType never
 	})
-	ALT('FOO', 'abc').settle(s => null) // $ExpectType never
-	ALT('FOO', 'abc').settle() // $ExpectType never
+	ALT('FOO', 'abc').settle(s => null) // $ExpectType unknown
+	ALT('FOO', 'abc').settle() // $ExpectType unknown
 }
 
 function unless_on ()
