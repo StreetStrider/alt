@@ -44,7 +44,7 @@ export interface Alt <Map extends Base>
 
 	ripout ()
 		: (keyof Map extends 'OK' ? Map['OK'] :
-			'OK' extends keyof Map ? (Map['OK'] | undefined) : never),
+			'OK' extends keyof Map ? (Map['OK'] | undefined) : unknown),
 
 	extract <K extends keyof Map> (key: K)
 		: (keyof Map extends K ? Map[K] : never),

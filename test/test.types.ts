@@ -128,18 +128,18 @@ function extract ()
 
 function ripout ()
 {
-	OK(true).ripout() // $ExpectType boolean
-	FAIL().ripout() // $ExpectType never
-	ALT('FOO', true).ripout() // $ExpectType never
+	const a1: boolean = OK(true).ripout() // $ExpectType boolean
+	const a2: boolean = FAIL().ripout() // $ExpectError
+	const a3: boolean = ALT('FOO', true).ripout() // $ExpectError
 
-	const a: Alt<{ OK: number, FAIL: void }> = OK(17)
-	a.ripout() // $ExpectType number | undefined
-
-	const b: Alt<{ OK: number, FAIL: void }> = FAIL()
+	const b: Alt<{ OK: number, FAIL: void }> = OK(17)
 	b.ripout() // $ExpectType number | undefined
 
-	const b_ok = b.settle(() => 0)
-	b_ok.extract() // $ExpectType number
+	const c: Alt<{ OK: number, FAIL: void }> = FAIL()
+	c.ripout() // $ExpectType number | undefined
+
+	const c_ok = c.settle(() => 0)
+	c_ok.extract() // $ExpectType number
 }
 
 function thru ()
