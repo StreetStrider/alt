@@ -47,10 +47,10 @@ export interface Alt <Map extends Base>
 			'OK' extends keyof Map ? (Map['OK'] | undefined) : unknown),
 
 	extract <K extends keyof Map> (key: K)
-		: (keyof Map extends K ? Map[K] : never),
+		: (keyof Map extends K ? Map[K] : unknown),
 
 	extract ()
-		: (keyof Map extends 'OK' ? Map['OK'] : never),
+		: (keyof Map extends 'OK' ? Map['OK'] : unknown),
 
 	thru <Out> (fn: (alt: this) => Out)
 		: Out,

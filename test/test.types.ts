@@ -101,8 +101,8 @@ function debug ()
 
 function extract ()
 {
-	OK(true).extract() // $ExpectType boolean
-	ALT('FOO', true).extract() // $ExpectType never
+	const a1: boolean = OK(true).extract() // $ExpectType boolean
+	const a2: boolean = ALT('FOO', true).extract() // $ExpectError
 
 	OK(true).extract('BAR') // $ExpectError
 	ALT('FOO', true).extract('BAR') // $ExpectError
@@ -110,13 +110,13 @@ function extract ()
 	ALT('FOO', true).extract('FOO') // $ExpectType boolean
 
 	const a: Alt<{ OK: number, FAIL: void }> = OK(17)
-	a.extract() // $ExpectType never
-	a.extract('OK') // $ExpectType never
+	a.extract() // $ExpectType unknown
+	a.extract('OK') // $ExpectType unknown
 	a.extract('FOO') // $ExpectError
 
 	const b: Alt<{ OK: number, FAIL: void }> = FAIL()
-	b.extract() // $ExpectType never
-	b.extract('OK') // $ExpectType never
+	b.extract() // $ExpectType unknown
+	b.extract('OK') // $ExpectType unknown
 	b.extract('FOO') // $ExpectError
 
 	const b_ok = b.settle(() => 0)
