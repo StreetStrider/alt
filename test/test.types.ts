@@ -2,6 +2,8 @@
 import { Alt as ALT } from '../'
 import { Alt } from '../types'
 import { Repr } from '../types'
+import { Result } from '../types'
+import { ResultLoading } from '../types'
 
 import { OK } from '../'
 import { FAIL } from '../'
@@ -452,4 +454,27 @@ function error_spread1 ()
 
 	const baz = ALT('FAIL', { error: true })
 	error_spread(baz) // $ExpectType Alt<{ FAIL: { error: boolean; }; }>
+}
+
+
+//
+function variance ()
+{
+	type T1 = Alt<{ X: number, Y: string }>
+	type T2 = Alt<{ X: number }>
+
+	let t1: T1 = ALT('X', 1)
+	let t2: T2 = ALT('X', 1)
+
+	t1 = t2.as<T1>() // $ExpectType T1
+	t2 = t1.as<T2>() // $ExpectError
+
+	const t11 = t2.as<T1>()
+	t11 // $ExpectType T1
+
+	const t22 = t1.as<T2>()
+	t22 // $ExpectType unknown
+
+	const r1: Result<number> = OK(17)
+	const r2: ResultLoading<number> = r1.as<ResultLoading<number>>()
 }

@@ -4,6 +4,8 @@ import { expect } from 'chai'
 // import Alt from '../'
 import { Alt } from '../'
 import { Repr } from '../types'
+import { Result } from '../types'
+import { ResultLoading } from '../types'
 
 import { OK } from '../'
 import { FAIL } from '../'
@@ -348,6 +350,13 @@ describe('Alt', () =>
 			const f = Alt('OK', 17)
 			expect(f.unless()).eq(f)
 			expect(f.debug()).deep.eq({ key: 'OK', value: 17 })
+		})
+
+		it('as', () =>
+		{
+			const a: Result<number> = OK(17)
+			const b: ResultLoading<number> = a.as<ResultLoading<number>>()
+			expect(b.debug()).deep.eq({ key: 'OK', value: 17 })
 		})
 	})
 

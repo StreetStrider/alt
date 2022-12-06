@@ -113,6 +113,11 @@ export interface Alt <Map extends Base>
 		: (KeysOther<Map, 'OK'> extends never
 			? this : Alt<Expand<Record<'OK', Map[keyof Map]>>>),
 			// ? this : Alt<Expand<MapTo<Map, KeysOther<Map, 'OK'>, 'OK', Map[KeysOther<Map, 'OK'>]>>>),
+
+	as <To extends Alt<any>> ()
+	: (To extends Alt<infer T>
+		? (T extends Map ? To : unknown) : never),
+
 }
 
 
