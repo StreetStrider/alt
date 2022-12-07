@@ -466,6 +466,9 @@ function variance ()
 	let t1: T1 = ALT('X', 1)
 	let t2: T2 = ALT('X', 1)
 
+	t1 = t2 // $ExpectError
+	t2 = t1 // $ExpectError
+
 	t1 = t2.as<T1>() // $ExpectType T1
 	t2 = t1.as<T2>() // $ExpectError
 
