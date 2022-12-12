@@ -2,7 +2,7 @@
   "private": true,
 
      "name": "alt",
-  "version": "0.2.0",
+  "version": "0.3.0",
 
   "description": "generalization over Option, Either, Result and others for the practical use in JavaScript apps",
 
