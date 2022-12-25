@@ -16,14 +16,14 @@ describe('Integration', () =>
 {
 	it('waterfall #1', () =>
 	{
-		const a: Alt<{ OK: { data: string }, FAIL: Error, LOADING: void }> = OK({ data: 'foo' })
+		const a = OK({ data: 'foo' }) as Alt<'OK', { data: string }> | Alt<'FAIL', Error> | Alt<'LOADING', void>
 
 		const b = a
 		.map(ok => V(ok.data))
 		.map('FAIL', e => V(e.message))
 		.map('LOADING', () => V('~'))
 		.unless()
-		b // $ExpectType Alt<{ OK: V; }>
+		b // $ExpectType Alt<"OK", V>
 
 		const c = b.extract()
 		c // $ExpectType V
@@ -33,7 +33,7 @@ describe('Integration', () =>
 
 	it('waterfall #2', () =>
 	{
-		const a: Alt<{ OK: { data: string }, FAIL: Error, LOADING: void }> = OK({ data: 'foo' })
+		const a = OK({ data: 'foo' }) as Alt<'OK', { data: string }> | Alt<'FAIL', Error> | Alt<'LOADING', void>
 
 		const b = a
 		.map('FAIL', e => V(e.message))
@@ -50,7 +50,7 @@ describe('Integration', () =>
 
 	it('waterfall #3', () =>
 	{
-		const a: Alt<{ OK: { data: string }, FAIL: Error, LOADING: void }> = OK({ data: 'foo' })
+		const a = OK({ data: 'foo' }) as Alt<'OK', { data: string }> | Alt<'FAIL', Error> | Alt<'LOADING', void>
 
 		const b = a
 		.map(ok => ok.data)
@@ -68,7 +68,7 @@ describe('Integration', () =>
 
 	it('waterfall #4', () =>
 	{
-		const a: Alt<{ OK: { data: string }, FAIL: Error, LOADING: void }> = OK({ data: 'foo' })
+		const a: Alt<'OK', { data: string }> | Alt<'FAIL', Error> | <'LOADING', void> = OK({ data: 'foo' })
 
 		const b = a
 		.map('FAIL', e => e.message)
@@ -86,7 +86,7 @@ describe('Integration', () =>
 
 	it('waterfall #5 settle', () =>
 	{
-		const a: Alt<{ OK: { data: string }, FAIL: Error, LOADING: void }> = OK({ data: 'foo' })
+		const a: Alt<'OK', { data: string }> | Alt<'FAIL', Error> | <'LOADING', void> = OK({ data: 'foo' })
 
 		const b = a
 		.map(ok => V(ok.data))
@@ -102,7 +102,7 @@ describe('Integration', () =>
 
 	it('waterfall #6 settle', () =>
 	{
-		const a: Alt<{ OK: string, FAIL: Error, LOADING: void }> = OK('foo')
+		const a: Alt<'OK', string> | Alt<'FAIL', Error> | <'LOADING', void> = OK('foo')
 
 		const b = a
 		.settle(e => e.message)
@@ -118,7 +118,7 @@ describe('Integration', () =>
 
 	it('waterfall #7 map_to', () =>
 	{
-		const a: Alt<{ OK: { data: string }, FAIL: Error, LOADING: void }> = OK({ data: 'foo' })
+		const a: Alt<'OK', { data: string }> | Alt<'FAIL', Error> | <'LOADING', void> = OK({ data: 'foo' })
 
 		const b = a
 		.map(ok => V(ok.data))
@@ -134,7 +134,7 @@ describe('Integration', () =>
 
 	it('waterfall #8 map_to', () =>
 	{
-		const a: Alt<{ OK: string, FAIL: Error, LOADING: void }> = OK('foo')
+		const a: Alt<'OK', string> | Alt<'FAIL', Error> | <'LOADING', void> = OK('foo')
 
 		const b = a
 		.map_to('FAIL', 'OK', e => e.message)

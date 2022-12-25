@@ -3,41 +3,72 @@ import { Alt } from './types'
 import { Keys } from './types'
 
 import { Repr } from './types'
-import { Join } from './types'
 import { Result } from './types'
-import { Spread } from './types'
 
 
-export function Alt <Key extends Keys, Map extends { [K in Key]: void }>
-	(key: Key)
-		: Alt<Map>
+export function Alt <Key extends Keys> (key: Key)
+	: Alt<Key, void>
 
-export function Alt <Key extends Keys, Value, Map extends { [K in Key]: Value }>
-	(key: Key, value: Value)
-		: Alt<Map>
+export function Alt <Key extends Keys, Value> (key: Key, value: Value)
+	: Alt<Key, Value>
 
 
 export function load <R extends Repr<any>> (repr: R)
 	: (R extends Repr<infer A> ? A : never)
 
 
-export function join <Left extends Alt<any>, Right extends Alt<any>>
-	(left: Left, right: Right)
-		: Join<Left, Right>
+export function join
+<
+	Left  extends Alt<any, any>,
+	Right extends Alt<any, any>,
+>
+(
+	left:  Left,
+	right: Right,
+)
+	:
+		(Left extends Alt<'OK', infer L>
+		?
+			(Right extends Alt<'OK', infer R>
+			?
+				Alt<'OK', [ L, R ]>
+			:
+				Right)
+		:
+			Left
+		)
 
 
-export function OK <Map extends { OK: void }> (): Alt<Map>
-export function OK <Value, Map extends { OK: Value }> (value: Value): Alt<Map>
+export function OK (): Alt<'OK', void>
+export function OK <Value> (value: Value): Alt<'OK', Value>
 
-export function FAIL <Map extends { FAIL: void }> (): Alt<Map>
-export function FAIL <Value, Map extends { FAIL: Value }> (value: Value): Alt<Map>
+export function FAIL (): Alt<'FAIL', void>
+export function FAIL <Value> (value: Value): Alt<'FAIL', Value>
 
-export function LOADING <Map extends { LOADING: void }> (): Alt<Map>
-export function LOADING <Value, Map extends { LOADING: Value }> (value: Value): Alt<Map>
+export function LOADING (): Alt<'LOADING', void>
+export function LOADING <Value> (value: Value): Alt<'LOADING', Value>
 
 
 export function attempt <T, E = unknown> (fn: () => T): Result<T, E>
 
 export function capture <T, E = unknown> (fn: () => (Promise<T> | T)): Promise<Result<T, E>>
 
-export function error_spread <A extends Alt<any>> (alt: A): Spread<A>
+
+export function error_spread <T extends Alt<any, any>> (alt: T)
+:
+	(T extends Alt<'FAIL', infer E>
+	?
+		(
+			E extends { message: string }
+			?
+				(E['message'] extends any
+				?
+					Alt<`FAIL:${ E['message'] }`, Extract<E, { message: E['message'] }>>
+				:
+					never
+				)
+			:
+			T
+		)
+	:
+	T)

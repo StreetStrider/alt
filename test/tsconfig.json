@@ -3,7 +3,7 @@
 	[
 		"*.ts"
 	],
-	"exclude": [ "_*" ],
+	"exclude": [ "*.unit.ts" ],
 	"compilerOptions":
 	{
 		"noEmit": true,
