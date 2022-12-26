@@ -480,4 +480,7 @@ function variance ()
 
 	const r1: Result<number> = OK(17)
 	const r2: ResultLoading<number> = r1.as<ResultLoading<number>>()
+
+	const r11: ResultLoading<number> = OK(17)
+	const r22: Result<number> = r11.as<Result<number>>() // $ExpectError
 }
