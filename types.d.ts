@@ -3,7 +3,6 @@ export type Keys = (string | number | symbol)
 export type Base = Record<Keys, unknown>
 
 
-// TODO: this
 export interface Alt <Key extends Keys, Value>
 {
 	debug ()
@@ -31,35 +30,35 @@ export interface Alt <Key extends Keys, Value>
 
 	chain <K extends Keys, Out extends Alt<any, any>>
 		(key: K, fn: (value: K extends Key ? Value : never) => Out)
-			: (K extends Key ? Out : Alt<Key, Value>),
+			: (K extends Key ? Out : this),
 
 	map_to <From extends Keys, To extends Keys, Out>
 		(from: From, to: To, fn: (value: (From extends Key ? Value : never)) => Out)
-			: (From extends Key ? Alt<To, Out> : Alt<Key, Value>),
+			: (From extends Key ? Alt<To, Out> : this),
 
 	map <K extends Keys, Out>
 		(key: K, fn: (value: (K extends Key ? Value : never)) => Out)
-			: (K extends Key ? Alt<K, Out> : Alt<Key, Value>),
+			: (K extends Key ? Alt<K, Out> : this),
 
 	tap <K extends Keys>
 		(key: K, fn: (value: (K extends Key ? Value : never)) => void)
-			: K extends Key ? Alt<Key, Value> : unknown,
+			: K extends Key ? this : unknown,
 
-	// TODO: tap(fn)
+	// tap(fn)
 
 	settle <K extends Keys, Out>
 		(key: K, fn: (value: (K extends Key ? Value : never)) => Out)
-			: (K extends Key ? Alt<'OK', Out> : Alt<Key, Value>),
+			: (K extends Key ? Alt<'OK', Out> : this),
 
 	settle <K extends Keys>
 		(key: K)
-			: (K extends Key ? Alt<'OK', Value> : Alt<Key, Value>),
+			: (K extends Key ? Alt<'OK', Value> : this),
 
 	//settle <Out> (fn: (value: ('FAIL' extends Key ? Value : never)) => Out)
-	//	: ('FAIL' extends Key ? Alt<'OK', Out> : Alt<Key, Value>),
+	//	: ('FAIL' extends Key ? Alt<'OK', Out> : this),
 
 	//settle ()
-	//	: ('FAIL' extends Key ? Alt<'OK', Value> : Alt<Key, Value>),
+	//	: ('FAIL' extends Key ? Alt<'OK', Value> : this),
 
 	unless <K extends Keys, Out>
 		(key: K, fn: (value: (K extends Key ? never : Value)) => Out)
@@ -71,12 +70,11 @@ export interface Alt <Key extends Keys, Value>
 
 	//unless <Out> (fn: (value: ('OK' extends Key ? never : Value)) => Out)
 	//	: Alt<'OK', Key extends 'OK' ? Value : Out>,
-
 }
 
 
 //
-declare const repr$symbol: unique symbol // = Symbol('repr') // TODO rm
+declare const repr$symbol: unique symbol
 
 export type Repr <A extends Alt<any, any>> =
 {
