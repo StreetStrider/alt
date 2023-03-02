@@ -473,32 +473,29 @@ function error_spread1 ()
 }
 
 
-/*
-//
 function variance ()
 {
 	type T1 = Alt<'X', number> | Alt<'Y', string>
 	type T2 = Alt<'X', number>
 
-	let t1 = ALT('X', 1) as T1
-	let t2 = ALT('X', 1) as T2
+	let t1: T1 = ALT('X', 1) as T1
+	let t2: T2 = ALT('X', 1) as T2
 
-	t1 // $-ExpectType T1
-	t2 // $-ExpectType T2
+	let t2_1: T2
+	let t1_2: T1
 
-	t1 = t2 // $-ExpectError
-	t2 = t1 // $-ExpectError
+	t1 // $ExpectType T1
+	t2 // $ExpectType T2
 
-	// t1 = t2.as<T1>() // $-ExpectType T1
-	// t2 = t1.as<T2>() // $-ExpectError
+	t2_1 = t1 // $ExpectError
+	t1_2 = t2
 
-	// const t11 = t2.as<T1>()
-	// t11 // $-ExpectType T1
+	let r1: Result<number> = OK(17) as Result<number>
+	let r2: ResultLoading<number> = OK(17) as ResultLoading<number>
 
-	// const t22 = t1.as<T2>()
-	// t22 // $-ExpectType unknown
+	r1 // $ExpectType Result<number, unknown>
+	r2 // $ExpectType ResultLoading<number, unknown>
 
-	// const r1: Result<number> = OK(17)
-	// const r2: ResultLoading<number> = r1.as<ResultLoading<number>>()
+	const r2_1: ResultLoading<number> = r1
+	const r1_2: Result<number> = r2 // $ExpectError
 }
-*/
