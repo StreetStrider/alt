@@ -478,20 +478,17 @@ function variance ()
 	type T1 = Alt<'X', number> | Alt<'Y', string>
 	type T2 = Alt<'X', number>
 
-	let t1: T1 = ALT('X', 1) as T1
-	let t2: T2 = ALT('X', 1) as T2
-
-	let t2_1: T2
-	let t1_2: T1
+	const t1: T1 = ALT('X', 1) as T1
+	const t2: T2 = ALT('X', 1) as T2
 
 	t1 // $ExpectType T1
 	t2 // $ExpectType T2
 
-	t2_1 = t1 // $ExpectError
-	t1_2 = t2
+	const t2_1: T2 = t1 // $ExpectError
+	const t1_2: T1 = t2
 
-	let r1: Result<number> = OK(17) as Result<number>
-	let r2: ResultLoading<number> = OK(17) as ResultLoading<number>
+	const r1: Result<number> = OK(17) as Result<number>
+	const r2: ResultLoading<number> = OK(17) as ResultLoading<number>
 
 	r1 // $ExpectType Result<number, unknown>
 	r2 // $ExpectType ResultLoading<number, unknown>
