@@ -19,8 +19,8 @@ export interface Alt <Key extends Keys, Value>
 		: ('OK' extends Key ? Value : undefined),
 
 	// TODO try strict keys?
-	extract <K extends Keys> (key: K)
-		: (K extends Key ? Value : unknown),
+	// extract <K extends Keys> (key: K)
+	// 	: (K extends Key ? Value : never),
 
 	extract ()
 		: ('OK' extends Key ? Value : unknown),
@@ -50,15 +50,15 @@ export interface Alt <Key extends Keys, Value>
 		(key: K, fn: (value: (K extends Key ? Value : never)) => Out)
 			: (K extends Key ? Alt<'OK', Out> : this),
 
-	settle <K extends Keys>
-		(key: K)
-			: (K extends Key ? Alt<'OK', Value> : this),
+	// settle <K extends Keys>
+	// 	(key: K)
+	// 		: (K extends Key ? Alt<'OK', Value> : this),
 
-	//settle <Out> (fn: (value: ('FAIL' extends Key ? Value : never)) => Out)
-	//	: ('FAIL' extends Key ? Alt<'OK', Out> : this),
+	// settle <Out> (fn: (value: ('FAIL' extends Key ? Value : never)) => Out)
+	// 	: ('FAIL' extends Key ? Alt<'OK', Out> : this),
 
-	//settle ()
-	//	: ('FAIL' extends Key ? Alt<'OK', Value> : this),
+	// settle ()
+	// 	: ('FAIL' extends Key ? Alt<'OK', Value> : this),
 
 	unless <K extends Keys, Out>
 		(key: K, fn: (value: (K extends Key ? never : Value)) => Out)
@@ -68,8 +68,8 @@ export interface Alt <Key extends Keys, Value>
 	// 	(key: K)
 	// 		: Alt<K, Value>,
 
-	//unless <Out> (fn: (value: ('OK' extends Key ? never : Value)) => Out)
-	//	: Alt<'OK', Key extends 'OK' ? Value : Out>,
+	// unless <Out> (fn: (value: ('OK' extends Key ? never : Value)) => Out)
+	// 	: Alt<'OK', Key extends 'OK' ? Value : Out>,
 }
 
 

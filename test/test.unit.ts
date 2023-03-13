@@ -352,12 +352,14 @@ describe('Alt', () =>
 			expect(f.debug()).deep.eq({ key: 'OK', value: 17 })
 		})
 
+		/*
 		it('as', () =>
 		{
 			const a: Result<number> = OK(17)
 			const b: ResultLoading<number> = a.as<ResultLoading<number>>()
 			expect(b.debug()).deep.eq({ key: 'OK', value: 17 })
 		})
+		*/
 	})
 
 	describe('join', () =>

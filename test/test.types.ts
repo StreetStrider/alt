@@ -74,7 +74,6 @@ function is ()
 	a // $ExpectType Alt<"FOO", number>
 	if (a.is('FOO'))
 	{
-		// TODO:
 		a // $-ExpectType Alt<"FOO", number>
 	}
 
@@ -87,7 +86,6 @@ function is ()
 	ok // $-ExpectType Alt<"OK", number>
 	if (ok.is('OK'))
 	{
-		// TODO:
 		ok // $-ExpectType Alt<"OK", number>
 	}
 
@@ -106,35 +104,32 @@ function debug ()
 	either.debug() // $ExpectType { key: "FAIL"; value: void; } | { key: "OK"; value: number; }
 }
 
-/*
 function extract ()
 {
-	const a1: boolean = OK(true).extract() // $-ExpectType boolean
-	const a2: boolean = ALT('FOO', true).extract() // $-ExpectError
+	const a1: boolean = OK(true).extract() // $ExpectType boolean
+	const a2: boolean = ALT('FOO', true).extract() // $ExpectError
 
-	OK(true).extract('BAR') // $-ExpectError // $-ExpectType unknown
-	ALT('FOO', true).extract('BAR') // $-ExpectError // $-ExpectType unknown
+	// OK(true).extract('BAR') // $-ExpectType never
+	// ALT('FOO', true).extract('BAR') // $-ExpectType never
 
-	ALT('FOO', true).extract('FOO') // $-ExpectType boolean
+	// ALT('FOO', true).extract('FOO') // $-ExpectType boolean
 
-	const a = OK(17) as Alt<"OK", number> | Alt<"FAIL", void>
-	a.extract // $-ExpectType 1
-	a.extract() // $-ExpectType unknown
-	a.extract('OK') // $-ExpectType unknown
-	a.extract('FOO') // $-ExpectError
+	const a = OK(17) as Alt<'OK', number> | Alt<'FAIL', void>
+	a.extract() // $ExpectType unknown
+	// a.extract('OK') // $-ExpectType never
+	// a.extract('FOO') // $-ExpectError
 
-	const b = FAIL() as Alt<"OK", number> | Alt<"FAIL", void>
-	b.extract() // $-ExpectType unknown
-	b.extract('OK') // $-ExpectType unknown
-	b.extract('FOO') // $-ExpectError
+	const b = FAIL() as Alt<'OK', number> | Alt<'FAIL', void>
+	b.extract() // $ExpectType unknown
+	// b.extract('OK') // $-ExpectType unknown
+	// b.extract('FOO') // $-ExpectError
 
-	const b_ok = b.settle(() => 0)
-	b_ok.extract() // $-ExpectType number
-	b_ok.extract('OK') // $-ExpectType number
-	b_ok.extract('FAIL') // $-ExpectError
-	b_ok.extract('FOO') // $-ExpectError
+	const b_ok = b.settle('FAIL', () => 0)
+	b_ok.extract() // $ExpectType number
+	// b_ok.extract('OK') // $-ExpectType number
+	// b_ok.extract('FAIL') // $-ExpectError
+	// b_ok.extract('FOO') // $-ExpectError
 }
-*/
 
 function ripout ()
 {
@@ -148,7 +143,6 @@ function ripout ()
 	const c = FAIL() as Alt<"OK", number> | Alt<"FAIL", void>
 	c.ripout() // $ExpectType number | undefined
 
-	// TODO
 	// const c_ok = c.settle(() => 0)
 	// c_ok.extract() // $-ExpectType number
 }
@@ -182,7 +176,6 @@ function chain ()
 		return ALT('BAR', 17)
 	})
 
-	// TODO
 	//ALT('FOO', 'abc').chain('BAZ', s => // $ExpectError
 	//	ALT('BAR', null))
 
@@ -212,7 +205,6 @@ function map_to ()
 		s // $ExpectType string
 	})
 
-	// TODO
 	//ALT('FOO', 'abc').map_to('BAZ', 'BAR', // $-ExpectError
 	//	s => null)
 
@@ -300,7 +292,7 @@ function settle_on ()
 {
 	ALT('FOO', 'abc').settle('FOO', s => s + 'd') // $ExpectType Alt<"OK", string>
 	ALT('FOO', 'abc').settle('FOO', s => 17) // $ExpectType Alt<"OK", number>
-	ALT('FOO', 'abc').settle('FOO') // $ExpectType Alt<"OK", string>
+	// ALT('FOO', 'abc').settle('FOO') // $-ExpectType Alt<"OK", string>
 
 	ALT('FOO', 'abc').settle('FOO', s =>
 	{
@@ -316,7 +308,7 @@ function settle ()
 {
 	ALT('FAIL', 'abc').settle('FAIL', s => s + 'd') // $ExpectType Alt<"OK", string>
 	ALT('FAIL', 'abc').settle('FAIL', s => 17) // $ExpectType Alt<"OK", number>
-	ALT('FAIL', 'abc').settle('FAIL') // $ExpectType Alt<"OK", string>
+	// ALT('FAIL', 'abc').settle('FAIL') // $-ExpectType Alt<"OK", string>
 
 	ALT('FAIL', 'abc').settle('FAIL', s =>
 	{
