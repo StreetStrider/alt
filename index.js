@@ -23,7 +23,6 @@ function Alt (key, value)
 		tap,
 		settle,
 		unless,
-		as,
 	}
 
 	function debug ()
@@ -139,11 +138,6 @@ function Alt (key, value)
 		fn || (fn = idem)
 
 		return Alt(key, fn(value))
-	}
-
-	function as ()
-	{
-		return $alt
 	}
 
 	return $alt

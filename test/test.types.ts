@@ -54,7 +54,7 @@ function construct ()
 	const a444 = LOADING()
 	a444 // $ExpectType Alt<"LOADING", void>
 
-	let a5: Alt<"OK", string> | Alt<"FAIL", void>
+	let a5: Alt<'OK', string> | Alt<'FAIL', void>
 	a5 = OK('foo')
 	a5 // $ExpectType Alt<"OK", string>
 	a5 = ALT('OK', 'bar')
@@ -89,7 +89,7 @@ function is ()
 		ok // $-ExpectType Alt<"OK", number>
 	}
 
-	const either: Alt<"OK", number> | Alt<"FAIL", void> = OK(17)
+	const either: Alt<'OK', number> | Alt<'FAIL', void> = OK(17)
 	either.is('OK')   // $ExpectType true
 	either.is('FAIL') // $ExpectType false
 	either.is('BAZ')  // $ExpectType false
@@ -100,7 +100,7 @@ function debug ()
 	OK(true).debug() // $ExpectType { key: "OK"; value: boolean; }
 	ALT('FOO', true).debug() // $ExpectType { key: "FOO"; value: boolean; }
 
-	const either = OK(17) as Alt<"OK", number> | Alt<"FAIL", void>
+	const either = OK(17) as Alt<'OK', number> | Alt<'FAIL', void>
 	either.debug() // $ExpectType { key: "FAIL"; value: void; } | { key: "OK"; value: number; }
 }
 
@@ -137,19 +137,19 @@ function ripout ()
 	const a2: boolean = FAIL().ripout() // $ExpectError
 	const a3: boolean = ALT('FOO', true).ripout() // $ExpectError
 
-	const b = OK(17) as Alt<"OK", number> | Alt<"FAIL", void>
+	const b = OK(17) as Alt<'OK', number> | Alt<'FAIL', void>
 	b.ripout() // $ExpectType number | undefined
 
-	const c = FAIL() as Alt<"OK", number> | Alt<"FAIL", void>
+	const c = FAIL() as Alt<'OK', number> | Alt<'FAIL', void>
 	c.ripout() // $ExpectType number | undefined
 
-	// const c_ok = c.settle(() => 0)
-	// c_ok.extract() // $-ExpectType number
+	const c_ok = c.settle('FAIL', () => 0)
+	c_ok.ripout() // $ExpectType number
 }
 
 function thru ()
 {
-	const a = OK(17) as Alt<"OK", number> | Alt<"FAIL", void>
+	const a = OK(17) as Alt<'OK', number> | Alt<'FAIL', void>
 	const b = a.thru(a => [ a.debug() ] as const)
 	b // $ExpectType readonly [{ key: "FAIL"; value: void; } | { key: "OK"; value: number; }]
 
@@ -176,15 +176,15 @@ function chain ()
 		return ALT('BAR', 17)
 	})
 
-	//ALT('FOO', 'abc').chain('BAZ', s => // $ExpectError
-	//	ALT('BAR', null))
+	ALT('FOO', 'abc').chain('BAZ', s => // ExpectType never
+		ALT('BAR', null))
 
-	// ALT('FOO', 'abc').chain('FOO',
-	// 	s => null) // $-ExpectError
+	ALT('FOO', 'abc').chain('FOO',
+		s => null) // $ExpectError
 	// ALT('FOO', 'abc').chain('BAZ', // $-ExpectError
 	// 	s => null)
 
-	const a = ALT('FOO', 'abc') as Alt<"FOO", string> | Alt<"BAR", boolean>
+	const a = ALT('FOO', 'abc') as Alt<'FOO', string> | Alt<'BAR', boolean>
 	a.chain('FOO', s => ALT('FOO', s + 'd')) // $ExpectType Alt<"FOO", string> | Alt<"BAR", boolean>
 	a.chain('FOO', s => ALT('FOO', 17)) // $ExpectType Alt<"FOO", number> | Alt<"BAR", boolean>
 
@@ -205,10 +205,12 @@ function map_to ()
 		s // $ExpectType string
 	})
 
-	//ALT('FOO', 'abc').map_to('BAZ', 'BAR', // $-ExpectError
-	//	s => null)
+	ALT('FOO', 'abc').map_to('BAZ', 'BAR', s =>
+	{
+		s // $ExpectType never
+	})
 
-	const a = ALT('FOO', 'abc') as Alt<"FOO", string> | Alt<"BAR", boolean>
+	const a = ALT('FOO', 'abc') as Alt<'FOO', string> | Alt<'BAR', boolean>
 	a.map_to('FOO', 'FOO', s => s + 'd') // $ExpectType Alt<"FOO", string> | Alt<"BAR", boolean>
 
 	a.map_to('FOO', 'FOO', s => 17) // $ExpectType Alt<"FOO", number> | Alt<"BAR", boolean>
@@ -226,15 +228,19 @@ function map_on ()
 		s // $ExpectType string
 	})
 
-	//ALT('FOO', 'abc').map('BAZ', // $-ExpectError
-	//	s => null)
+	ALT('FOO', 'abc').map('BAZ', s =>
+	{
+		s // $ExpectType never
+	})
 
 	const a = ALT('FOO', 'abc') as Alt<'FOO', string> | Alt<'BAR', boolean>
 	a.map('FOO', s => s + 'd') // $ExpectType Alt<"FOO", string> | Alt<"BAR", boolean>
 	a.map('FOO', s => 17)      // $ExpectType Alt<"FOO", number> | Alt<"BAR", boolean>
 
-	a.map('BAZ', // $-ExpectError
-		s => null)
+	a.map('BAZ', s =>
+	{
+		s // $ExpectType never
+	})
 }
 
 function map ()
@@ -245,12 +251,6 @@ function map ()
 	{
 		s // $ExpectType string
 	})
-
-	/*ALT('FU', 'abc').map(s => null) // $-ExpectType unknown
-	ALT('FU', 'abc').map(s =>
-	{
-		s // $-ExpectType never
-	})*/
 
 	const a = ALT('OK', 'abc') as Alt<'OK', string> | Alt<'FAIL', boolean>
 	a.map('OK', s => s + 'd') // $ExpectType Alt<"OK", string> | Alt<"FAIL", boolean>
@@ -267,8 +267,10 @@ function tap_on ()
 		s // $ExpectType string
 	})
 
-	// ALT('FOO', 'abc').tap('BAZ', // $-ExpectError
-	//	s => null)
+	ALT('FOO', 'abc').tap('BAZ', s =>
+	{
+		s // $ExpectType never
+	})
 }
 
 function tap ()
@@ -299,9 +301,10 @@ function settle_on ()
 		s // $ExpectType string
 	})
 
-	//ALT('FOO', 'abc').settle('BAZ', // $-ExpectError
-	//	s => 17)
-	//ALT('FOO', 'abc').settle('BAZ') // $-ExpectError
+	ALT('FOO', 'abc').settle('BAZ', s =>
+	{
+		s // $ExpectType never
+	})
 }
 
 function settle ()
@@ -319,8 +322,6 @@ function settle ()
 	{
 		s // $ExpectType never
 	})
-	// ALT('FOO', 'abc').settle('FAIL', s => null) // $-ExpectType unknown
-	// ALT('FOO', 'abc').settle('FAIL') // $-ExpectType unknown
 }
 
 function unless_on ()
