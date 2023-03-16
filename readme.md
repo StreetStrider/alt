@@ -24,4 +24,4 @@ function View () {
 
 ## license
 
-ISC, © Strider, 2022.
+ISC, © Strider, 2023.
