@@ -483,8 +483,8 @@ function variance ()
 	const r1: Result<number> = OK(17) as Result<number>
 	const r2: ResultLoading<number> = OK(17) as ResultLoading<number>
 
-	r1 // $ExpectType Result<number, unknown>
-	r2 // $ExpectType ResultLoading<number, unknown>
+	r1 // $ExpectType Result<number>
+	r2 // $ExpectType ResultLoading<number>
 
 	const r2_1: ResultLoading<number> = r1
 	const r1_2: Result<number> = r2 // $ExpectError
