@@ -33,7 +33,8 @@ export function join
 			?
 				Alt<'OK', [ L, R ]>
 			:
-				Right)
+				Right
+			)
 		:
 			Left
 		)
@@ -58,17 +59,17 @@ export function error_spread <T extends Alt<any, any>> (alt: T)
 :
 	(T extends Alt<'FAIL', infer E>
 	?
-		(
-			E extends { message: string }
+		(E extends { message: string }
+		?
+			(E['message'] extends any
 			?
-				(E['message'] extends any
-				?
-					Alt<`FAIL:${ E['message'] }`, Extract<E, { message: E['message'] }>>
-				:
-					never
-				)
+				Alt<`FAIL:${ E['message'] }`, Extract<E, { message: E['message'] }>>
 			:
+				never
+			)
+		:
 			T
 		)
 	:
-	T)
+		T
+	)
