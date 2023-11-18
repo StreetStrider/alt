@@ -1,3 +1,4 @@
+// TODO: test symbol, number as key
 
 import { expect } from 'chai'
 

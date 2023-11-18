@@ -110,10 +110,13 @@ function Alt (key, value)
 
 	function settle (key, fn)
 	{
-		var k = typeof key
-		if (k !== 'string')
+		if (typeof key === 'function')
 		{
-			if (k === 'function') { fn = key }
+			fn  = key
+			key = 'FAIL'
+		}
+		else if (key == null)
+		{
 			key = 'FAIL'
 		}
 
@@ -122,10 +125,13 @@ function Alt (key, value)
 
 	function unless (key, fn)
 	{
-		var k = typeof key
-		if (k !== 'string')
+		if (typeof key === 'function')
 		{
-			if (k === 'function') { fn = key }
+			fn  = key
+			key = 'OK'
+		}
+		else if (key == null)
+		{
 			key = 'OK'
 		}
 
@@ -134,9 +140,7 @@ function Alt (key, value)
 			return $alt
 		}
 
-		fn || (fn = idem)
-
-		return Alt(key, fn(value))
+		return map_to($key, key, fn)
 	}
 
 	return $alt
