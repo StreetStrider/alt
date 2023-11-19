@@ -1,3 +1,4 @@
+// TODO: test methods on union
 
 import { Alt as ALT } from '../'
 import { Alt } from '../types'
