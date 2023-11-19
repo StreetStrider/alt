@@ -160,6 +160,9 @@ exports.join = function join (left, right)
 }
 
 
+// TODO: coalesce(...alts), coalese_on, join_on
+
+
 exports.OK = OK
 
 function OK (value)
@@ -220,3 +223,6 @@ exports.error_spread = function error_spread (alt)
 		}
 	})
 }
+
+
+// TODO: progress(async -> setter)

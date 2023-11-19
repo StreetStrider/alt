@@ -70,6 +70,9 @@ export interface Alt <Key extends Keys, Value>
 
 	// unless <Out> (fn: (value: ('OK' extends Key ? never : Value)) => Out)
 	// 	: Alt<'OK', Key extends 'OK' ? Value : Out>,
+
+	// unless ()
+	//
 }
 
 
