@@ -2,8 +2,6 @@
 
 exports.Alt = Alt
 
-var idem = (_ => _)
-
 function Alt (key, value)
 {
 	const $key = key
@@ -49,7 +47,7 @@ function Alt (key, value)
 
 	function extract (key)
 	{
-		key || (key = 'OK')
+		key ?? (key = 'OK')
 
 		if (! is(key))
 		{
@@ -76,7 +74,7 @@ function Alt (key, value)
 
 	function map_to (from, to, fn)
 	{
-		fn || (fn = idem)
+		fn ?? (fn = (_ => _))
 
 		return chain(from, value => Alt(to, fn(value)))
 	}
