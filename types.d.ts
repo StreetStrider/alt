@@ -1,7 +1,7 @@
 // TODO: try fn <const Key>
 
 export type Keys = (string | number | symbol)
-export type Base = Record<Keys, unknown>
+/* export type Base = Record<Keys, unknown> */
 
 
 export interface Alt <Key extends Keys, Value>
