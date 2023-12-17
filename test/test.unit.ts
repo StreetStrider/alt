@@ -164,6 +164,7 @@ describe('Alt', () =>
 	{
 		it('extract on key', () =>
 		{
+			/* @ts-expect-error */
 			expect(Alt('FOO', 17).extract('FOO')).eq(17)
 			expect(() => Alt('FOO', 17).extract('BAR')).throw(TypeError) // $ExpectError
 		})
@@ -201,7 +202,7 @@ describe('Alt', () =>
 			.debug()).deep.eq({ key: 'BAR', value: [ 17 ] })
 
 			const f = Alt('BAR', 17)
-			expect(f.chain('FOO', v => Alt('BAZ', [ v ]))).eq(f) // $ExpectError
+			expect(f.chain('FOO', v => Alt('BAZ', [ v ]))).eq(f)
 			expect(f.debug()).deep.eq({ key: 'BAR', value: 17 })
 		})
 	})
@@ -213,9 +214,10 @@ describe('Alt', () =>
 			expect(Alt('FOO', 17).map_to('FOO', 'BAR', x => x + 1).debug()).deep.eq({ key: 'BAR', value: 18 })
 
 			const f = Alt('FOO', 17)
-			expect(f.map_to('BAR', 'BAZ', x => x + 1)).eq(f) // $ExpectError
+			expect(f.map_to('BAR', 'BAZ', x => x + 1)).eq(f)
 			expect(f.debug()).deep.eq({ key: 'FOO', value: 17 })
 
+			/* @ts-expect-error */
 			expect(Alt('FOO', 17).map_to('FOO', 'BAR').debug()).deep.eq({ key: 'BAR', value: 17 })
 			expect(f.map_to('BAR', 'BAZ')).eq(f) // $ExpectError
 		})
@@ -225,15 +227,17 @@ describe('Alt', () =>
 			expect(Alt('FOO', 17).map('FOO', x => x + 1).debug()).deep.eq({ key: 'FOO', value: 18 })
 
 			const f = Alt('FOO', 17)
-			expect(f.map('BAR', x => x + 1)).eq(f) // $ExpectError
+			expect(f.map('BAR', x => x + 1)).eq(f)
 			expect(f.debug()).deep.eq({ key: 'FOO', value: 17 })
 		})
 
 		it('map', () =>
 		{
+			/* @ts-expect-error */
 			expect(Alt('OK', 17).map(x => x + 1).debug()).deep.eq({ key: 'OK', value: 18 })
 
 			const f = Alt('FOO', 17)
+			/* @ts-expect-error */
 			expect(f.map(x => x + 1)).eq(f)
 			expect(f.debug()).deep.eq({ key: 'FOO', value: 17 })
 		})
@@ -251,7 +255,7 @@ describe('Alt', () =>
 			expect(f1.debug()).deep.eq({ key: 'FOO', value: 17 })
 
 			const f2 = Alt('FOO', 17)
-			expect(f2.tap('BAR', x => { x2++; return x + 1 })).eq(f2) // $ExpectError
+			expect(f2.tap('BAR', x => { x2++; return x + 1 })).eq(f2)
 			expect(f2.debug()).deep.eq({ key: 'FOO', value: 17 })
 
 			expect(x1).eq(1)
@@ -264,10 +268,12 @@ describe('Alt', () =>
 			let x2 = 0
 
 			const f1 = Alt('OK', 17)
+			/* @ts-expect-error */
 			expect(f1.tap(x => { x1++; return x + 1 })).eq(f1)
 			expect(f1.debug()).deep.eq({ key: 'OK', value: 17 })
 
 			const f2 = Alt('FOO', 17)
+			/* @ts-expect-error */
 			expect(f2.tap(x => { x2++; return x + 1 })).eq(f2)
 			expect(f2.debug()).deep.eq({ key: 'FOO', value: 17 })
 
@@ -283,12 +289,13 @@ describe('Alt', () =>
 			expect(Alt('FOO', 17).settle('FOO', x => x + 1).debug()).deep.eq({ key: 'OK', value: 18 })
 
 			const f = Alt('OK', 17)
-			expect(f.settle('FOO', x => x + 1)).eq(f) // $ExpectError
+			expect(f.settle('FOO', x => x + 1)).eq(f)
 			expect(f.debug()).deep.eq({ key: 'OK', value: 17 })
 		})
 
 		it('settle on key()', () =>
 		{
+			/* @ts-expect-error */
 			expect(Alt('FOO', 17).settle('FOO').debug()).deep.eq({ key: 'OK', value: 17 })
 
 			const f = Alt('OK', 17)
@@ -298,18 +305,22 @@ describe('Alt', () =>
 
 		it('settle', () =>
 		{
+			/* @ts-expect-error */
 			expect(Alt('FAIL', 17).settle(x => x + 1).debug()).deep.eq({ key: 'OK', value: 18 })
 
 			const f = Alt('OK', 17)
+			/* @ts-expect-error */
 			expect(f.settle(x => x + 1)).eq(f)
 			expect(f.debug()).deep.eq({ key: 'OK', value: 17 })
 		})
 
 		it('settle()', () =>
 		{
+			/* @ts-expect-error */
 			expect(Alt('FAIL', 17).settle().debug()).deep.eq({ key: 'OK', value: 17 })
 
 			const f = Alt('OK', 17)
+			/* @ts-expect-error */
 			expect(f.settle()).eq(f)
 			expect(f.debug()).deep.eq({ key: 'OK', value: 17 })
 		})
@@ -328,27 +339,33 @@ describe('Alt', () =>
 
 		it('unless on key()', () =>
 		{
+			/* @ts-expect-error */
 			expect(Alt('BAR', 17).unless('FOO').debug()).deep.eq({ key: 'FOO', value: 17 })
 
 			const f = Alt('FOO', 17)
+			/* @ts-expect-error */
 			expect(f.unless('FOO')).eq(f)
 			expect(f.debug()).deep.eq({ key: 'FOO', value: 17 })
 		})
 
 		it('unless', () =>
 		{
+			/* @ts-expect-error */
 			expect(Alt('BAR', 17).unless(x => x + 1).debug()).deep.eq({ key: 'OK', value: 18 })
 
 			const f = Alt('OK', 17)
+			/* @ts-expect-error */
 			expect(f.unless(x => x + 1)).eq(f)
 			expect(f.debug()).deep.eq({ key: 'OK', value: 17 })
 		})
 
 		it('unless()', () =>
 		{
+			/* @ts-expect-error */
 			expect(Alt('BAR', 17).unless().debug()).deep.eq({ key: 'OK', value: 17 })
 
 			const f = Alt('OK', 17)
+			/* @ts-expect-error */
 			expect(f.unless()).eq(f)
 			expect(f.debug()).deep.eq({ key: 'OK', value: 17 })
 		})
