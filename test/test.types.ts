@@ -17,6 +17,8 @@ import { error_spread } from '../'
 import { load } from '../'
 
 
+type TestResult = (Alt<'OK', number> | Alt<'FAIL', void>)
+
 function construct ()
 {
 	const a1 = ALT('OK', 'foo' as const)
@@ -90,10 +92,19 @@ function is ()
 		ok // $-ExpectType Alt<"OK", number>
 	}
 
-	const either: Alt<'OK', number> | Alt<'FAIL', void> = OK(17)
-	either.is('OK')   // $ExpectType true
-	either.is('FAIL') // $ExpectType false
-	either.is('BAZ')  // $ExpectType false
+	{
+		let either: TestResult = OK(17)
+		either.is('OK')   // $ExpectType true
+		either.is('FAIL') // $ExpectType false
+		either.is('BAZ')  // $ExpectType false
+	}
+
+	{
+		const either = OK(17) as TestResult
+		either.is('OK')   // $ExpectType boolean
+		either.is('FAIL') // $ExpectType boolean
+		either.is('BAZ')  // $ExpectType false
+	}
 }
 
 function debug ()
@@ -101,7 +112,7 @@ function debug ()
 	OK(true).debug() // $ExpectType { key: "OK"; value: boolean; }
 	ALT('FOO', true).debug() // $ExpectType { key: "FOO"; value: boolean; }
 
-	const either = OK(17) as Alt<'OK', number> | Alt<'FAIL', void>
+	const either = OK(17) as TestResult
 	either.debug() // $ExpectType { key: "FAIL"; value: void; } | { key: "OK"; value: number; }
 }
 
@@ -115,12 +126,12 @@ function extract ()
 
 	// ALT('FOO', true).extract('FOO') // $-ExpectType boolean
 
-	const a = OK(17) as Alt<'OK', number> | Alt<'FAIL', void>
+	const a = OK(17) as TestResult
 	a.extract() // $ExpectType unknown
 	// a.extract('OK') // $-ExpectType never
 	// a.extract('FOO') // $-ExpectError
 
-	const b = FAIL() as Alt<'OK', number> | Alt<'FAIL', void>
+	const b = FAIL() as TestResult
 	b.extract() // $ExpectType unknown
 	// b.extract('OK') // $-ExpectType unknown
 	// b.extract('FOO') // $-ExpectError
@@ -138,10 +149,10 @@ function ripout ()
 	const a2: boolean = FAIL().ripout() // $ExpectError
 	const a3: boolean = ALT('FOO', true).ripout() // $ExpectError
 
-	const b = OK(17) as Alt<'OK', number> | Alt<'FAIL', void>
+	const b = OK(17) as TestResult
 	b.ripout() // $ExpectType number | undefined
 
-	const c = FAIL() as Alt<'OK', number> | Alt<'FAIL', void>
+	const c = FAIL() as TestResult
 	c.ripout() // $ExpectType number | undefined
 
 	const c_ok = c.settle('FAIL', () => 0)
@@ -150,7 +161,7 @@ function ripout ()
 
 function thru ()
 {
-	const a = OK(17) as Alt<'OK', number> | Alt<'FAIL', void>
+	const a = OK(17) as TestResult
 	const b = a.thru(a => [ a.debug() ] as const)
 	b // $ExpectType readonly [{ key: "FAIL"; value: void; } | { key: "OK"; value: number; }]
 
