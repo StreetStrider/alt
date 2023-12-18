@@ -346,7 +346,19 @@ function settle_on ()
 		s // $ExpectType never
 	})
 
-	// TODO: TestResult
+	const a = ALT('FOO', 'abc') as TestResultFooBar
+	a.settle('FOO', s => s + 'd') // $ExpectType Alt<"OK", string> | Alt<"BAR", boolean>
+	a.settle('FOO', s => 17)      // $ExpectType Alt<"OK", number> | Alt<"BAR", boolean>
+
+	a.settle('FOO', s =>
+	{
+		s // $ExpectType string
+	})
+
+	a.settle('BAZ', s =>
+	{
+		s // $ExpectType never
+	})
 }
 
 function settle ()
@@ -365,16 +377,23 @@ function settle ()
 		s // $ExpectType never
 	})
 
-	// TODO: TestResult
+	const a = ALT('FAIL') as TestResult
+	a.settle('FAIL', s => s + 'd') // $ExpectType Alt<"OK", string> | Alt<"OK", number>
+	a.settle('FAIL', s => 17)      // $ExpectType Alt<"OK", number>
+
+	a.settle('FAIL', s =>
+	{
+		s // $ExpectType void
+	})
+
+	a.settle('FOO', s =>
+	{
+		s // $ExpectType never
+	})
 }
 
 function unless_on ()
 {
-	const a = ALT('BAR', 'abc') as Alt<'FOO', number> | Alt<'BAR', string>
-	a.unless('FOO', s => s + 'd') // $ExpectType Alt<"FOO", string> | Alt<"FOO", number>
-	a.unless('FOO', s => 17) // $ExpectType Alt<"FOO", number>
-	// a.unless('FOO') // $ExpectType Alt<"FOO", number> | Alt<"FOO", unknown>
-
 	ALT('FOO', 'abc').unless('FOO', s =>
 	{
 		s // $ExpectType never
@@ -385,7 +404,10 @@ function unless_on ()
 	ALT('FOO', 'abc').unless('BAZ', s => null) // $ExpectType Alt<"BAZ", null>
 	// ALT('FOO', 'abc').unless('BAZ') // $ExpectType Alt<"BAZ", string>
 
-	// TODO: TestResult
+	const a = ALT('BAR', 'abc') as Alt<'FOO', number> | Alt<'BAR', string>
+	a.unless('FOO', s => s + 'd') // $ExpectType Alt<"FOO", string> | Alt<"FOO", number>
+	a.unless('FOO', s => 17) // $ExpectType Alt<"FOO", number>
+	// a.unless('FOO') // $-ExpectType Alt<"FOO", number> | Alt<"FOO", unknown>
 }
 
 /*
