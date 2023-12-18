@@ -1,4 +1,3 @@
-// TODO: test methods on union
 
 import { Alt as ALT } from '../'
 import { Alt } from '../types'
@@ -18,6 +17,7 @@ import { load } from '../'
 
 
 type TestResult = (Alt<'OK', number> | Alt<'FAIL', void>)
+type TestResultFooBar = (Alt<'FOO', string> | Alt<'BAR', boolean>)
 
 function construct ()
 {
@@ -161,12 +161,12 @@ function ripout ()
 
 function thru ()
 {
+	OK(true).thru(a => 17 as const) // $ExpectType 17
+	FAIL().thru(  a => 17 as const) // $ExpectType 17
+
 	const a = OK(17) as TestResult
 	const b = a.thru(a => [ a.debug() ] as const)
 	b // $ExpectType readonly [{ key: "FAIL"; value: void; } | { key: "OK"; value: number; }]
-
-	OK(true).thru(a => 17 as const) // $ExpectType 17
-	FAIL().thru(a => 17 as const) // $ExpectType 17
 
 	a.thru(a =>
 	{
@@ -196,12 +196,12 @@ function chain ()
 	// ALT('FOO', 'abc').chain('BAZ', // $-ExpectError
 	// 	s => null)
 
-	const a = ALT('FOO', 'abc') as Alt<'FOO', string> | Alt<'BAR', boolean>
+	const a = ALT('FOO', 'abc') as TestResultFooBar
 	a.chain('FOO', s => ALT('FOO', s + 'd')) // $ExpectType Alt<"FOO", string> | Alt<"BAR", boolean>
-	a.chain('FOO', s => ALT('FOO', 17)) // $ExpectType Alt<"FOO", number> | Alt<"BAR", boolean>
+	a.chain('FOO', s => ALT('FOO', 17)) // $ExpectType Alt<"BAR", boolean> | Alt<"FOO", number>
 
-	a.chain('FOO', s => ALT('BAR', s + 'd')) // $ExpectType Alt<"BAR", string> | Alt<"BAR", boolean>
-	a.chain('FOO', s => ALT('BAR', 17)) // $ExpectType Alt<"BAR", number> | Alt<"BAR", boolean>
+	a.chain('FOO', s => ALT('BAR', s + 'd')) // $ExpectType Alt<"BAR", boolean> | Alt<"BAR", string>
+	a.chain('FOO', s => ALT('BAR', 17)) // $ExpectType Alt<"BAR", boolean> | Alt<"BAR", number>
 }
 
 function map_to ()
@@ -222,13 +222,13 @@ function map_to ()
 		s // $ExpectType never
 	})
 
-	const a = ALT('FOO', 'abc') as Alt<'FOO', string> | Alt<'BAR', boolean>
+	const a = ALT('FOO', 'abc') as TestResultFooBar
 	a.map_to('FOO', 'FOO', s => s + 'd') // $ExpectType Alt<"FOO", string> | Alt<"BAR", boolean>
 
-	a.map_to('FOO', 'FOO', s => 17) // $ExpectType Alt<"FOO", number> | Alt<"BAR", boolean>
+	a.map_to('FOO', 'FOO', s => 17) // $ExpectType Alt<"BAR", boolean> | Alt<"FOO", number>
 
-	a.map_to('FOO', 'BAR', s => s + 'd') // $ExpectType Alt<"BAR", string> | Alt<"BAR", boolean>
-	a.map_to('FOO', 'BAR', s => 17) // $ExpectType Alt<"BAR", number> | Alt<"BAR", boolean>
+	a.map_to('FOO', 'BAR', s => s + 'd') // $ExpectType Alt<"BAR", boolean> | Alt<"BAR", string>
+	a.map_to('FOO', 'BAR', s => 17) // $ExpectType Alt<"BAR", boolean> | Alt<"BAR", number>
 }
 
 function map_on ()
@@ -245,9 +245,9 @@ function map_on ()
 		s // $ExpectType never
 	})
 
-	const a = ALT('FOO', 'abc') as Alt<'FOO', string> | Alt<'BAR', boolean>
+	const a = ALT('FOO', 'abc') as TestResultFooBar
 	a.map('FOO', s => s + 'd') // $ExpectType Alt<"FOO", string> | Alt<"BAR", boolean>
-	a.map('FOO', s => 17)      // $ExpectType Alt<"FOO", number> | Alt<"BAR", boolean>
+	a.map('FOO', s => 17)      // $ExpectType Alt<"BAR", boolean> | Alt<"FOO", number>
 
 	a.map('BAZ', s =>
 	{
@@ -283,6 +283,20 @@ function tap_on ()
 	{
 		s // $ExpectType never
 	})
+
+	const a = ALT('FOO', 'abc') as TestResultFooBar
+	a.tap('FOO', s =>
+	{
+		s // $ExpectType string
+	})
+	.tap('BAR', b =>
+	{
+		b // $ExpectType boolean
+	})
+	.tap('BAZ', s =>
+	{
+		s // $ExpectType never
+	})
 }
 
 function tap ()
@@ -295,8 +309,22 @@ function tap ()
 		s // $ExpectType string
 	})
 
-	ALT('FU', 'abc').tap('OK', s => null) // $ExpectType unknown
+	ALT('FU', 'abc').tap('OK', s => null) // $ExpectType Alt<"FU", string>
 	ALT('FU', 'abc').tap('OK', s =>
+	{
+		s // $ExpectType never
+	})
+
+	const a = ALT('OK', 17) as TestResult
+	a.tap('OK', s =>
+	{
+		s // $ExpectType number
+	})
+	.tap('FAIL', v =>
+	{
+		v // $ExpectType void
+	})
+	.tap('BAZ', s =>
 	{
 		s // $ExpectType never
 	})
@@ -317,6 +345,8 @@ function settle_on ()
 	{
 		s // $ExpectType never
 	})
+
+	// TODO: TestResult
 }
 
 function settle ()
@@ -334,12 +364,14 @@ function settle ()
 	{
 		s // $ExpectType never
 	})
+
+	// TODO: TestResult
 }
 
 function unless_on ()
 {
 	const a = ALT('BAR', 'abc') as Alt<'FOO', number> | Alt<'BAR', string>
-	a.unless('FOO', s => s + 'd') // $ExpectType Alt<"FOO", number> | Alt<"FOO", string>
+	a.unless('FOO', s => s + 'd') // $ExpectType Alt<"FOO", string> | Alt<"FOO", number>
 	a.unless('FOO', s => 17) // $ExpectType Alt<"FOO", number>
 	// a.unless('FOO') // $ExpectType Alt<"FOO", number> | Alt<"FOO", unknown>
 
@@ -352,6 +384,8 @@ function unless_on ()
 
 	ALT('FOO', 'abc').unless('BAZ', s => null) // $ExpectType Alt<"BAZ", null>
 	// ALT('FOO', 'abc').unless('BAZ') // $ExpectType Alt<"BAZ", string>
+
+	// TODO: TestResult
 }
 
 /*
@@ -378,7 +412,7 @@ function unless ()
 //
 function join_generic ()
 {
-	const a = OK('LK') as Alt<'OK', 'LK'> | Alt<'FAIL', 'LE'>
+	const a = OK('LK')   as Alt<'OK', 'LK'> | Alt<'FAIL', 'LE'>
 	const b = FAIL('RE') as Alt<'OK', 'RK'> | Alt<'FAIL', 'RE'>
 
 	join(a, b) // $ExpectType Alt<"FAIL", "LE"> | Alt<"FAIL", "RE"> | Alt<"OK", ["LK", "RK"]>

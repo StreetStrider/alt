@@ -43,7 +43,7 @@ export interface Alt <Key extends Keys, Value>
 
 	tap <K extends Keys>
 		(key: K, fn: (value: (K extends Key ? Value : never)) => void)
-			: K extends Key ? this : unknown,
+			: this,
 
 	// tap(fn)
 
