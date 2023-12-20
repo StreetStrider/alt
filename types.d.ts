@@ -1,7 +1,5 @@
-// TODO: try fn <const Key>
 
 export type Keys = (string | number | symbol)
-/* export type Base = Record<Keys, unknown> */
 
 
 export interface Alt <Key extends Keys, Value>
@@ -13,7 +11,7 @@ export interface Alt <Key extends Keys, Value>
 		: Repr<this>,
 
 	// TODO is: predicate?
-	is <K extends Keys> (key: K)
+	is <const K extends Keys> (key: K)
 		: (K extends Key ? true : false),
 
 	ripout ()
@@ -29,25 +27,25 @@ export interface Alt <Key extends Keys, Value>
 	thru <Out> (fn: (alt: this) => Out)
 		: Out,
 
-	chain <K extends Keys, Out extends Alt<any, any>>
+	chain <const K extends Keys, Out extends Alt<any, any>>
 		(key: K, fn: (value: K extends Key ? Value : never) => Out)
 			: (K extends Key ? Out : this),
 
-	map_to <From extends Keys, To extends Keys, Out>
+	map_to <const From extends Keys, const To extends Keys, Out>
 		(from: From, to: To, fn: (value: (From extends Key ? Value : never)) => Out)
 			: (From extends Key ? Alt<To, Out> : this),
 
-	map <K extends Keys, Out>
+	map <const K extends Keys, Out>
 		(key: K, fn: (value: (K extends Key ? Value : never)) => Out)
 			: (K extends Key ? Alt<K, Out> : this),
 
-	tap <K extends Keys>
+	tap <const K extends Keys>
 		(key: K, fn: (value: (K extends Key ? Value : never)) => void)
 			: this,
 
 	// tap(fn)
 
-	settle <K extends Keys, Out>
+	settle <const K extends Keys, Out>
 		(key: K, fn: (value: (K extends Key ? Value : never)) => Out)
 			: (K extends Key ? Alt<'OK', Out> : this),
 
@@ -61,7 +59,7 @@ export interface Alt <Key extends Keys, Value>
 	// settle ()
 	// 	: ('FAIL' extends Key ? Alt<'OK', Value> : this),
 
-	unless <K extends Keys, Out>
+	unless <const K extends Keys, Out>
 		(key: K, fn: (value: (K extends Key ? never : Value)) => Out)
 			: Alt<K, K extends Key ? Value : Out>,
 

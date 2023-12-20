@@ -6,10 +6,10 @@ import { Repr } from './types'
 import { Result } from './types'
 
 
-export function Alt <Key extends Keys> (key: Key)
+export function Alt <const Key extends Keys> (key: Key)
 	: Alt<Key, void>
 
-export function Alt <Key extends Keys, Value> (key: Key, value: Value)
+export function Alt <const Key extends Keys, Value> (key: Key, value: Value)
 	: Alt<Key, Value>
 
 
