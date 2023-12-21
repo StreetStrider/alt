@@ -77,7 +77,7 @@ function is ()
 	a // $ExpectType Alt<"FOO", number>
 	if (a.is('FOO'))
 	{
-		a // $-ExpectType Alt<"FOO", number>
+		a // $ExpectType Alt<"FOO", number>
 	}
 
 	const ok = OK(17)
@@ -86,10 +86,10 @@ function is ()
 	ok.is('FAIL' as string) // $ExpectType false
 	ok.is('FAIL' as any) // $ExpectType boolean
 
-	ok // $-ExpectType Alt<"OK", number>
+	ok // $ExpectType Alt<"OK", number>
 	if (ok.is('OK'))
 	{
-		ok // $-ExpectType Alt<"OK", number>
+		ok // $ExpectType Alt<"OK", number>
 	}
 
 	{
@@ -97,13 +97,41 @@ function is ()
 		either.is('OK')   // $ExpectType true
 		either.is('FAIL') // $ExpectType false
 		either.is('BAZ')  // $ExpectType false
+
+		either // $ExpectType Alt<"OK", number>
+		if (either.is('OK'))
+		{
+			either // $ExpectType Alt<"OK", number>
+		}
 	}
 
 	{
-		const either = OK(17) as TestResult
+		let either = OK(17) as TestResult
 		either.is('OK')   // $ExpectType boolean
 		either.is('FAIL') // $ExpectType boolean
 		either.is('BAZ')  // $ExpectType false
+
+		either // $ExpectType TestResult
+
+		/*
+		if (either.is('FAIL'))
+		{
+			either // $-ExpectType Alt<"FAIL", void>
+		}
+		else
+		{
+			either // $-ExpectType Alt<"OK", number>
+		}
+
+		if (either.is('OK'))
+		{
+			either // $-ExpectType Alt<"OK", number>
+		}
+		else
+		{
+			either // $-ExpectType Alt<"FAIL", void>
+		}
+		*/
 	}
 }
 

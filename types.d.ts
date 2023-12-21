@@ -10,9 +10,16 @@ export interface Alt <Key extends Keys, Value>
 	repr ()
 		: Repr<this>,
 
-	// TODO is: predicate?
-	is <const K extends Keys> (key: K)
+	/* too boring:
+	is <const K extends Keys> (key: K) // (0)
+		: boolean, */
+
+	is <const K extends Keys> (key: K) // (1)
 		: (K extends Key ? true : false),
+
+	/* we're not there yet:
+	is <const K extends Keys> (key: K) // (2)
+		: this is (K extends Key ? Alt<K, Value> : unknown), */
 
 	ripout ()
 		: ('OK' extends Key ? Value : undefined),
