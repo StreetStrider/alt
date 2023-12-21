@@ -24,12 +24,11 @@ export interface Alt <Key extends Keys, Value>
 	ripout ()
 		: ('OK' extends Key ? Value : undefined),
 
-	// TODO try strict keys?
-	// extract <K extends Keys> (key: K)
-	// 	: (K extends Key ? Value : never),
-
 	extract ()
 		: ('OK' extends Key ? Value : unknown),
+
+	// extract <K extends Keys> (key: K)
+	// 	: (K extends Key ? Value : never),
 
 	thru <Out> (fn: (alt: this) => Out)
 		: Out,
