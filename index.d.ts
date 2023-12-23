@@ -1,9 +1,8 @@
 
-import { Alt } from './types'
-import { Keys } from './types'
-
-import { Repr } from './types'
-import { Result } from './types'
+import type { Alt }    from './types.js'
+import type { Keys }   from './types.js'
+import type { Repr }   from './types.js'
+import type { Result } from './types.js'
 
 
 export function Alt <const Key extends Keys> (key: Key)
