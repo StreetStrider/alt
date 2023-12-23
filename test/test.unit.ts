@@ -422,6 +422,48 @@ describe('Alt', () =>
 			expect(j.is('OK')).eq(true)
 			expect(j.extract()).deep.eq([ { x: 1 }, { y: true } ])
 		})
+
+		// method:
+		it('_.join(_)', () =>
+		{
+			const L = Alt('FOO', { x: 1 })
+			const R = Alt('BAR', { y: true })
+
+			const j = L.join(R)
+
+			expect(j).eq(L)
+		})
+
+		it('_.join( _)', () =>
+		{
+			const L = Alt('OK', { x: 1 })
+			const R = Alt('FU', { y: true })
+
+			const j = L.join(R)
+
+			expect(j).eq(R)
+		})
+
+		it('_.join(OK)', () =>
+		{
+			const L = Alt('FU', { x: 1 })
+			const R = Alt('OK', { y: true })
+
+			const j = L.join(R)
+
+			expect(j).eq(L)
+		})
+
+		it('_.join( OK)', () =>
+		{
+			const L = Alt('OK', { x: 1 })
+			const R = Alt('OK', { y: true })
+
+			const j = L.join(R)
+
+			expect(j.is('OK')).eq(true)
+			expect(j.extract()).deep.eq([ { x: 1 }, { y: true } ])
+		})
 	})
 
 	describe('attempt', () =>

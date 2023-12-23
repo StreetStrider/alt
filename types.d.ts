@@ -1,6 +1,8 @@
 
 export type Keys = (string | number | symbol)
 
+import type { join as Join } from './index.js'
+
 
 export interface Alt <Key extends Keys, Value>
 {
@@ -78,6 +80,9 @@ export interface Alt <Key extends Keys, Value>
 
 	// unless ()
 	//
+
+	join <Right extends Alt<any, any>> (right: Right)
+		: ReturnType<typeof Join<this, Right>>,
 }
 
 

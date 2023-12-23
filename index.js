@@ -20,6 +20,7 @@ function Alt (key, value)
 		tap,
 		settle,
 		unless,
+		join,
 	}
 
 	function debug ()
@@ -141,6 +142,11 @@ function Alt (key, value)
 		return map_to($key, key, fn)
 	}
 
+	function join (right)
+	{
+		return j($alt, right)
+	}
+
 	return $alt
 }
 
@@ -154,11 +160,14 @@ exports.load = function load (repr)
 }
 
 
-exports.join = function join (left, right)
+function join (left, right)
 {
 	return left.chain('OK', L => right.map(R => [ L, R ]))
 }
 
+exports.join = join
+
+const j = join
 
 // TODO: coalesce(...alts), coalese_on, join_on
 
