@@ -169,7 +169,20 @@ exports.join = join
 
 const j = join
 
-// TODO: coalesce(...alts), coalese_on, join_on
+
+// TODO: coalesce
+exports.coalesce = function coalesce (key, alts, fallback_fn)
+{
+	for (const alt of alts)
+	{
+		if (alt.is(key))
+		{
+			return alt
+		}
+	}
+
+	return fallback_fn(alts)
+}
 
 
 exports.OK = OK
