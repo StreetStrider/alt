@@ -200,21 +200,20 @@ exports.coalesce = function coalesce (key, alts, fallback_fn)
 }
 
 
-exports.OK = OK
-
+ exports.OK = OK
 function OK (value)
 {
 	return Alt('OK', value)
 }
 
-exports.FAIL = FAIL
-
+ exports.FAIL = FAIL
 function FAIL (value)
 {
 	return Alt('FAIL', value)
 }
 
-exports.LOADING = function LOADING (value)
+ exports.LOADING = LOADING
+function LOADING (value)
 {
 	return Alt('LOADING', value)
 }
@@ -246,6 +245,21 @@ exports.capture = async function capture (fn)
 }
 
 
+// TODO: progress
+exports.progress = async function progress (fn, fn_setter)
+{
+	try
+	{
+		fn_setter(LOADING())
+		fn_setter(OK(await fn()))
+	}
+	catch (e)
+	{
+		fn_setter(FAIL(e))
+	}
+}
+
+
 exports.error_spread = function error_spread (alt)
 {
 	return alt.chain('FAIL', (error) =>
@@ -260,6 +274,3 @@ exports.error_spread = function error_spread (alt)
 		}
 	})
 }
-
-
-// TODO: progress(async -> setter)

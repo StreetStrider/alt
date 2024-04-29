@@ -3,6 +3,7 @@ import type { Alt }    from './types.js'
 import type { Keys }   from './types.js'
 import type { Repr }   from './types.js'
 import type { Result } from './types.js'
+import type { ResultLoading } from './types.js'
 
 
 export function Alt <const Key extends Keys> (key: Key)
@@ -53,6 +54,12 @@ export function attempt <T, E = unknown> (fn: () => T): Result<T, E>
 
 export function capture <T, E = unknown> (fn: () => (Promise<T> | T)): Promise<Result<T, E>>
 
+export function progress <T, E = unknown>
+(
+	fn: () => (Promise<T> | T),
+	fn_setter: (r: ResultLoading<T, E>) => void,
+)
+	: void
 
 export function error_spread <T extends Alt<any, any>> (alt: T)
 :
