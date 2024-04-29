@@ -26,7 +26,7 @@ export interface Alt <Key extends Keys, Value>
 	ripout ()
 		: ('OK' extends Key ? Value : undefined),
 
-	extract ()
+	extract (raise_fn?: (actual: Key, expected: Keys) => unknown)
 		: ('OK' extends Key ? Value : unknown),
 
 	// extract <K extends Keys> (key: K)

@@ -166,13 +166,25 @@ describe('Alt', () =>
 		{
 			/* @ts-expect-error */
 			expect(Alt('FOO', 17).extract('FOO')).eq(17)
-			expect(() => Alt('FOO', 17).extract('BAR')).throw(TypeError) // $ExpectError
+			/* @ts-expect-error */
+			expect(() => Alt('FOO', 17).extract('BAR')).throw(TypeError)
 		})
 
 		it('extract', () =>
 		{
 			expect(Alt('OK', 17).extract()).eq(17)
 			expect(() => Alt('FOO', 17).extract()).throw(TypeError)
+		})
+
+		it('extract(raise)', () =>
+		{
+			expect(Alt('OK', 17)
+			.extract((actual, expected) => { throw new ReferenceError(String(expected)) }))
+			.eq(17)
+
+			expect(() => Alt('FOO', 17)
+			.extract((actual, expected) => { throw new ReferenceError(String(expected)) }))
+			.throw(ReferenceError)
 		})
 	})
 

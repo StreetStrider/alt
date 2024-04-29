@@ -46,13 +46,28 @@ function Alt (key, value)
 		}
 	}
 
-	function extract (key)
+	function extract (key, raise_fn)
 	{
-		key ?? (key = 'OK')
+		if (typeof key === 'function')
+		{
+			raise_fn = key
+			key = 'OK'
+		}
+		else if (key == null)
+		{
+			key = 'OK'
+		}
 
 		if (! is(key))
 		{
-			throw new TypeError(`alt/extract/wrong (key = ${ String($key) }, attempt = ${ String(key) })`)
+			if (raise_fn)
+			{
+				throw raise_fn($key, key)
+			}
+			else
+			{
+				throw new TypeError(`alt/extract/wrong (key = ${ String($key) }, attempt = ${ String(key) })`)
+			}
 		}
 
 		return value
