@@ -77,5 +77,13 @@
 
     "nyc":
       "15"
+  },
+
+  "pnpm":
+  {
+    "overrides":
+    {
+      "@definitelytyped/utils": "0.1.4"
+    }
   }
 }
