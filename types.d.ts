@@ -24,7 +24,7 @@ export interface Alt <Key extends Keys, Value>
 		: this is (K extends Key ? Alt<K, Value> : unknown), */
 
 	ripout ()
-		: ('OK' extends Key ? Value : undefined),
+		: (Key extends 'OK' ? Value : undefined),
 
 	extract_of <K extends Keys>
 		(key: K, raise_fn?: (actual: Key, expected: K) => unknown)
