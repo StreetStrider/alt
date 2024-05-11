@@ -298,32 +298,30 @@ describe('Alt', () =>
 
 	describe('settle', () =>
 	{
-		it('settle on key', () =>
+		it('settle_of', () =>
 		{
-			expect(Alt('FOO', 17).settle('FOO', x => x + 1).debug()).deep.eq({ key: 'OK', value: 18 })
+			expect(Alt('FOO', 17).settle_of('FOO', x => x + 1).debug()).deep.eq({ key: 'OK', value: 18 })
 
 			const f = Alt('OK', 17)
-			expect(f.settle('FOO', x => x + 1)).eq(f)
+			expect(f.settle_of('FOO', x => x + 1)).eq(f)
 			expect(f.debug()).deep.eq({ key: 'OK', value: 17 })
 		})
 
-		it('settle on key()', () =>
+		it('settle_of()', () =>
 		{
 			/* @ts-expect-error */
-			expect(Alt('FOO', 17).settle('FOO').debug()).deep.eq({ key: 'OK', value: 17 })
+			expect(Alt('FOO', 17).settle_of('FOO').debug()).deep.eq({ key: 'OK', value: 17 })
 
 			const f = Alt('OK', 17)
-			expect(f.settle('FOO')).eq(f) // $ExpectError
+			expect(f.settle_of('FOO')).eq(f) // $ExpectError
 			expect(f.debug()).deep.eq({ key: 'OK', value: 17 })
 		})
 
 		it('settle', () =>
 		{
-			/* @ts-expect-error */
 			expect(Alt('FAIL', 17).settle(x => x + 1).debug()).deep.eq({ key: 'OK', value: 18 })
 
 			const f = Alt('OK', 17)
-			/* @ts-expect-error */
 			expect(f.settle(x => x + 1)).eq(f)
 			expect(f.debug()).deep.eq({ key: 'OK', value: 17 })
 		})

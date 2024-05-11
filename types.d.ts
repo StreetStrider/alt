@@ -51,19 +51,13 @@ export interface Alt <Key extends Keys, Value>
 	tap (fn: (value: (Key extends 'OK' ? Value : never)) => void)
 			: this,
 
-	settle <const K extends Keys, Out>
+	settle_of <const K extends Keys, Out>
 		(key: K, fn: (value: (K extends Key ? Value : never)) => Out)
 			: (K extends Key ? Alt<'OK', Out> : this),
 
-	// settle <K extends Keys>
-	// 	(key: K)
-	// 		: (K extends Key ? Alt<'OK', Value> : this),
-
-	// settle <Out> (fn: (value: ('FAIL' extends Key ? Value : never)) => Out)
-	// 	: ('FAIL' extends Key ? Alt<'OK', Out> : this),
-
-	// settle ()
-	// 	: ('FAIL' extends Key ? Alt<'OK', Value> : this),
+	settle <Out>
+		(fn: (value: (Key extends 'FAIL' ? Value : never)) => Out)
+			: (Key extends 'FAIL' ? Alt<'OK', Out> : this),
 
 	unless <const K extends Keys, Out>
 		(key: K, fn: (value: (K extends Key ? never : Value)) => Out)

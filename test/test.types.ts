@@ -162,7 +162,7 @@ function extract ()
 	b.extract_of('OK') // $ExpectType unknown
 	b.extract_of('FOO') // $ExpectError unknown
 
-	const b_ok = b.settle('FAIL', () => 0)
+	const b_ok = b.settle_of('FAIL', () => 0)
 	b_ok.extract() // $ExpectType number
 	b_ok.extract_of('OK') // $ExpectType number
 	b_ok.extract_of('FAIL') // $ExpectType unknown
@@ -181,7 +181,7 @@ function ripout ()
 	const c = FAIL() as TestResult
 	c.ripout() // $ExpectType number | undefined
 
-	const c_ok = c.settle('FAIL', () => 0)
+	const c_ok = c.settle_of('FAIL', () => 0)
 	c_ok.ripout() // $ExpectType number
 }
 
@@ -356,32 +356,32 @@ function tap ()
 	})
 }
 
-function settle_on ()
+function settle_of ()
 {
-	ALT('FOO', 'abc').settle('FOO', s => s + 'd') // $ExpectType Alt<"OK", string>
-	ALT('FOO', 'abc').settle('FOO', s => 17) // $ExpectType Alt<"OK", number>
-	// ALT('FOO', 'abc').settle('FOO') // $-ExpectType Alt<"OK", string>
+	ALT('FOO', 'abc').settle_of('FOO', s => s + 'd') // $ExpectType Alt<"OK", string>
+	ALT('FOO', 'abc').settle_of('FOO', s => 17) // $ExpectType Alt<"OK", number>
+	// ALT('FOO', 'abc').settle_of('FOO') // $-ExpectType Alt<"OK", string>
 
-	ALT('FOO', 'abc').settle('FOO', s =>
+	ALT('FOO', 'abc').settle_of('FOO', s =>
 	{
 		s // $ExpectType string
 	})
 
-	ALT('FOO', 'abc').settle('BAZ', s =>
+	ALT('FOO', 'abc').settle_of('BAZ', s =>
 	{
 		s // $ExpectType never
 	})
 
 	const a = ALT('FOO', 'abc') as TestResultFooBar
-	a.settle('FOO', s => s + 'd') // $ExpectType Alt<"OK", string> | Alt<"BAR", boolean>
-	a.settle('FOO', s => 17)      // $ExpectType Alt<"OK", number> | Alt<"BAR", boolean>
+	a.settle_of('FOO', s => s + 'd') // $ExpectType Alt<"OK", string> | Alt<"BAR", boolean>
+	a.settle_of('FOO', s => 17)      // $ExpectType Alt<"OK", number> | Alt<"BAR", boolean>
 
-	a.settle('FOO', s =>
+	a.settle_of('FOO', s =>
 	{
 		s // $ExpectType string
 	})
 
-	a.settle('BAZ', s =>
+	a.settle_of('BAZ', s =>
 	{
 		s // $ExpectType never
 	})
@@ -389,30 +389,30 @@ function settle_on ()
 
 function settle ()
 {
-	ALT('FAIL', 'abc').settle('FAIL', s => s + 'd') // $ExpectType Alt<"OK", string>
-	ALT('FAIL', 'abc').settle('FAIL', s => 17) // $ExpectType Alt<"OK", number>
-	// ALT('FAIL', 'abc').settle('FAIL') // $-ExpectType Alt<"OK", string>
+	ALT('FAIL', 'abc').settle(s => s + 'd') // $ExpectType Alt<"OK", string>
+	ALT('FAIL', 'abc').settle(s => 17) // $ExpectType Alt<"OK", number>
+	// ALT('FAIL', 'abc').settle() // $-ExpectType Alt<"OK", string>
 
-	ALT('FAIL', 'abc').settle('FAIL', s =>
+	ALT('FAIL', 'abc').settle(s =>
 	{
 		s // $ExpectType string
 	})
 
-	ALT('FOO', 'abc').settle('FAIL', s =>
+	ALT('FOO', 'abc').settle(s =>
 	{
 		s // $ExpectType never
 	})
 
 	const a = ALT('FAIL') as TestResult
-	a.settle('FAIL', s => s + 'd') // $ExpectType Alt<"OK", string> | Alt<"OK", number>
-	a.settle('FAIL', s => 17)      // $ExpectType Alt<"OK", number>
+	a.settle(s => s + 'd') // $ExpectType Alt<"OK", string> | Alt<"OK", number>
+	a.settle(s => 17)      // $ExpectType Alt<"OK", number>
 
-	a.settle('FAIL', s =>
+	a.settle(s =>
 	{
 		s // $ExpectType void
 	})
 
-	a.settle('FOO', s =>
+	a.settle_of('FOO', s =>
 	{
 		s // $ExpectType never
 	})

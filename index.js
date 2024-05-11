@@ -21,6 +21,7 @@ function Alt (key, value)
 		map,
 		tap_of,
 		tap,
+		settle_of,
 		settle,
 		unless,
 		join,
@@ -118,19 +119,14 @@ function Alt (key, value)
 		return tap_of('OK', fn)
 	}
 
-	function settle (key, fn)
+	function settle_of (key, fn)
 	{
-		if (typeof key === 'function')
-		{
-			fn  = key
-			key = 'FAIL'
-		}
-		else if (key == null)
-		{
-			key = 'FAIL'
-		}
-
 		return map_to(key, 'OK', fn)
+	}
+
+	function settle (fn)
+	{
+		return settle_of('FAIL', fn)
 	}
 
 	function unless (key, fn)

@@ -96,9 +96,8 @@ describe('Integration', () =>
 
 		const b = a
 		.map(ok => V(ok.data))
-		/* @ts-expect-error */
 		.settle(e => V(e.message))
-		.settle('LOADING', () => V('~'))
+		.settle_of('LOADING', () => V('~'))
 		b // $-ExpectType Alt<{ OK: V; }>
 
 		const c = b.extract()
@@ -112,9 +111,8 @@ describe('Integration', () =>
 		const a = OK('foo') as TestResult<string>
 
 		const b = a
-		/* @ts-expect-error */
 		.settle(e => e.message)
-		.settle('LOADING', () => '~')
+		.settle_of('LOADING', () => '~')
 		.map(V)
 		b // $-ExpectType Alt<{ OK: V; }>
 
