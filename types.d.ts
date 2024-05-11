@@ -43,9 +43,13 @@ export interface Alt <Key extends Keys, Value>
 		(from: From, to: To, fn: (value: (From extends Key ? Value : never)) => Out)
 			: (From extends Key ? Alt<To, Out> : this),
 
-	map <const K extends Keys, Out>
+	map_of <const K extends Keys, Out>
 		(key: K, fn: (value: (K extends Key ? Value : never)) => Out)
 			: (K extends Key ? Alt<K, Out> : this),
+
+	map <Out>
+		(fn: (value: (Key extends 'OK' ? Value : never)) => Out)
+			: (Key extends 'OK' ? Alt<Key, Out> : this),
 
 	tap <const K extends Keys>
 		(key: K, fn: (value: (K extends Key ? Value : never)) => void)

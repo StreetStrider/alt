@@ -21,10 +21,9 @@ describe('Integration', () =>
 		const a = OK({ data: 'foo' }) as TestResult<{ data: string }>
 
 		const b = a
-		/* @ts-expect-error */
 		.map(ok => V(ok.data))
-		.map('FAIL', e => V(e.message))
-		.map('LOADING', () => V('~'))
+		.map_of('FAIL', e => V(e.message))
+		.map_of('LOADING', () => V('~'))
 		/* @ts-expect-error */
 		.unless()
 		b // $-ExpectType Alt<"OK", V>
@@ -40,9 +39,8 @@ describe('Integration', () =>
 		const a = OK({ data: 'foo' }) as TestResult<{ data: string }>
 
 		const b = a
-		.map('FAIL', e => V(e.message))
-		.map('LOADING', () => V('~'))
-		/* @ts-expect-error */
+		.map_of('FAIL', e => V(e.message))
+		.map_of('LOADING', () => V('~'))
 		.map(ok => V(ok.data))
 		/* @ts-expect-error */
 		.unless()
@@ -59,11 +57,9 @@ describe('Integration', () =>
 		const a = OK({ data: 'foo' }) as TestResult<{ data: string }>
 
 		const b = a
-		/* @ts-expect-error */
 		.map(ok => ok.data)
-		.map('FAIL', e => e.message)
-		.map('LOADING', () => '~')
-		/* @ts-expect-error */
+		.map_of('FAIL', e => e.message)
+		.map_of('LOADING', () => '~')
 		.map(V)
 		/* @ts-expect-error */
 		.unless(V)
@@ -80,13 +76,11 @@ describe('Integration', () =>
 		const a = OK({ data: 'foo' }) as TestResult<{ data: string }>
 
 		const b = a
-		.map('FAIL', e => e.message)
-		.map('LOADING', () => '~')
-		/* @ts-expect-error */
+		.map_of('FAIL', e => e.message)
+		.map_of('LOADING', () => '~')
 		.map(ok => ok.data)
 		/* @ts-expect-error */
 		.unless()
-		/* @ts-expect-error */
 		.map(V)
 		b // $-ExpectType Alt<{ OK: V; }>
 
@@ -101,7 +95,6 @@ describe('Integration', () =>
 		const a = OK({ data: 'foo' }) as TestResult<{ data: string }>
 
 		const b = a
-		/* @ts-expect-error */
 		.map(ok => V(ok.data))
 		/* @ts-expect-error */
 		.settle(e => V(e.message))
@@ -122,7 +115,6 @@ describe('Integration', () =>
 		/* @ts-expect-error */
 		.settle(e => e.message)
 		.settle('LOADING', () => '~')
-		/* @ts-expect-error */
 		.map(V)
 		b // $-ExpectType Alt<{ OK: V; }>
 
@@ -137,7 +129,6 @@ describe('Integration', () =>
 		const a = OK({ data: 'foo' }) as TestResult<{ data: string }>
 
 		const b = a
-		/* @ts-expect-error */
 		.map(ok => V(ok.data))
 		.map_to('FAIL', 'OK', e => V(e.message))
 		.map_to('LOADING', 'OK', () => V('~'))
@@ -156,7 +147,6 @@ describe('Integration', () =>
 		const b = a
 		.map_to('FAIL', 'OK', e => e.message)
 		.map_to('LOADING', 'OK', () => '~')
-		/* @ts-expect-error */
 		.map(V)
 		b // $-ExpectType Alt<{ OK: V; }>
 

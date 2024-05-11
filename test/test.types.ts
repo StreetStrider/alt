@@ -259,25 +259,25 @@ function map_to ()
 	a.map_to('FOO', 'BAR', s => 17) // $ExpectType Alt<"BAR", boolean> | Alt<"BAR", number>
 }
 
-function map_on ()
+function map_of ()
 {
-	ALT('FOO', 'abc').map('FOO', s => s + 'd') // $ExpectType Alt<"FOO", string>
-	ALT('FOO', 'abc').map('FOO', s => 17) // $ExpectType Alt<"FOO", number>
-	ALT('FOO', 'abc').map('FOO', s =>
+	ALT('FOO', 'abc').map_of('FOO', s => s + 'd') // $ExpectType Alt<"FOO", string>
+	ALT('FOO', 'abc').map_of('FOO', s => 17) // $ExpectType Alt<"FOO", number>
+	ALT('FOO', 'abc').map_of('FOO', s =>
 	{
 		s // $ExpectType string
 	})
 
-	ALT('FOO', 'abc').map('BAZ', s =>
+	ALT('FOO', 'abc').map_of('BAZ', s =>
 	{
 		s // $ExpectType never
 	})
 
 	const a = ALT('FOO', 'abc') as TestResultFooBar
-	a.map('FOO', s => s + 'd') // $ExpectType Alt<"FOO", string> | Alt<"BAR", boolean>
-	a.map('FOO', s => 17)      // $ExpectType Alt<"BAR", boolean> | Alt<"FOO", number>
+	a.map_of('FOO', s => s + 'd') // $ExpectType Alt<"FOO", string> | Alt<"BAR", boolean>
+	a.map_of('FOO', s => 17)      // $ExpectType Alt<"BAR", boolean> | Alt<"FOO", number>
 
-	a.map('BAZ', s =>
+	a.map_of('BAZ', s =>
 	{
 		s // $ExpectType never
 	})
@@ -285,16 +285,16 @@ function map_on ()
 
 function map ()
 {
-	ALT('OK', 'abc').map('OK', s => s + 'd') // $ExpectType Alt<"OK", string>
-	ALT('OK', 'abc').map('OK', s => 17)      // $ExpectType Alt<"OK", number>
-	ALT('OK', 'abc').map('OK', s =>
+	ALT('OK', 'abc').map(s => s + 'd') // $ExpectType Alt<"OK", string>
+	ALT('OK', 'abc').map(s => 17)      // $ExpectType Alt<"OK", number>
+	ALT('OK', 'abc').map(s =>
 	{
 		s // $ExpectType string
 	})
 
 	const a = ALT('OK', 'abc') as Alt<'OK', string> | Alt<'FAIL', boolean>
-	a.map('OK', s => s + 'd') // $ExpectType Alt<"OK", string> | Alt<"FAIL", boolean>
-	a.map('OK', s => 17)      // $ExpectType Alt<"OK", number> | Alt<"FAIL", boolean>
+	a.map(s => s + 'd') // $ExpectType Alt<"OK", string> | Alt<"FAIL", boolean>
+	a.map(s => 17)      // $ExpectType Alt<"OK", number> | Alt<"FAIL", boolean>
 }
 
 function tap_on ()

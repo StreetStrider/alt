@@ -16,6 +16,7 @@ function Alt (key, value)
 		thru,
 		chain,
 		map_to,
+		map_of,
 		map,
 		tap,
 		settle,
@@ -95,15 +96,14 @@ function Alt (key, value)
 		return chain(from, value => Alt(to, fn(value)))
 	}
 
-	function map (key, fn)
+	function map_of (key, fn)
 	{
-		if (typeof key === 'function')
-		{
-			fn  = key
-			key = 'OK'
-		}
-
 		return map_to(key, key, fn)
+	}
+
+	function map (fn)
+	{
+		return map_of('OK', fn)
 	}
 
 	function tap (key, fn)
