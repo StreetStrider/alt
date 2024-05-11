@@ -297,31 +297,31 @@ function map ()
 	a.map(s => 17)      // $ExpectType Alt<"OK", number> | Alt<"FAIL", boolean>
 }
 
-function tap_on ()
+function tap_of ()
 {
-	ALT('FOO', 'abc').tap('FOO', s => console.log(s + 'd')) // $ExpectType Alt<"FOO", string>
-	ALT('FOO', 'abc').tap('FOO', s => 17) // $ExpectType Alt<"FOO", string>
+	ALT('FOO', 'abc').tap_of('FOO', s => console.log(s + 'd')) // $ExpectType Alt<"FOO", string>
+	ALT('FOO', 'abc').tap_of('FOO', s => 17) // $ExpectType Alt<"FOO", string>
 
-	ALT('FOO', 'abc').tap('FOO', s =>
+	ALT('FOO', 'abc').tap_of('FOO', s =>
 	{
 		s // $ExpectType string
 	})
 
-	ALT('FOO', 'abc').tap('BAZ', s =>
+	ALT('FOO', 'abc').tap_of('BAZ', s =>
 	{
 		s // $ExpectType never
 	})
 
 	const a = ALT('FOO', 'abc') as TestResultFooBar
-	a.tap('FOO', s =>
+	a.tap_of('FOO', s =>
 	{
 		s // $ExpectType string
 	})
-	.tap('BAR', b =>
+	.tap_of('BAR', b =>
 	{
 		b // $ExpectType boolean
 	})
-	.tap('BAZ', s =>
+	.tap_of('BAZ', s =>
 	{
 		s // $ExpectType never
 	})
@@ -329,30 +329,30 @@ function tap_on ()
 
 function tap ()
 {
-	ALT('OK', 'abc').tap('OK', s => console.log(s + 'd')) // $ExpectType Alt<"OK", string>
-	ALT('OK', 'abc').tap('OK', s => 17) // $ExpectType Alt<"OK", string>
+	ALT('OK', 'abc').tap(s => console.log(s + 'd')) // $ExpectType Alt<"OK", string>
+	ALT('OK', 'abc').tap(s => 17) // $ExpectType Alt<"OK", string>
 
-	ALT('OK', 'abc').tap('OK', s =>
+	ALT('OK', 'abc').tap(s =>
 	{
 		s // $ExpectType string
 	})
 
-	ALT('FU', 'abc').tap('OK', s => null) // $ExpectType Alt<"FU", string>
-	ALT('FU', 'abc').tap('OK', s =>
+	ALT('FU', 'abc').tap(s => null) // $ExpectType Alt<"FU", string>
+	ALT('FU', 'abc').tap(s =>
 	{
 		s // $ExpectType never
 	})
 
 	const a = ALT('OK', 17) as TestResult
-	a.tap('OK', s =>
+	a.tap(s =>
 	{
 		s // $ExpectType number
 	})
-	.tap('FAIL', v =>
+	.tap_of('FAIL', v =>
 	{
 		v // $ExpectType void
 	})
-	.tap('BAZ', s =>
+	.tap_of('BAZ', s =>
 	{
 		s // $ExpectType never
 	})

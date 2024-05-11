@@ -52,11 +52,12 @@ export interface Alt <Key extends Keys, Value>
 		(fn: (value: (Key extends 'OK' ? Value : never)) => Out)
 			: (Key extends 'OK' ? Alt<Key, Out> : this),
 
-	tap <const K extends Keys>
+	tap_of <const K extends Keys>
 		(key: K, fn: (value: (K extends Key ? Value : never)) => void)
 			: this,
 
-	// tap(fn)
+	tap (fn: (value: (Key extends 'OK' ? Value : never)) => void)
+			: this,
 
 	settle <const K extends Keys, Out>
 		(key: K, fn: (value: (K extends Key ? Value : never)) => Out)
