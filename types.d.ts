@@ -12,16 +12,8 @@ export interface Alt <Key extends Keys, Value>
 	repr ()
 		: Repr<this>,
 
-	/* too boring:
-	is <const K extends Keys> (key: K) // (0)
-		: boolean, */
-
-	is <const K extends Keys> (key: K) // (1)
-		: (K extends Key ? true : false),
-
-	/* we're not there yet:
-	is <const K extends Keys> (key: K) // (2)
-		: this is (K extends Key ? Alt<K, Value> : unknown), */
+	is <K extends Keys> (key: K)
+		: this is Alt<K, K extends Key ? Value : unknown>,
 
 	ripout ()
 		: (Key extends 'OK' ? Value : undefined),

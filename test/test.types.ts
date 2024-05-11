@@ -69,9 +69,9 @@ function construct ()
 function is ()
 {
 	const a = ALT('FOO', 17)
-	a.is('FOO') // $ExpectType true
-	a.is('BAR') // $ExpectType false
-	a.is('BAR' as string) // $ExpectType false
+	a.is('FOO') // $ExpectType boolean
+	a.is('BAR') // $ExpectType boolean
+	a.is('BAR' as string) // $ExpectType boolean
 	a.is('BAR' as any) // $ExpectType boolean
 
 	a // $ExpectType Alt<"FOO", number>
@@ -81,9 +81,9 @@ function is ()
 	}
 
 	const ok = OK(17)
-	ok.is('OK')   // $ExpectType true
-	ok.is('FAIL') // $ExpectType false
-	ok.is('FAIL' as string) // $ExpectType false
+	ok.is('OK')   // $ExpectType boolean
+	ok.is('FAIL') // $ExpectType boolean
+	ok.is('FAIL' as string) // $ExpectType boolean
 	ok.is('FAIL' as any) // $ExpectType boolean
 
 	ok // $ExpectType Alt<"OK", number>
@@ -94,9 +94,9 @@ function is ()
 
 	{
 		let either: TestResult = OK(17)
-		either.is('OK')   // $ExpectType true
-		either.is('FAIL') // $ExpectType false
-		either.is('BAZ')  // $ExpectType false
+		either.is('OK')   // $ExpectType boolean
+		either.is('FAIL') // $ExpectType boolean
+		either.is('BAZ')  // $ExpectType boolean
 
 		either // $ExpectType Alt<"OK", number>
 		if (either.is('OK'))
@@ -109,29 +109,27 @@ function is ()
 		let either = OK(17) as TestResult
 		either.is('OK')   // $ExpectType boolean
 		either.is('FAIL') // $ExpectType boolean
-		either.is('BAZ')  // $ExpectType false
+		either.is('BAZ')  // $ExpectType boolean
 
 		either // $ExpectType TestResult
 
-		/*
 		if (either.is('FAIL'))
 		{
-			either // $-ExpectType Alt<"FAIL", void>
+			either // $ExpectType Alt<"FAIL", void>
 		}
 		else
 		{
-			either // $-ExpectType Alt<"OK", number>
+			either // $ExpectType Alt<"OK", number>
 		}
 
 		if (either.is('OK'))
 		{
-			either // $-ExpectType Alt<"OK", number>
+			either // $ExpectType Alt<"OK", number>
 		}
 		else
 		{
-			either // $-ExpectType Alt<"FAIL", void>
+			either // $ExpectType Alt<"FAIL", void>
 		}
-		*/
 	}
 }
 
