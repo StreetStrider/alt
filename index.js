@@ -12,6 +12,7 @@ function Alt (key, value)
 		repr,
 		is,
 		ripout,
+		extract_of,
 		extract,
 		thru,
 		chain,
@@ -47,18 +48,8 @@ function Alt (key, value)
 		}
 	}
 
-	function extract (key, raise_fn)
+	function extract_of (key, raise_fn)
 	{
-		if (typeof key === 'function')
-		{
-			raise_fn = key
-			key = 'OK'
-		}
-		else if (key == null)
-		{
-			key = 'OK'
-		}
-
 		if (! is(key))
 		{
 			if (raise_fn)
@@ -72,6 +63,11 @@ function Alt (key, value)
 		}
 
 		return value
+	}
+
+	function extract (raise_fn)
+	{
+		return extract_of('OK', raise_fn)
 	}
 
 	function thru (fn)

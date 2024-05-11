@@ -162,12 +162,10 @@ describe('Alt', () =>
 
 	describe('extract', () =>
 	{
-		it('extract on key', () =>
+		it('extract_of', () =>
 		{
-			/* @ts-expect-error */
-			expect(Alt('FOO', 17).extract('FOO')).eq(17)
-			/* @ts-expect-error */
-			expect(() => Alt('FOO', 17).extract('BAR')).throw(TypeError)
+			expect(Alt('FOO', 17).extract_of('FOO')).eq(17)
+			expect(() => Alt('FOO', 17).extract_of('BAR')).throw(TypeError)
 		})
 
 		it('extract', () =>
@@ -178,13 +176,21 @@ describe('Alt', () =>
 
 		it('extract(raise)', () =>
 		{
+			expect(() => Alt('FOO', 17)
+			.extract_of('BAR', (actual, expected) => { throw new ReferenceError(String(expected)) }))
+			.throw(ReferenceError)
+
+			expect(Alt('FOO', 17)
+			.extract_of('FOO', (actual, expected) => { throw new ReferenceError(String(expected)) }))
+			.eq(17)
+
+			expect(() => Alt('BAZ', 17)
+			.extract((actual, expected) => { throw new ReferenceError(String(expected)) }))
+			.throw(ReferenceError)
+
 			expect(Alt('OK', 17)
 			.extract((actual, expected) => { throw new ReferenceError(String(expected)) }))
 			.eq(17)
-
-			expect(() => Alt('FOO', 17)
-			.extract((actual, expected) => { throw new ReferenceError(String(expected)) }))
-			.throw(ReferenceError)
 		})
 	})
 

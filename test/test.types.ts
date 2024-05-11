@@ -149,26 +149,26 @@ function extract ()
 	const a1: boolean = OK(true).extract() // $ExpectType boolean
 	const a2: boolean = ALT('FOO', true).extract() // $ExpectError
 
-	// OK(true).extract('BAR') // $-ExpectType never
-	// ALT('FOO', true).extract('BAR') // $-ExpectType never
+	OK(true).extract_of('BAR') // $ExpectType unknown
+	ALT('FOO', true).extract_of('BAR') // $ExpectType unknown
 
-	// ALT('FOO', true).extract('FOO') // $-ExpectType boolean
+	ALT('FOO', true).extract_of('FOO') // $ExpectType boolean
 
 	const a = OK(17) as TestResult
 	a.extract() // $ExpectType unknown
-	// a.extract('OK') // $-ExpectType never
-	// a.extract('FOO') // $-ExpectError
+	a.extract_of('FAIL') // $ExpectType unknown
+	a.extract_of('FOO') // $ExpectType unknown
 
 	const b = FAIL() as TestResult
 	b.extract() // $ExpectType unknown
-	// b.extract('OK') // $-ExpectType unknown
-	// b.extract('FOO') // $-ExpectError
+	b.extract_of('OK') // $ExpectType unknown
+	b.extract_of('FOO') // $ExpectError unknown
 
 	const b_ok = b.settle('FAIL', () => 0)
 	b_ok.extract() // $ExpectType number
-	// b_ok.extract('OK') // $-ExpectType number
-	// b_ok.extract('FAIL') // $-ExpectError
-	// b_ok.extract('FOO') // $-ExpectError
+	b_ok.extract_of('OK') // $ExpectType number
+	b_ok.extract_of('FAIL') // $ExpectType unknown
+	b_ok.extract_of('FOO') // $ExpectType unknown
 }
 
 function ripout ()
