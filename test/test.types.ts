@@ -157,16 +157,29 @@ function extract ()
 	a.extract_of('FAIL') // $ExpectType unknown
 	a.extract_of('FOO') // $ExpectType unknown
 
+	a.extract(() => new Error) // $ExpectType unknown
+	a.extract_of('FAIL', () => new Error) // $ExpectType unknown
+	a.extract_of('FOO', () => new Error) // $ExpectType unknown
+
 	const b = FAIL() as TestResult
 	b.extract() // $ExpectType unknown
 	b.extract_of('OK') // $ExpectType unknown
 	b.extract_of('FOO') // $ExpectError unknown
+
+	b.extract(() => new Error) // $ExpectType unknown
+	b.extract_of('OK', () => new Error) // $ExpectType unknown
+	b.extract_of('FOO', () => new Error) // $ExpectError unknown
 
 	const b_ok = b.settle_of('FAIL', () => 0)
 	b_ok.extract() // $ExpectType number
 	b_ok.extract_of('OK') // $ExpectType number
 	b_ok.extract_of('FAIL') // $ExpectType unknown
 	b_ok.extract_of('FOO') // $ExpectType unknown
+
+	b_ok.extract(() => new Error) // $ExpectType number
+	b_ok.extract_of('OK', () => new Error) // $ExpectType number
+	b_ok.extract_of('FAIL', () => new Error) // $ExpectType unknown
+	b_ok.extract_of('FOO', () => new Error) // $ExpectType unknown
 }
 
 function ripout ()
