@@ -94,7 +94,7 @@ describe('Integration', () =>
 		.map(ok => V(ok.data))
 		.settle(e => V(e.message))
 		.settle_of('LOADING', () => V('~'))
-		b // $-ExpectType Alt<{ OK: V; }>
+		b // $ExpectType Alt<"OK", V>
 
 		const c = b.extract()
 		c // $ExpectType V
@@ -110,7 +110,7 @@ describe('Integration', () =>
 		.settle(e => e.message)
 		.settle_of('LOADING', () => '~')
 		.map(V)
-		b // $-ExpectType Alt<{ OK: V; }>
+		b // $ExpectType Alt<"OK", V>
 
 		const c = b.extract()
 		c // $ExpectType V
@@ -126,7 +126,7 @@ describe('Integration', () =>
 		.map(ok => V(ok.data))
 		.map_to('FAIL', 'OK', e => V(e.message))
 		.map_to('LOADING', 'OK', () => V('~'))
-		b // $-ExpectType Alt<{ OK: V; }>
+		b // $ExpectType Alt<"OK", V>
 
 		const c = b.extract()
 		c // $ExpectType V
@@ -142,7 +142,7 @@ describe('Integration', () =>
 		.map_to('FAIL', 'OK', e => e.message)
 		.map_to('LOADING', 'OK', () => '~')
 		.map(V)
-		b // $-ExpectType Alt<{ OK: V; }>
+		b // $ExpectType Alt<"OK", V>
 
 		const c = b.extract()
 		c // $ExpectType V
