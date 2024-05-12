@@ -24,12 +24,11 @@ describe('Integration', () =>
 		.map(ok => V(ok.data))
 		.map_of('FAIL', e => V(e.message))
 		.map_of('LOADING', () => V('~'))
-		/* @ts-expect-error */
-		.unless()
-		b // $-ExpectType Alt<"OK", V>
+		.unless(_ => _)
+		b // $ExpectType Alt<"OK", V>
 
 		const c = b.extract()
-		c // $-ExpectType V
+		c // $ExpectType V
 
 		expect(c).deep.eq({ text: 'foo' })
 	})
@@ -42,12 +41,11 @@ describe('Integration', () =>
 		.map_of('FAIL', e => V(e.message))
 		.map_of('LOADING', () => V('~'))
 		.map(ok => V(ok.data))
-		/* @ts-expect-error */
-		.unless()
-		b // $-ExpectType Alt<{ OK: V; }>
+		.unless(_ => _)
+		b // $ExpectType Alt<"OK", V>
 
 		const c = b.extract()
-		c // $-ExpectType V
+		c // $ExpectType V
 
 		expect(c).deep.eq({ text: 'foo' })
 	})
@@ -61,12 +59,11 @@ describe('Integration', () =>
 		.map_of('FAIL', e => e.message)
 		.map_of('LOADING', () => '~')
 		.map(V)
-		/* @ts-expect-error */
 		.unless(V)
-		b // $-ExpectType Alt<{ OK: V; }>
+		b // $ExpectType Alt<"OK", V>
 
 		const c = b.extract()
-		c // $-ExpectType V
+		c // $ExpectType V
 
 		expect(c).deep.eq({ text: 'foo' })
 	})
@@ -79,13 +76,12 @@ describe('Integration', () =>
 		.map_of('FAIL', e => e.message)
 		.map_of('LOADING', () => '~')
 		.map(ok => ok.data)
-		/* @ts-expect-error */
-		.unless()
+		.unless(_ => _)
 		.map(V)
-		b // $-ExpectType Alt<{ OK: V; }>
+		b // $ExpectType Alt<"OK", V>
 
 		const c = b.extract()
-		c // $-ExpectType V
+		c // $ExpectType V
 
 		expect(c).deep.eq({ text: 'foo' })
 	})
@@ -101,7 +97,7 @@ describe('Integration', () =>
 		b // $-ExpectType Alt<{ OK: V; }>
 
 		const c = b.extract()
-		c // $-ExpectType V
+		c // $ExpectType V
 
 		expect(c).deep.eq({ text: 'foo' })
 	})
@@ -117,7 +113,7 @@ describe('Integration', () =>
 		b // $-ExpectType Alt<{ OK: V; }>
 
 		const c = b.extract()
-		c // $-ExpectType V
+		c // $ExpectType V
 
 		expect(c).deep.eq({ text: 'foo' })
 	})
@@ -133,7 +129,7 @@ describe('Integration', () =>
 		b // $-ExpectType Alt<{ OK: V; }>
 
 		const c = b.extract()
-		c // $-ExpectType V
+		c // $ExpectType V
 
 		expect(c).deep.eq({ text: 'foo' })
 	})
@@ -149,7 +145,7 @@ describe('Integration', () =>
 		b // $-ExpectType Alt<{ OK: V; }>
 
 		const c = b.extract()
-		c // $-ExpectType V
+		c // $ExpectType V
 
 		expect(c).deep.eq({ text: 'foo' })
 	})

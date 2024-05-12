@@ -1,4 +1,5 @@
 /* eslint-disable max-len */
+/* eslint-disable max-statements */
 
 exports.Alt = Alt
 
@@ -23,6 +24,7 @@ function Alt (key, value)
 		tap,
 		settle_of,
 		settle,
+		unless_of,
 		unless,
 		join,
 	}
@@ -129,24 +131,19 @@ function Alt (key, value)
 		return settle_of('FAIL', fn)
 	}
 
-	function unless (key, fn)
+	function unless_of (key, fn)
 	{
-		if (typeof key === 'function')
-		{
-			fn  = key
-			key = 'OK'
-		}
-		else if (key == null)
-		{
-			key = 'OK'
-		}
-
 		if (is(key))
 		{
 			return $alt
 		}
 
 		return map_to($key, key, fn)
+	}
+
+	function unless (fn)
+	{
+		return unless_of('OK', fn)
 	}
 
 	function join (right)

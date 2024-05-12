@@ -340,33 +340,31 @@ describe('Alt', () =>
 
 	describe('unless', () =>
 	{
-		it('unless on key', () =>
+		it('unless_of', () =>
 		{
-			expect(Alt('BAR', 17).unless('FOO', x => x + 1).debug()).deep.eq({ key: 'FOO', value: 18 })
+			expect(Alt('BAR', 17).unless_of('FOO', x => x + 1).debug()).deep.eq({ key: 'FOO', value: 18 })
 
 			const f = Alt('FOO', 17)
-			expect(f.unless('FOO', x => x + 1)).eq(f)
+			expect(f.unless_of('FOO', x => x + 1)).eq(f)
 			expect(f.debug()).deep.eq({ key: 'FOO', value: 17 })
 		})
 
-		it('unless on key()', () =>
+		it('unless_of()', () =>
 		{
 			/* @ts-expect-error */
-			expect(Alt('BAR', 17).unless('FOO').debug()).deep.eq({ key: 'FOO', value: 17 })
+			expect(Alt('BAR', 17).unless_of('FOO').debug()).deep.eq({ key: 'FOO', value: 17 })
 
 			const f = Alt('FOO', 17)
 			/* @ts-expect-error */
-			expect(f.unless('FOO')).eq(f)
+			expect(f.unless_of('FOO')).eq(f)
 			expect(f.debug()).deep.eq({ key: 'FOO', value: 17 })
 		})
 
 		it('unless', () =>
 		{
-			/* @ts-expect-error */
 			expect(Alt('BAR', 17).unless(x => x + 1).debug()).deep.eq({ key: 'OK', value: 18 })
 
 			const f = Alt('OK', 17)
-			/* @ts-expect-error */
 			expect(f.unless(x => x + 1)).eq(f)
 			expect(f.debug()).deep.eq({ key: 'OK', value: 17 })
 		})

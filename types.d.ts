@@ -59,19 +59,13 @@ export interface Alt <Key extends Keys, Value>
 		(fn: (value: (Key extends 'FAIL' ? Value : never)) => Out)
 			: (Key extends 'FAIL' ? Alt<'OK', Out> : this),
 
-	unless <const K extends Keys, Out>
+	unless_of <const K extends Keys, Out>
 		(key: K, fn: (value: (K extends Key ? never : Value)) => Out)
 			: Alt<K, K extends Key ? Value : Out>,
 
-	// unless <K extends Keys>
-	// 	(key: K)
-	// 		: Alt<K, Value>,
-
-	// unless <Out> (fn: (value: ('OK' extends Key ? never : Value)) => Out)
-	// 	: Alt<'OK', Key extends 'OK' ? Value : Out>,
-
-	// unless ()
-	//
+	unless <Out>
+		(fn: (value: (Key extends 'OK' ? never : Value)) => Out)
+			: Alt<'OK', Key extends 'OK' ? Value : Out>,
 
 	join <Right extends Alt<any, any>> (right: Right)
 		: ReturnType<typeof Join<this, Right>>,

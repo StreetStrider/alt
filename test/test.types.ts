@@ -418,43 +418,41 @@ function settle ()
 	})
 }
 
-function unless_on ()
+function unless_of ()
 {
-	ALT('FOO', 'abc').unless('FOO', s =>
+	ALT('FOO', 'abc').unless_of('FOO', s =>
 	{
 		s // $ExpectType never
 	})
-	ALT('FOO', 'abc').unless('FOO', s => null) // $ExpectType Alt<"FOO", string>
-	// ALT('FOO', 'abc').unless('FOO') // $ExpectType Alt<"FOO", string>
+	ALT('FOO', 'abc').unless_of('FOO', s => null) // $ExpectType Alt<"FOO", string>
+	// ALT('FOO', 'abc').unless_of('FOO') // $ExpectType Alt<"FOO", string>
 
-	ALT('FOO', 'abc').unless('BAZ', s => null) // $ExpectType Alt<"BAZ", null>
-	// ALT('FOO', 'abc').unless('BAZ') // $ExpectType Alt<"BAZ", string>
+	ALT('FOO', 'abc').unless_of('BAZ', s => null) // $ExpectType Alt<"BAZ", null>
+	// ALT('FOO', 'abc').unless_of('BAZ') // $ExpectType Alt<"BAZ", string>
 
 	const a = ALT('BAR', 'abc') as Alt<'FOO', number> | Alt<'BAR', string>
-	a.unless('FOO', s => s + 'd') // $ExpectType Alt<"FOO", string> | Alt<"FOO", number>
-	a.unless('FOO', s => 17) // $ExpectType Alt<"FOO", number>
-	// a.unless('FOO') // $-ExpectType Alt<"FOO", number> | Alt<"FOO", unknown>
+	a.unless_of('FOO', s => s + 'd') // $ExpectType Alt<"FOO", string> | Alt<"FOO", number>
+	a.unless_of('FOO', s => 17) // $ExpectType Alt<"FOO", number>
+	// a.unless_of('FOO') // $-ExpectType Alt<"FOO", number> | Alt<"FOO", unknown>
 }
 
-/*
 function unless ()
 {
-	const a: Alt<{ OK: null, FAIL: string }> = ALT('FAIL', 'abc')
-	a.unless(s => s + 'd') // $-ExpectType Alt<{ OK: string | null; }>
-	a.unless(s => 17) // $-ExpectType Alt<{ OK: number | null; }>
-	a.unless() // $-ExpectType Alt<{ OK: string | null; }>
+	const a = ALT('FAIL', 'abc') as Alt<'OK', null> | Alt<'FAIL', string >
+	a.unless(s => s + 'd') // $ExpectType Alt<"OK", string> | Alt<"OK", null>
+	a.unless(s => 17) // $ExpectType Alt<"OK", number> | Alt<"OK", null>
+	// a.unless() // $-ExpectType Alt<{ OK: string | null; }>
 
 	ALT('OK', 'abc').unless(s =>
 	{
-		s // $-ExpectType never
+		s // $ExpectType never
 	})
-	ALT('OK', 'abc').unless(s => null) // $-ExpectType Alt<"OK", string>
-	ALT('OK', 'abc').unless() // $-ExpectType Alt<"OK", string>
+	ALT('OK', 'abc').unless(s => null) // $ExpectType Alt<"OK", string>
+	// ALT('OK', 'abc').unless() // $-ExpectType Alt<"OK", string>
 
-	ALT('FU', 'abc').unless(s => null) // $-ExpectType Alt<{ OK: null; }>
-	ALT('FU', 'abc').unless() // $-ExpectType Alt<"OK", string>
+	ALT('FU', 'abc').unless(s => null) // $ExpectType Alt<"OK", null>
+	// ALT('FU', 'abc').unless() // $-ExpectType Alt<"OK", string>
 }
-*/
 
 
 //
