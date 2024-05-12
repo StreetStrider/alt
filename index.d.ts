@@ -50,19 +50,22 @@ export function PROGRESS (): Alt<'PROGRESS', void>
 export function PROGRESS <Value> (value: Value): Alt<'PROGRESS', Value>
 
 
-export function attempt <T, E = unknown> (fn: () => T): Result<T, E>
+export function attempt <T, E = unknown> (fn: () => T)
+	: Result<T, E>
 
-export function capture <T, E = unknown> (fn: () => (PromiseLike<T> | T)): Promise<Result<T, E>>
+export function capture <T, E = unknown> (fn: () => (PromiseLike<T> | T))
+	: Promise<Result<T, E>>
 
 export function progress <T, E = unknown>
 (
 	fn: () => (PromiseLike<T> | T),
 	fn_setter: (r: ResultProgress<T, E>) => void,
 )
-	: void
+	: Promise<Result<T, E>>
+
 
 export function error_spread <T extends Alt<any, any>> (alt: T)
-:
+	:
 	(T extends Alt<'FAIL', infer E>
 	?
 		(E extends { message: string }

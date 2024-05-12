@@ -221,7 +221,8 @@ exports.attempt = function attempt (fn)
 }
 
 
-exports.capture = async function capture (fn)
+exports.capture = capture
+async function capture (fn)
 {
 	try
 	{
@@ -234,19 +235,14 @@ exports.capture = async function capture (fn)
 }
 
 
-// TODO: progress
-// consider return { fn_setter return value ?? OK()/FAIL() }
 exports.progress = async function progress (fn, fn_setter)
 {
-	try
-	{
-		fn_setter(PROGRESS())
-		fn_setter(OK(await fn()))
-	}
-	catch (e)
-	{
-		fn_setter(FAIL(e))
-	}
+	fn_setter(PROGRESS())
+
+	const value = await capture(fn)
+	fn_setter(value)
+
+	return value
 }
 
 

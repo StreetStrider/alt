@@ -15,6 +15,7 @@ import { load } from '../'
 import { join } from '../'
 import { attempt } from '../'
 import { capture } from '../'
+import { progress } from '../'
 import { error_spread } from '../'
 
 
@@ -498,6 +499,56 @@ describe('Alt', () =>
 		})
 		/* eslint-enable no-throw-literal */
 		/* eslint-enable require-await */
+	})
+
+	describe('progress', () =>
+	{
+		/* eslint-disable require-await */
+		/* eslint-disable no-throw-literal */
+		it('progress', async () =>
+		{
+			expect(await test_progress(() => 17))
+			.deep.eq(
+			[
+				{ key: 'PROGRESS', value: void 0 },
+				{ key: 'OK', value: 17 },
+				{ key: 'OK', value: 17 },
+			])
+
+			expect(await test_progress(async () => 17))
+			.deep.eq(
+			[
+				{ key: 'PROGRESS', value: void 0 },
+				{ key: 'OK', value: 17 },
+				{ key: 'OK', value: 17 },
+			])
+
+			expect(await test_progress(() => { throw { x: 0 } }))
+			.deep.eq(
+			[
+				{ key: 'PROGRESS', value: void 0 },
+				{ key: 'FAIL', value: { x: 0 }},
+				{ key: 'FAIL', value: { x: 0 }},
+			])
+
+			expect(await test_progress(async () => { throw { x: 0 } }))
+			.deep.eq(
+			[
+				{ key: 'PROGRESS', value: void 0 },
+				{ key: 'FAIL', value: { x: 0 }},
+				{ key: 'FAIL', value: { x: 0 }},
+			])
+		})
+		/* eslint-enable no-throw-literal */
+		/* eslint-enable require-await */
+
+		async function test_progress (fn: () => void)
+		{
+			const r = []
+			const v = progress(fn, v => r.push(v.debug()))
+			r.push((await v).debug())
+			return r
+		}
 	})
 
 	describe('load / repr', () =>
