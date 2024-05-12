@@ -3,11 +3,11 @@ import { Alt as ALT } from '../'
 import { Alt } from '../types'
 import { Repr } from '../types'
 import { Result } from '../types'
-import { ResultLoading } from '../types'
+import { ResultProgress } from '../types'
 
 import { OK } from '../'
 import { FAIL } from '../'
-import { LOADING } from '../'
+import { PROGRESS } from '../'
 
 import { join } from '../'
 import { attempt } from '../'
@@ -48,14 +48,14 @@ function construct ()
 	const a333 = FAIL()
 	a333 // $ExpectType Alt<"FAIL", void>
 
-	const a4 = LOADING('foo' as const)
-	a4 // $ExpectType Alt<"LOADING", "foo">
+	const a4 = PROGRESS('foo' as const)
+	a4 // $ExpectType Alt<"PROGRESS", "foo">
 
-	const a44 = LOADING('foo')
-	a44 // $ExpectType Alt<"LOADING", string>
+	const a44 = PROGRESS('foo')
+	a44 // $ExpectType Alt<"PROGRESS", string>
 
-	const a444 = LOADING()
-	a444 // $ExpectType Alt<"LOADING", void>
+	const a444 = PROGRESS()
+	a444 // $ExpectType Alt<"PROGRESS", void>
 
 	let a5: Alt<'OK', string> | Alt<'FAIL', void>
 	a5 = OK('foo')
@@ -586,11 +586,11 @@ function variance ()
 	const t1_2: T1 = t2
 
 	const r1: Result<number> = OK(17) as Result<number>
-	const r2: ResultLoading<number> = OK(17) as ResultLoading<number>
+	const r2: ResultProgress<number> = OK(17) as ResultProgress<number>
 
 	r1 // $ExpectType Result<number>
-	r2 // $ExpectType ResultLoading<number>
+	r2 // $ExpectType ResultProgress<number>
 
-	const r2_1: ResultLoading<number> = r1
+	const r2_1: ResultProgress<number> = r1
 	const r1_2: Result<number> = r2 // $ExpectError
 }

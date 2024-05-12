@@ -11,7 +11,7 @@ function V (text: string): V
 	return { text }
 }
 
-type TestResult <T> = (Alt<'OK', T> | Alt<'FAIL', Error> | Alt<'LOADING', void>)
+type TestResult <T> = (Alt<'OK', T> | Alt<'FAIL', Error> | Alt<'PROGRESS', void>)
 
 
 describe('Integration', () =>
@@ -23,7 +23,7 @@ describe('Integration', () =>
 		const b = a
 		.map(ok => V(ok.data))
 		.map_of('FAIL', e => V(e.message))
-		.map_of('LOADING', () => V('~'))
+		.map_of('PROGRESS', () => V('~'))
 		.unless(_ => _)
 		b // $ExpectType Alt<"OK", V>
 
@@ -39,7 +39,7 @@ describe('Integration', () =>
 
 		const b = a
 		.map_of('FAIL', e => V(e.message))
-		.map_of('LOADING', () => V('~'))
+		.map_of('PROGRESS', () => V('~'))
 		.map(ok => V(ok.data))
 		.unless(_ => _)
 		b // $ExpectType Alt<"OK", V>
@@ -57,7 +57,7 @@ describe('Integration', () =>
 		const b = a
 		.map(ok => ok.data)
 		.map_of('FAIL', e => e.message)
-		.map_of('LOADING', () => '~')
+		.map_of('PROGRESS', () => '~')
 		.map(V)
 		.unless(V)
 		b // $ExpectType Alt<"OK", V>
@@ -74,7 +74,7 @@ describe('Integration', () =>
 
 		const b = a
 		.map_of('FAIL', e => e.message)
-		.map_of('LOADING', () => '~')
+		.map_of('PROGRESS', () => '~')
 		.map(ok => ok.data)
 		.unless(_ => _)
 		.map(V)
@@ -93,7 +93,7 @@ describe('Integration', () =>
 		const b = a
 		.map(ok => V(ok.data))
 		.settle(e => V(e.message))
-		.settle_of('LOADING', () => V('~'))
+		.settle_of('PROGRESS', () => V('~'))
 		b // $ExpectType Alt<"OK", V>
 
 		const c = b.extract()
@@ -108,7 +108,7 @@ describe('Integration', () =>
 
 		const b = a
 		.settle(e => e.message)
-		.settle_of('LOADING', () => '~')
+		.settle_of('PROGRESS', () => '~')
 		.map(V)
 		b // $ExpectType Alt<"OK", V>
 
@@ -125,7 +125,7 @@ describe('Integration', () =>
 		const b = a
 		.map(ok => V(ok.data))
 		.map_to('FAIL', 'OK', e => V(e.message))
-		.map_to('LOADING', 'OK', () => V('~'))
+		.map_to('PROGRESS', 'OK', () => V('~'))
 		b // $ExpectType Alt<"OK", V>
 
 		const c = b.extract()
@@ -140,7 +140,7 @@ describe('Integration', () =>
 
 		const b = a
 		.map_to('FAIL', 'OK', e => e.message)
-		.map_to('LOADING', 'OK', () => '~')
+		.map_to('PROGRESS', 'OK', () => '~')
 		.map(V)
 		b // $ExpectType Alt<"OK", V>
 

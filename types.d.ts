@@ -93,9 +93,9 @@ export type Result <T, E = unknown> =
 	Alt<'FAIL', E>
 )
 
-export type ResultLoading <T, E = unknown> =
+export type ResultProgress <T, E = unknown> =
 (
 	Result<T, E>
 |
-	Alt<'LOADING', void>
+	Alt<'PROGRESS', void>
 )

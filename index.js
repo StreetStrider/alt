@@ -201,10 +201,10 @@ function FAIL (value)
 	return Alt('FAIL', value)
 }
 
- exports.LOADING = LOADING
-function LOADING (value)
+ exports.PROGRESS = PROGRESS
+function PROGRESS (value)
 {
-	return Alt('LOADING', value)
+	return Alt('PROGRESS', value)
 }
 
 
@@ -240,7 +240,7 @@ exports.progress = async function progress (fn, fn_setter)
 {
 	try
 	{
-		fn_setter(LOADING())
+		fn_setter(PROGRESS())
 		fn_setter(OK(await fn()))
 	}
 	catch (e)

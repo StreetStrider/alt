@@ -3,7 +3,7 @@ import type { Alt }    from './types.js'
 import type { Keys }   from './types.js'
 import type { Repr }   from './types.js'
 import type { Result } from './types.js'
-import type { ResultLoading } from './types.js'
+import type { ResultProgress } from './types.js'
 
 
 export function Alt <const Key extends Keys> (key: Key)
@@ -46,8 +46,8 @@ export function OK <Value> (value: Value): Alt<'OK', Value>
 export function FAIL (): Alt<'FAIL', void>
 export function FAIL <Value> (value: Value): Alt<'FAIL', Value>
 
-export function LOADING (): Alt<'LOADING', void>
-export function LOADING <Value> (value: Value): Alt<'LOADING', Value>
+export function PROGRESS (): Alt<'PROGRESS', void>
+export function PROGRESS <Value> (value: Value): Alt<'PROGRESS', Value>
 
 
 export function attempt <T, E = unknown> (fn: () => T): Result<T, E>
@@ -57,7 +57,7 @@ export function capture <T, E = unknown> (fn: () => (PromiseLike<T> | T)): Promi
 export function progress <T, E = unknown>
 (
 	fn: () => (PromiseLike<T> | T),
-	fn_setter: (r: ResultLoading<T, E>) => void,
+	fn_setter: (r: ResultProgress<T, E>) => void,
 )
 	: void
 

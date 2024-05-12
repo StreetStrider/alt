@@ -6,11 +6,10 @@ import { expect } from 'chai'
 import { Alt } from '../'
 import { Repr } from '../types'
 import { Result } from '../types'
-import { ResultLoading } from '../types'
 
 import { OK } from '../'
 import { FAIL } from '../'
-import { LOADING } from '../'
+import { PROGRESS } from '../'
 
 import { load } from '../'
 import { join } from '../'
@@ -79,32 +78,32 @@ describe('Alt', () =>
 			expect(a.debug()).deep.eq({ key: 'FAIL', value: void 0 })
 		})
 
-		it('Alt(LOADING, v)', () =>
+		it('Alt(PROGRESS, v)', () =>
 		{
-			const a = Alt('LOADING', { x: 1 })
+			const a = Alt('PROGRESS', { x: 1 })
 
-			expect(a.debug()).deep.eq({ key: 'LOADING', value: { x: 1 }})
+			expect(a.debug()).deep.eq({ key: 'PROGRESS', value: { x: 1 }})
 		})
 
-		it('Alt(LOADING)', () =>
+		it('Alt(PROGRESS)', () =>
 		{
-			const a = Alt('LOADING')
+			const a = Alt('PROGRESS')
 
-			expect(a.debug()).deep.eq({ key: 'LOADING', value: void 0 })
+			expect(a.debug()).deep.eq({ key: 'PROGRESS', value: void 0 })
 		})
 
-		it('LOADING(v)', () =>
+		it('PROGRESS(v)', () =>
 		{
-			const a = LOADING({ x: 1 })
+			const a = PROGRESS({ x: 1 })
 
-			expect(a.debug()).deep.eq({ key: 'LOADING', value: { x: 1 }})
+			expect(a.debug()).deep.eq({ key: 'PROGRESS', value: { x: 1 }})
 		})
 
-		it('LOADING()', () =>
+		it('PROGRESS()', () =>
 		{
-			const a = LOADING()
+			const a = PROGRESS()
 
-			expect(a.debug()).deep.eq({ key: 'LOADING', value: void 0 })
+			expect(a.debug()).deep.eq({ key: 'PROGRESS', value: void 0 })
 		})
 	})
 
@@ -122,7 +121,7 @@ describe('Alt', () =>
 		{
 			expect(OK({ x: 1 }).is('OK')).eq(true)
 			expect(OK({ x: 1 }).is('FAIL')).eq(false)
-			expect(OK({ x: 1 }).is('LOADING')).eq(false)
+			expect(OK({ x: 1 }).is('PROGRESS')).eq(false)
 			expect(OK({ x: 1 }).is('NONE')).eq(false)
 		})
 
@@ -130,23 +129,23 @@ describe('Alt', () =>
 		{
 			expect(FAIL({ x: 1 }).is('OK')).eq(false)
 			expect(FAIL({ x: 1 }).is('FAIL')).eq(true)
-			expect(FAIL({ x: 1 }).is('LOADING')).eq(false)
+			expect(FAIL({ x: 1 }).is('PROGRESS')).eq(false)
 			expect(FAIL({ x: 1 }).is('NONE')).eq(false)
 		})
 
-		it('LOADING', () =>
+		it('PROGRESS', () =>
 		{
-			expect(LOADING().is('OK')).eq(false)
-			expect(LOADING().is('FAIL')).eq(false)
-			expect(LOADING().is('LOADING')).eq(true)
-			expect(LOADING().is('NONE')).eq(false)
+			expect(PROGRESS().is('OK')).eq(false)
+			expect(PROGRESS().is('FAIL')).eq(false)
+			expect(PROGRESS().is('PROGRESS')).eq(true)
+			expect(PROGRESS().is('NONE')).eq(false)
 		})
 
 		it('NONE', () =>
 		{
 			expect(Alt('NONE', { x: 1 }).is('OK')).eq(false)
 			expect(Alt('NONE', { x: 1 }).is('FAIL')).eq(false)
-			expect(Alt('NONE', { x: 1 }).is('LOADING')).eq(false)
+			expect(Alt('NONE', { x: 1 }).is('PROGRESS')).eq(false)
 			expect(Alt('NONE', { x: 1 }).is('NONE')).eq(true)
 		})
 	})
@@ -384,7 +383,7 @@ describe('Alt', () =>
 		it('as', () =>
 		{
 			const a: Result<number> = OK(17)
-			const b: ResultLoading<number> = a.as<ResultLoading<number>>()
+			const b: ResultProgress<number> = a.as<ResultProgress<number>>()
 			expect(b.debug()).deep.eq({ key: 'OK', value: 17 })
 		})
 		*/
