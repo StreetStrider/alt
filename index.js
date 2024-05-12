@@ -235,6 +235,7 @@ exports.capture = async function capture (fn)
 
 
 // TODO: progress
+// consider return { fn_setter return value ?? OK()/FAIL() }
 exports.progress = async function progress (fn, fn_setter)
 {
 	try

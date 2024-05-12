@@ -52,11 +52,11 @@ export function LOADING <Value> (value: Value): Alt<'LOADING', Value>
 
 export function attempt <T, E = unknown> (fn: () => T): Result<T, E>
 
-export function capture <T, E = unknown> (fn: () => (Promise<T> | T)): Promise<Result<T, E>>
+export function capture <T, E = unknown> (fn: () => (PromiseLike<T> | T)): Promise<Result<T, E>>
 
 export function progress <T, E = unknown>
 (
-	fn: () => (Promise<T> | T),
+	fn: () => (PromiseLike<T> | T),
 	fn_setter: (r: ResultLoading<T, E>) => void,
 )
 	: void
