@@ -7,15 +7,15 @@ function View () {
   const [ state, _ ] = useSomeState()
 
   useEffect(() => {
-    state.tap('ERROR', error => console.error(error))
+    state.tap_of('ERROR', error => console.error(error))
   }, [ state ])
 
   return <div>
   {
     state
-    .map('OK', data => <Component data={ data } />)
-    .settle('LOADING', () => <Loading />)
-    .settle('ERROR', error => <div className='error'>Error: { error.message }</div>)
+    .map(data => <Component data={ data } />)
+    .settle_of('PROGRESS', () => <Loading />)
+    .settle_of('ERROR', error => <div className='error'>Error: { error.message }</div>)
     .extract()
   }
   </div>
@@ -26,4 +26,4 @@ function View () {
 
 ## license
 
-ISC, © Strider, 2023.
+ISC, © Strider, 2024.
